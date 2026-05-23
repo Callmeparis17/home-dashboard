@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Home</title>
+<title>Home Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -49,10 +49,19 @@
     background:radial-gradient(circle,rgba(80,180,255,0.08) 0%,transparent 70%);
     pointer-events:none; z-index:0;
   }
-  .wrapper { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:36px 22px 56px; }
+  .wrapper { position:relative; z-index:1; width:100%; min-height:100dvh; margin:0; padding:24px; }
+  .dashboard-shell { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; align-items:stretch; min-height:calc(100dvh - 48px); }
+  .dashboard-column { min-width:0; }
+  .left-stack { display:grid; gap:16px; align-content:start; grid-template-rows:auto auto auto auto 1fr; }
+  .control-panel { background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.35); }
+  .panel-title { font-size:10px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+  .panel-title::after { content:''; flex:1; height:2px; background:var(--border); border-radius:2px; }
+  .calendar-column { display:flex; flex-direction:column; min-height:calc(100dvh - 48px); }
+  @media(max-width:900px){ .wrapper{padding:18px;} .dashboard-shell{ grid-template-columns:1fr; min-height:auto; } .calendar-column{ min-height:70dvh; } }
+  @media(min-width:1200px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
 
   /* Header */
-  .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:36px; animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0; animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:0 4px 16px rgba(0,0,0,0.35); }
   .greeting { font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:3px; }
   .title { font-size:34px; font-weight:900; letter-spacing:-0.02em; line-height:1.1; }
   .title em { font-style:normal; color:#e040fb; }
@@ -61,7 +70,7 @@
   .date { font-size:11px; color:var(--text-dim); font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-top:2px; }
 
 
-  .safety-note { margin-top:18px; background:#151515; border:2px solid rgba(255,255,255,0.12); border-radius:var(--radius); padding:14px 16px; font-size:12px; font-weight:700; color:var(--text-mid); line-height:1.35; animation:popIn 0.4s 0.1s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .safety-note { margin-top:0; background:#151515; border:2px solid rgba(255,255,255,0.12); border-radius:var(--radius); padding:14px 16px; font-size:12px; font-weight:700; color:var(--text-mid); line-height:1.35; animation:popIn 0.4s 0.1s cubic-bezier(0.34,1.56,0.64,1) both; }
   .safety-note strong { color:#fff; }
 
   /* Section label */
@@ -77,8 +86,8 @@
   .scene-chip span { margin-right:5px; }
 
   /* Ecosystem cards */
-  .ecosystem-strip { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:popIn 0.4s 0.12s cubic-bezier(0.34,1.56,0.64,1) both; }
-  .ecosystem-card { border-radius:var(--radius); padding:20px 20px 18px; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; text-decoration:none; color:inherit; display:block; position:relative; overflow:hidden; border:2px solid transparent; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
+  .ecosystem-strip { display:grid; grid-template-columns:1fr 1fr; gap:10px; animation:popIn 0.4s 0.12s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .ecosystem-card { border-radius:var(--radius); padding:16px 16px 14px; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; text-decoration:none; color:inherit; display:block; position:relative; overflow:hidden; border:2px solid transparent; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
   .ecosystem-card.google { background:var(--google-bg); border-color:#90caf9; }
   .ecosystem-card.govee  { background:var(--govee-bg);  border-color:#ce93d8; }
   .ecosystem-card:active { transform:scale(0.96); }
@@ -90,11 +99,11 @@
   .eco-badge { position:absolute; top:14px; right:14px; font-size:10px; font-weight:800; background:rgba(255,255,255,0.7); border:1px solid rgba(0,0,0,0.08); padding:3px 9px; border-radius:20px; color:rgba(0,0,0,0.5); }
 
   /* Device grid */
-  .device-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; animation:popIn 0.4s 0.18s cubic-bezier(0.34,1.56,0.64,1) both; }
-  @media(min-width:600px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
-  @media(min-width:800px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
+  .device-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; animation:popIn 0.4s 0.18s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @media(min-width:600px) and (max-width:900px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media(min-width:901px){ .device-grid{ grid-template-columns:repeat(2,1fr); } }
 
-  .device-card { border-radius:var(--radius); padding:18px 16px 16px; cursor:pointer; border:2px solid transparent; transition:transform 0.13s,box-shadow 0.15s,filter 0.2s,opacity 0.2s; position:relative; overflow:hidden; user-select:none; box-shadow:0 3px 12px rgba(0,0,0,0.4); }
+  .device-card { border-radius:var(--radius); padding:16px 14px 14px; cursor:pointer; border:2px solid transparent; transition:transform 0.13s,box-shadow 0.15s,filter 0.2s,opacity 0.2s; position:relative; overflow:hidden; user-select:none; box-shadow:0 3px 12px rgba(0,0,0,0.4); }
   .device-card:active { transform:scale(0.95); }
   .device-card.off { filter:saturate(0.2) brightness(0.85); opacity:0.65; }
   .device-card.on  { box-shadow:0 6px 22px rgba(0,0,0,0.5); border-color:rgba(255,255,255,0.5); }
@@ -123,8 +132,27 @@
   .d-spinner { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:24px; height:24px; border:3px solid rgba(26,26,46,0.2); border-top-color:rgba(26,26,46,0.6); border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
   .device-card.loading .d-spinner { display:block; }
 
+
+
+  /* Family Calendar */
+  .calendar-card { background:#111111; border:2px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.35); animation:popIn 0.4s 0.2s cubic-bezier(0.34,1.56,0.64,1) both; flex:1; display:flex; flex-direction:column; min-height:100%; }
+  .calendar-header { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px 18px 12px; border-bottom:1px solid var(--border); }
+  .calendar-title-wrap { display:flex; align-items:center; gap:12px; min-width:0; }
+  .calendar-icon { width:42px; height:42px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; background:linear-gradient(135deg,rgba(224,64,251,0.24),rgba(33,150,243,0.24)); border:1px solid rgba(255,255,255,0.12); }
+  .calendar-title { font-size:17px; font-weight:900; line-height:1.1; }
+  .calendar-sub { font-size:11px; font-weight:700; color:var(--text-dim); margin-top:3px; }
+  .calendar-open { flex-shrink:0; border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:8px 12px; background:#1a1a1a; color:var(--text); text-decoration:none; font-size:11px; font-weight:900; }
+  .calendar-frame-wrap { position:relative; min-height:0; background:#0b0b0b; flex:1; }
+  .calendar-frame { width:100%; height:100%; min-height:720px; border:0; display:block; background:#fff; }
+  .calendar-placeholder { padding:22px 18px 20px; color:var(--text-mid); font-size:13px; line-height:1.45; }
+  .calendar-placeholder strong { color:#fff; }
+  .calendar-placeholder code { display:block; margin:12px 0; padding:12px; background:#050505; border:1px solid var(--border); border-radius:12px; color:#d9b3ff; font-size:11px; white-space:normal; word-break:break-word; }
+  .calendar-steps { margin-top:12px; padding-left:18px; }
+  .calendar-steps li { margin:6px 0; }
+  @media(max-width:520px){ .calendar-header{align-items:flex-start;} .calendar-open{display:none;} .calendar-frame{min-height:380px;} .calendar-frame-wrap{min-height:340px;} }
+
   /* Status bar */
-  .status-bar { margin-top:30px; background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:16px 22px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 16px rgba(0,0,0,0.3); animation:popIn 0.4s 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .status-bar { margin-top:0; background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:16px 22px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 16px rgba(0,0,0,0.3); animation:popIn 0.4s 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
   .status-items { display:flex; gap:22px; }
   .status-item  { display:flex; align-items:center; gap:8px; }
   .status-dot   { width:9px; height:9px; border-radius:50%; }
@@ -159,55 +187,79 @@
 <body>
 <div class="wrapper">
 
-  <div class="header">
-    <div class="header-left">
-      <div class="greeting">Welcome home</div>
-      <div class="title">Home <em>Control</em></div>
+  <div class="dashboard-shell">
+    <div class="dashboard-column left-stack">
+      <div class="header">
+        <div class="header-left">
+          <div class="greeting">Welcome home</div>
+          <div class="title">Home <em>Control</em></div>
+        </div>
+        <div class="clock-block">
+          <div class="clock" id="clock">--:--</div>
+          <div class="date"  id="date">---</div>
+        </div>
+      </div>
+      <div class="safety-note">
+        <strong>Safe public mode:</strong> API key removed. Device cards are demo toggles only. Use app buttons for real controls.
+      </div>
+
+      <div class="control-panel">
+        <div class="panel-title">Scenes</div>
+        <div class="scene-row" id="sceneRow">
+          <div class="scene-chip active" data-scene="all-on"><span>✨</span>All On</div>
+          <div class="scene-chip" data-scene="all-off"><span>🌙</span>All Off</div>
+          <div class="scene-chip" data-scene="lights-only"><span>💡</span>Lights Only</div>
+          <div class="scene-chip" data-scene="plug-only"><span>🔌</span>Plug Only</div>
+        </div>
+      </div>
+
+      <div class="control-panel">
+        <div class="panel-title">Apps</div>
+        <div class="ecosystem-strip">
+          <a class="ecosystem-card google" href="googlehome://" onclick="openApp('googlehome://','https://home.google.com'); return false;">
+            <div class="eco-badge">Open ↗</div>
+            <div class="eco-icon">🏠</div>
+            <div class="eco-name">Google Home</div>
+            <div class="eco-sub">Cameras · Other devices</div>
+          </a>
+          <a class="ecosystem-card govee" href="govee://" onclick="openApp('govee://','https://apps.apple.com/app/govee-home/id1395696823'); return false;">
+            <div class="eco-badge">Open ↗</div>
+            <div class="eco-icon">💡</div>
+            <div class="eco-name">Govee Home</div>
+            <div class="eco-sub">Full device controls</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="control-panel">
+        <div class="panel-title">Devices</div>
+        <div class="device-grid" id="deviceGrid"></div>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-items">
+          <div class="status-item"><div class="status-dot dot-on"></div><div class="status-label" id="onCount">— on</div></div>
+          <div class="status-item"><div class="status-dot dot-off"></div><div class="status-label" id="offCount">— off</div></div>
+        </div>
+        <div class="status-count" id="lastUpdate">Updated just now</div>
+      </div>
     </div>
-    <div class="clock-block">
-      <div class="clock" id="clock">--:--</div>
-      <div class="date"  id="date">---</div>
+
+    <div class="dashboard-column calendar-column">
+      <div class="calendar-card">
+        <div class="calendar-header">
+          <div class="calendar-title-wrap">
+            <div class="calendar-icon">📅</div>
+            <div>
+              <div class="calendar-title">Family Calendar</div>
+              <div class="calendar-sub" id="calendarStatus">Upcoming events</div>
+            </div>
+          </div>
+          <a class="calendar-open" id="calendarOpenLink" href="https://calendar.google.com" target="_blank" rel="noopener">Open Calendar ↗</a>
+        </div>
+        <div class="calendar-frame-wrap" id="calendarFrameWrap"></div>
+      </div>
     </div>
-  </div>
-
-
-  <div class="safety-note">
-    <strong>Safe public mode:</strong> API key removed. Device cards are demo toggles only. Use the Govee or Google Home buttons for real controls.
-  </div>
-
-  <div class="section-label">Scenes</div>
-  <div class="scene-row" id="sceneRow">
-    <div class="scene-chip active" data-scene="all-on"><span>✨</span>All On</div>
-    <div class="scene-chip" data-scene="all-off"><span>🌙</span>All Off</div>
-    <div class="scene-chip" data-scene="lights-only"><span>💡</span>Lights Only</div>
-    <div class="scene-chip" data-scene="plug-only"><span>🔌</span>Plug Only</div>
-  </div>
-
-  <div class="section-label">Apps</div>
-  <div class="ecosystem-strip">
-    <a class="ecosystem-card google" href="googlehome://" onclick="openApp('googlehome://','https://home.google.com'); return false;">
-      <div class="eco-badge">Open App ↗</div>
-      <div class="eco-icon">🏠</div>
-      <div class="eco-name">Google Home</div>
-      <div class="eco-sub">Cameras · Other devices</div>
-    </a>
-    <a class="ecosystem-card govee" href="govee://" onclick="openApp('govee://','https://apps.apple.com/app/govee-home/id1395696823'); return false;">
-      <div class="eco-badge">Open App ↗</div>
-      <div class="eco-icon">💡</div>
-      <div class="eco-name">Govee Home</div>
-      <div class="eco-sub">Full device controls</div>
-    </a>
-  </div>
-
-  <div class="section-label">Devices</div>
-  <div class="device-grid" id="deviceGrid"></div>
-
-  <div class="status-bar">
-    <div class="status-items">
-      <div class="status-item"><div class="status-dot dot-on"></div><div class="status-label" id="onCount">— on</div></div>
-      <div class="status-item"><div class="status-dot dot-off"></div><div class="status-label" id="offCount">— off</div></div>
-    </div>
-    <div class="status-count" id="lastUpdate">Updated just now</div>
   </div>
 </div>
 
@@ -230,11 +282,52 @@ const API_KEY = '';
 const DEMO_MODE = true;
 const API_BASE = 'https://developer-api.govee.com/v1/devices';
 
+// ── Family Calendar ───────────────────────────────────────────
+// Paste ONLY the src URL from your Google Calendar embed code below.
+// Example format:
+// https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID&ctz=America%2FLos_Angeles&mode=AGENDA
+const FAMILY_CALENDAR_EMBED_URL = '';
+
+
 const devices = [
   { id:'D4:AD:FC:B4:D5:8F', model:'H7021', name:'Deck Light',             icon:'🌿', location:'Deck',         color:'mint',     on:false },
   { id:'60:74:F4:E2:6F:DA', model:'H6099', name:'Backlight Living',        icon:'🌈', location:'Living Room',  color:'lavender', on:false },
   { id:'D4:AD:FC:1F:F7:0A', model:'H5082', name:'Dual Smart Plug',         icon:'🔌', location:'Home',         color:'coral',    on:false },
 ];
+
+
+function initFamilyCalendar() {
+  const wrap = document.getElementById('calendarFrameWrap');
+  const status = document.getElementById('calendarStatus');
+  const openLink = document.getElementById('calendarOpenLink');
+  if (!wrap) return;
+
+  if (!FAMILY_CALENDAR_EMBED_URL) {
+    status.textContent = 'Setup needed';
+    wrap.innerHTML = `
+      <div class="calendar-placeholder">
+        <strong>Calendar is ready. Add your Google Calendar embed link to activate it.</strong>
+        <code>const FAMILY_CALENDAR_EMBED_URL = 'paste-your-calendar-embed-src-here';</code>
+        <div>On a computer, open Google Calendar, go to Settings, select your family calendar, then use <strong>Integrate calendar</strong> and copy the embed link.</div>
+        <ol class="calendar-steps">
+          <li>Open Google Calendar on your computer.</li>
+          <li>Go to Settings and select the family calendar.</li>
+          <li>Under Integrate calendar, copy the embed code.</li>
+          <li>From the iframe code, copy only the URL inside <strong>src="..."</strong>.</li>
+          <li>Paste that URL into <strong>FAMILY_CALENDAR_EMBED_URL</strong> in this file.</li>
+        </ol>
+      </div>`;
+    return;
+  }
+
+  const calendarUrl = FAMILY_CALENDAR_EMBED_URL.includes('mode=')
+    ? FAMILY_CALENDAR_EMBED_URL
+    : FAMILY_CALENDAR_EMBED_URL + (FAMILY_CALENDAR_EMBED_URL.includes('?') ? '&' : '?') + 'mode=AGENDA';
+
+  status.textContent = 'Live Google Calendar view';
+  openLink.href = calendarUrl;
+  wrap.innerHTML = `<iframe class="calendar-frame" src="${calendarUrl}" scrolling="no"></iframe>`;
+}
 
 // ── Govee API ─────────────────────────────────────────────────
 async function goveeControl(device, cmd, value) {
@@ -378,6 +471,7 @@ updateClock(); setInterval(updateClock, 10000);
 
 // ── Init ──────────────────────────────────────────────────────
 renderDevices();
+initFamilyCalendar();
 </script>
 </body>
 </html>
