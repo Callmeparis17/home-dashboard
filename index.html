@@ -149,6 +149,14 @@
   .calendar-placeholder code { display:block; margin:12px 0; padding:12px; background:#050505; border:1px solid var(--border); border-radius:12px; color:#d9b3ff; font-size:11px; white-space:normal; word-break:break-word; }
   .calendar-steps { margin-top:12px; padding-left:18px; }
   .calendar-steps li { margin:6px 0; }
+  .calendar-setup-box { margin-top:16px; display:grid; gap:10px; }
+  .calendar-input { width:100%; border:2px solid var(--border); border-radius:14px; background:#050505; color:#fff; padding:12px 13px; font-family:'Nunito',sans-serif; font-size:12px; outline:none; }
+  .calendar-input:focus { border-color:rgba(224,64,251,0.55); }
+  .calendar-button-row { display:flex; gap:10px; flex-wrap:wrap; }
+  .calendar-btn { border:0; border-radius:999px; padding:10px 14px; background:#fff; color:#000; font-family:'Nunito',sans-serif; font-size:12px; font-weight:900; cursor:pointer; }
+  .calendar-btn.secondary { background:#1a1a1a; color:#fff; border:1px solid var(--border); }
+  .calendar-btn:active { transform:scale(0.97); }
+  .calendar-mini-note { font-size:11px; color:var(--text-dim); line-height:1.35; }
   @media(max-width:520px){ .calendar-header{align-items:flex-start;} .calendar-open{display:none;} .calendar-frame{min-height:380px;} .calendar-frame-wrap{min-height:340px;} }
 
   /* Status bar */
@@ -286,7 +294,7 @@ const API_BASE = 'https://developer-api.govee.com/v1/devices';
 // Paste ONLY the src URL from your Google Calendar embed code below.
 // Example format:
 // https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID&ctz=America%2FLos_Angeles&mode=AGENDA
-const FAMILY_CALENDAR_EMBED_URL = '';
+const FAMILY_CALENDAR_EMBED_URL = 'https://calendar.google.com/calendar/embed?src=family11563085076736409084%40group.calendar.google.com&ctz=America%2FLos_Angeles';
 
 
 const devices = [
@@ -296,37 +304,101 @@ const devices = [
 ];
 
 
+function normalizeCalendarUrl(rawValue) {
+  let value = (rawValue || '').trim();
+  if (!value) return '';
+
+  // Accept the full iframe code or only the src URL.
+  const srcMatch = value.match(/src=["']([^"']+)["']/i);
+  if (srcMatch) value = srcMatch[1];
+
+  // Convert HTML entities copied from Google Calendar embed code.
+  value = value.replace(/&amp;/g, '&');
+
+  // Keep the dashboard safe from pasted non-calendar scripts/links.
+  if (!/^https:\/\/calendar\.google\.com\/calendar\/embed\?/i.test(value)) {
+    return '';
+  }
+
+  // Force an agenda-style view and local timezone unless the URL already specifies them.
+  if (!/([?&])mode=/i.test(value)) {
+    value += (value.includes('?') ? '&' : '?') + 'mode=AGENDA';
+  }
+  if (!/([?&])ctz=/i.test(value)) {
+    value += '&ctz=America%2FLos_Angeles';
+  }
+  return value;
+}
+
+function getCalendarUrl() {
+  const saved = localStorage.getItem('familyCalendarEmbedUrl') || '';
+  return normalizeCalendarUrl(saved || FAMILY_CALENDAR_EMBED_URL);
+}
+
+function saveFamilyCalendar() {
+  const input = document.getElementById('calendarUrlInput');
+  const url = normalizeCalendarUrl(input ? input.value : '');
+  if (!url) {
+    showToast('Paste a valid Google Calendar embed link');
+    return;
+  }
+  localStorage.setItem('familyCalendarEmbedUrl', url);
+  showToast('Family calendar saved ✓');
+  initFamilyCalendar();
+}
+
+function clearFamilyCalendar() {
+  localStorage.removeItem('familyCalendarEmbedUrl');
+  showToast('Calendar link cleared');
+  initFamilyCalendar();
+}
+
+function renderCalendarSetup() {
+  const wrap = document.getElementById('calendarFrameWrap');
+  const status = document.getElementById('calendarStatus');
+  const openLink = document.getElementById('calendarOpenLink');
+  if (status) status.textContent = 'Setup needed';
+  if (openLink) openLink.href = 'https://calendar.google.com';
+
+  wrap.innerHTML = `
+    <div class="calendar-placeholder">
+      <strong>Add your Family Calendar link.</strong>
+      <div style="margin-top:8px;">Paste the Google Calendar embed code or just the <strong>src</strong> link below. The dashboard will save it on this iPad/browser.</div>
+      <div class="calendar-setup-box">
+        <input id="calendarUrlInput" class="calendar-input" placeholder="Paste Google Calendar embed link or iframe code here" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="calendar-button-row">
+          <button class="calendar-btn" onclick="saveFamilyCalendar()">Save Calendar</button>
+          <button class="calendar-btn secondary" onclick="window.open('https://calendar.google.com/calendar/u/0/r/settings', '_blank')">Open Google Calendar Settings</button>
+        </div>
+        <div class="calendar-mini-note">On a computer: Google Calendar → Settings → select your family calendar → Integrate calendar → copy the embed code. If the iPad is signed into the right Google account, private calendars may display. For a shared family dashboard, sharing the calendar with that Google account is usually cleaner.</div>
+      </div>
+      <ol class="calendar-steps">
+        <li>Open Google Calendar on your computer.</li>
+        <li>Go to Settings and select the family calendar.</li>
+        <li>Find <strong>Integrate calendar</strong>.</li>
+        <li>Copy the embed code or the URL inside <strong>src="..."</strong>.</li>
+        <li>Paste it here on the dashboard and tap <strong>Save Calendar</strong>.</li>
+      </ol>
+    </div>`;
+}
+
 function initFamilyCalendar() {
   const wrap = document.getElementById('calendarFrameWrap');
   const status = document.getElementById('calendarStatus');
   const openLink = document.getElementById('calendarOpenLink');
   if (!wrap) return;
 
-  if (!FAMILY_CALENDAR_EMBED_URL) {
-    status.textContent = 'Setup needed';
-    wrap.innerHTML = `
-      <div class="calendar-placeholder">
-        <strong>Calendar is ready. Add your Google Calendar embed link to activate it.</strong>
-        <code>const FAMILY_CALENDAR_EMBED_URL = 'paste-your-calendar-embed-src-here';</code>
-        <div>On a computer, open Google Calendar, go to Settings, select your family calendar, then use <strong>Integrate calendar</strong> and copy the embed link.</div>
-        <ol class="calendar-steps">
-          <li>Open Google Calendar on your computer.</li>
-          <li>Go to Settings and select the family calendar.</li>
-          <li>Under Integrate calendar, copy the embed code.</li>
-          <li>From the iframe code, copy only the URL inside <strong>src="..."</strong>.</li>
-          <li>Paste that URL into <strong>FAMILY_CALENDAR_EMBED_URL</strong> in this file.</li>
-        </ol>
-      </div>`;
+  const calendarUrl = getCalendarUrl();
+  if (!calendarUrl) {
+    renderCalendarSetup();
     return;
   }
 
-  const calendarUrl = FAMILY_CALENDAR_EMBED_URL.includes('mode=')
-    ? FAMILY_CALENDAR_EMBED_URL
-    : FAMILY_CALENDAR_EMBED_URL + (FAMILY_CALENDAR_EMBED_URL.includes('?') ? '&' : '?') + 'mode=AGENDA';
-
-  status.textContent = 'Live Google Calendar view';
-  openLink.href = calendarUrl;
-  wrap.innerHTML = `<iframe class="calendar-frame" src="${calendarUrl}" scrolling="no"></iframe>`;
+  if (status) status.textContent = 'Live Google Calendar view';
+  if (openLink) openLink.href = calendarUrl;
+  wrap.innerHTML = `
+    <iframe class="calendar-frame" src="${calendarUrl}" scrolling="no"></iframe>
+    <button class="calendar-btn secondary" onclick="clearFamilyCalendar()" style="position:absolute;right:14px;bottom:14px;z-index:2;background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);">Change Calendar</button>`;
 }
 
 // ── Govee API ─────────────────────────────────────────────────
