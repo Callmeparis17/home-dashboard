@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #111111;
+    --border: rgba(255,255,255,0.1);
+    --border-active: rgba(255,255,255,0.22);
+    --text: #f5f5f5;
+    --text-dim: rgba(255,255,255,0.4);
+    --text-mid: rgba(255,255,255,0.65);
+    --radius: 22px;
+    --radius-sm: 14px;
+    --c-yellow:   #fff176;
+    --c-pink:     #f8bbd9;
+    --c-mint:     #b2f2e0;
+    --c-sky:      #b3e5fc;
+    --c-lavender: #e1bee7;
+    --c-coral:    #ffcdd2;
+    --chip-bg: #1a1a1a;
+    --chip-active-bg: #ffffff;
+    --chip-active-fg: #000000;
+    --google-bg: #e3f2fd;
+    --google-fg: #1565c0;
+    --govee-bg:  #f3e5f5;
+    --govee-fg:  #6a1b9a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body {
+    background:#000;
+    color:var(--text);
+    font-family:'Nunito',sans-serif;
+    min-height:100vh; min-height:100dvh;
+    overflow-x:hidden;
+    padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
+  }
+  body::before {
+    content:''; position:fixed; top:-10%; left:-10%; width:45%; height:45%;
+    background:radial-gradient(circle,rgba(255,100,200,0.08) 0%,transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  body::after {
+    content:''; position:fixed; bottom:-10%; right:-5%; width:40%; height:40%;
+    background:radial-gradient(circle,rgba(80,180,255,0.08) 0%,transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  .wrapper { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:36px 22px 56px; }
+
+  /* Header */
+  .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:36px; animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .greeting { font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:3px; }
+  .title { font-size:34px; font-weight:900; letter-spacing:-0.02em; line-height:1.1; }
+  .title em { font-style:normal; color:#e040fb; }
+  .clock-block { text-align:right; }
+  .clock { font-size:30px; font-weight:800; letter-spacing:-0.03em; background:linear-gradient(135deg,#e040fb,#2196f3); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .date { font-size:11px; color:var(--text-dim); font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-top:2px; }
+
+
+  .safety-note { margin-top:18px; background:#151515; border:2px solid rgba(255,255,255,0.12); border-radius:var(--radius); padding:14px 16px; font-size:12px; font-weight:700; color:var(--text-mid); line-height:1.35; animation:popIn 0.4s 0.1s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .safety-note strong { color:#fff; }
+
+  /* Section label */
+  .section-label { font-size:10px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; margin-top:30px; display:flex; align-items:center; gap:10px; }
+  .section-label::after { content:''; flex:1; height:2px; background:var(--border); border-radius:2px; }
+
+  /* Scene chips */
+  .scene-row { display:flex; gap:9px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; animation:popIn 0.4s 0.08s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .scene-row::-webkit-scrollbar { display:none; }
+  .scene-chip { flex-shrink:0; background:var(--chip-bg); border:2px solid var(--border); border-radius:30px; padding:9px 18px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; color:var(--text); cursor:pointer; transition:background 0.15s,border-color 0.15s,transform 0.12s,color 0.15s; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+  .scene-chip:active { transform:scale(0.94); }
+  .scene-chip.active { background:var(--chip-active-bg); border-color:var(--chip-active-bg); color:var(--chip-active-fg); box-shadow:0 4px 14px rgba(255,255,255,0.15); }
+  .scene-chip span { margin-right:5px; }
+
+  /* Ecosystem cards */
+  .ecosystem-strip { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:popIn 0.4s 0.12s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .ecosystem-card { border-radius:var(--radius); padding:20px 20px 18px; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; text-decoration:none; color:inherit; display:block; position:relative; overflow:hidden; border:2px solid transparent; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
+  .ecosystem-card.google { background:var(--google-bg); border-color:#90caf9; }
+  .ecosystem-card.govee  { background:var(--govee-bg);  border-color:#ce93d8; }
+  .ecosystem-card:active { transform:scale(0.96); }
+  .eco-icon { font-size:28px; margin-bottom:10px; display:block; }
+  .eco-name { font-size:16px; font-weight:900; margin-bottom:2px; }
+  .ecosystem-card.google .eco-name { color:var(--google-fg); }
+  .ecosystem-card.govee  .eco-name { color:var(--govee-fg); }
+  .eco-sub { font-size:11px; font-weight:600; color:rgba(0,0,0,0.45); }
+  .eco-badge { position:absolute; top:14px; right:14px; font-size:10px; font-weight:800; background:rgba(255,255,255,0.7); border:1px solid rgba(0,0,0,0.08); padding:3px 9px; border-radius:20px; color:rgba(0,0,0,0.5); }
+
+  /* Device grid */
+  .device-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; animation:popIn 0.4s 0.18s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @media(min-width:600px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media(min-width:800px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
+
+  .device-card { border-radius:var(--radius); padding:18px 16px 16px; cursor:pointer; border:2px solid transparent; transition:transform 0.13s,box-shadow 0.15s,filter 0.2s,opacity 0.2s; position:relative; overflow:hidden; user-select:none; box-shadow:0 3px 12px rgba(0,0,0,0.4); }
+  .device-card:active { transform:scale(0.95); }
+  .device-card.off { filter:saturate(0.2) brightness(0.85); opacity:0.65; }
+  .device-card.on  { box-shadow:0 6px 22px rgba(0,0,0,0.5); border-color:rgba(255,255,255,0.5); }
+  .device-card.loading { opacity:0.7; pointer-events:none; }
+
+  .device-card[data-color="yellow"]   { background:var(--c-yellow); }
+  .device-card[data-color="pink"]     { background:var(--c-pink); }
+  .device-card[data-color="mint"]     { background:var(--c-mint); }
+  .device-card[data-color="sky"]      { background:var(--c-sky); }
+  .device-card[data-color="lavender"] { background:var(--c-lavender); }
+  .device-card[data-color="coral"]    { background:var(--c-coral); }
+
+  .d-icon { font-size:32px; margin-bottom:10px; display:block; line-height:1; }
+  .d-name { font-size:13px; font-weight:900; margin-bottom:2px; letter-spacing:-0.01em; color:#1a1a2e; }
+  .d-location { font-size:10px; font-weight:700; color:rgba(26,26,46,0.5); }
+  .d-source { font-size:9px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; margin-top:10px; padding:3px 8px; border-radius:20px; display:inline-block; background:rgba(255,255,255,0.55); color:rgba(26,26,46,0.55); }
+  .d-status { position:absolute; bottom:14px; right:14px; font-size:9px; font-weight:800; color:rgba(26,26,46,0.4); }
+
+  /* Toggle */
+  .d-toggle { position:absolute; top:14px; right:14px; width:30px; height:17px; border-radius:9px; background:rgba(0,0,0,0.15); transition:background 0.2s; }
+  .d-toggle::after { content:''; position:absolute; top:3px; left:3px; width:11px; height:11px; border-radius:50%; background:#fff; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.25); }
+  .device-card.on .d-toggle { background:rgba(0,0,0,0.3); }
+  .device-card.on .d-toggle::after { transform:translateX(13px); }
+
+  /* Spinner for loading state */
+  .d-spinner { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:24px; height:24px; border:3px solid rgba(26,26,46,0.2); border-top-color:rgba(26,26,46,0.6); border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
+  .device-card.loading .d-spinner { display:block; }
+
+  /* Status bar */
+  .status-bar { margin-top:30px; background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:16px 22px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 16px rgba(0,0,0,0.3); animation:popIn 0.4s 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .status-items { display:flex; gap:22px; }
+  .status-item  { display:flex; align-items:center; gap:8px; }
+  .status-dot   { width:9px; height:9px; border-radius:50%; }
+  .dot-on  { background:#4caf50; box-shadow:0 0 8px #4caf50; animation:pulse 2.5s ease infinite; }
+  .dot-off { background:#555; }
+  .status-label { font-size:12px; font-weight:700; color:var(--text-mid); }
+  .status-count { font-size:11px; font-weight:600; color:var(--text-dim); }
+
+  /* Toast */
+  .toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(20px); background:#222; color:#fff; font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; padding:10px 20px; border-radius:30px; border:1px solid var(--border); opacity:0; transition:opacity 0.2s,transform 0.2s; z-index:200; white-space:nowrap; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* Modal */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:100; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal { background:#111; border-radius:28px 28px 0 0; border:2px solid var(--border-active); padding:26px 22px 44px; width:100%; transform:translateY(30px); transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1); }
+  .modal-overlay.open .modal { transform:translateY(0); }
+  .modal-pill { width:36px; height:5px; background:#333; border-radius:3px; margin:0 auto 18px; }
+  .modal-title { font-size:22px; font-weight:900; margin-bottom:3px; }
+  .modal-sub   { font-size:12px; font-weight:600; color:var(--text-dim); margin-bottom:22px; }
+  .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .modal-btn { padding:15px; border-radius:var(--radius-sm); border:2px solid var(--border); background:#1e1e1e; color:var(--text); font-family:'Nunito',sans-serif; font-size:14px; font-weight:800; cursor:pointer; transition:background 0.15s,transform 0.1s; }
+  .modal-btn:active { transform:scale(0.96); }
+  .modal-btn.govee-btn { background:rgba(179,136,255,0.1); border-color:rgba(179,136,255,0.3); color:#ce93d8; grid-column:1/-1; }
+  .modal-btn.danger    { background:rgba(239,83,80,0.1); border-color:rgba(239,83,80,0.3); color:#ef5350; }
+
+  @keyframes popIn  { from{opacity:0;transform:translateY(18px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+  @keyframes pulse  { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes spin   { to{transform:translate(-50%,-50%) rotate(360deg)} }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="greeting">Welcome home</div>
+      <div class="title">Home <em>Control</em></div>
+    </div>
+    <div class="clock-block">
+      <div class="clock" id="clock">--:--</div>
+      <div class="date"  id="date">---</div>
+    </div>
+  </div>
+
+
+  <div class="safety-note">
+    <strong>Safe public mode:</strong> API key removed. Device cards are demo toggles only. Use the Govee or Google Home buttons for real controls.
+  </div>
+
+  <div class="section-label">Scenes</div>
+  <div class="scene-row" id="sceneRow">
+    <div class="scene-chip active" data-scene="all-on"><span>✨</span>All On</div>
+    <div class="scene-chip" data-scene="all-off"><span>🌙</span>All Off</div>
+    <div class="scene-chip" data-scene="lights-only"><span>💡</span>Lights Only</div>
+    <div class="scene-chip" data-scene="plug-only"><span>🔌</span>Plug Only</div>
+  </div>
+
+  <div class="section-label">Apps</div>
+  <div class="ecosystem-strip">
+    <a class="ecosystem-card google" href="googlehome://" onclick="openApp('googlehome://','https://home.google.com'); return false;">
+      <div class="eco-badge">Open App ↗</div>
+      <div class="eco-icon">🏠</div>
+      <div class="eco-name">Google Home</div>
+      <div class="eco-sub">Cameras · Other devices</div>
+    </a>
+    <a class="ecosystem-card govee" href="govee://" onclick="openApp('govee://','https://apps.apple.com/app/govee-home/id1395696823'); return false;">
+      <div class="eco-badge">Open App ↗</div>
+      <div class="eco-icon">💡</div>
+      <div class="eco-name">Govee Home</div>
+      <div class="eco-sub">Full device controls</div>
+    </a>
+  </div>
+
+  <div class="section-label">Devices</div>
+  <div class="device-grid" id="deviceGrid"></div>
+
+  <div class="status-bar">
+    <div class="status-items">
+      <div class="status-item"><div class="status-dot dot-on"></div><div class="status-label" id="onCount">— on</div></div>
+      <div class="status-item"><div class="status-dot dot-off"></div><div class="status-label" id="offCount">— off</div></div>
+    </div>
+    <div class="status-count" id="lastUpdate">Updated just now</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-pill"></div>
+    <div class="modal-title" id="modalTitle">Device</div>
+    <div class="modal-sub"   id="modalSub">—</div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<script>
+// ── Config ────────────────────────────────────────────────────
+// API key removed for public hosting.
+// Do not place your live Govee API key in a public GitHub Pages file.
+const API_KEY = '';
+const DEMO_MODE = true;
+const API_BASE = 'https://developer-api.govee.com/v1/devices';
+
+const devices = [
+  { id:'D4:AD:FC:B4:D5:8F', model:'H7021', name:'Deck Light',             icon:'🌿', location:'Deck',         color:'mint',     on:false },
+  { id:'60:74:F4:E2:6F:DA', model:'H6099', name:'Backlight Living',        icon:'🌈', location:'Living Room',  color:'lavender', on:false },
+  { id:'D4:AD:FC:1F:F7:0A', model:'H5082', name:'Dual Smart Plug',         icon:'🔌', location:'Home',         color:'coral',    on:false },
+];
+
+// ── Govee API ─────────────────────────────────────────────────
+async function goveeControl(device, cmd, value) {
+  // Public-hosted dashboard safety mode.
+  // GitHub Pages is public, so this file intentionally does not include
+  // a live Govee API key or send direct API control requests.
+  // Use the Govee app shortcut for real controls, or move API control
+  // behind a private backend/Home Assistant later.
+  if (!API_KEY || DEMO_MODE) {
+    console.log(`[Demo mode] ${cmd} ${value} requested for ${device.name}`);
+    return true;
+  }
+
+  const body = {
+    device: device.id,
+    model:  device.model,
+    cmd: { name: cmd, value: value }
+  };
+  try {
+    const res = await fetch(`${API_BASE}/control`, {
+      method: 'PUT',
+      headers: { 'Govee-API-Key': API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    return res.ok;
+  } catch(e) {
+    return false;
+  }
+}
+
+async function goveeTurnOn(device)  { return goveeControl(device, 'turn', 'on'); }
+async function goveeTurnOff(device) { return goveeControl(device, 'turn', 'off'); }
+
+// ── Toggle ────────────────────────────────────────────────────
+async function toggleDevice(id) {
+  const d = devices.find(d => d.id === id);
+  if (!d) return;
+
+  const card = document.querySelector(`.device-card[data-id="${id}"]`);
+  if (card) card.classList.add('loading');
+
+  const newState = !d.on;
+  const ok = newState ? await goveeTurnOn(d) : await goveeTurnOff(d);
+
+  if (ok) {
+    d.on = newState;
+    showToast(`${d.name} turned ${newState ? 'on' : 'off'}`);
+  } else {
+    showToast(`Couldn't reach ${d.name} — check connection`);
+  }
+
+  renderDevices();
+  closeModal();
+}
+
+// ── Scenes ────────────────────────────────────────────────────
+document.getElementById('sceneRow').addEventListener('click', async e => {
+  const chip = e.target.closest('.scene-chip');
+  if (!chip) return;
+  document.querySelectorAll('.scene-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+
+  const scene = chip.dataset.scene;
+  const targets = {
+    'all-on':      devices.map(d => ({ d, state: true  })),
+    'all-off':     devices.map(d => ({ d, state: false })),
+    'lights-only': devices.map(d => ({ d, state: d.model !== 'H5082' })),
+    'plug-only':   devices.map(d => ({ d, state: d.model === 'H5082' })),
+  }[scene] || [];
+
+  showToast('Applying scene...');
+  await Promise.all(targets.map(async ({ d, state }) => {
+    const ok = state ? await goveeTurnOn(d) : await goveeTurnOff(d);
+    if (ok) d.on = state;
+  }));
+  renderDevices();
+  showToast('Scene applied ✓');
+});
+
+// ── Modal ─────────────────────────────────────────────────────
+function showModal(id) {
+  const d = devices.find(d => d.id === id); if (!d) return;
+  document.getElementById('modalTitle').textContent = d.name;
+  document.getElementById('modalSub').textContent   = `${d.location} · ${d.model}`;
+  document.getElementById('modalActions').innerHTML = `
+    <button class="modal-btn govee-btn" onclick="openApp('govee://','https://apps.apple.com/app/govee-home/id1395696823')">↗ Open Govee App</button>
+    <button class="modal-btn" onclick="toggleDevice('${id}')" style="grid-column:1/-1">${d.on ? '⏹ Turn Off' : '▶ Turn On'}</button>
+    <button class="modal-btn" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn danger" onclick="closeModal()">Dismiss</button>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ── Render ────────────────────────────────────────────────────
+function renderDevices() {
+  document.getElementById('deviceGrid').innerHTML = devices.map(d => `
+    <div class="device-card ${d.on?'on':'off'}" data-id="${d.id}" data-color="${d.color}" onclick="showModal('${d.id}')">
+      <div class="d-toggle"></div>
+      <div class="d-spinner"></div>
+      <span class="d-icon">${d.icon}</span>
+      <div class="d-name">${d.name}</div>
+      <div class="d-location">${d.location}</div>
+      <div class="d-source">${d.model}</div>
+    </div>
+  `).join('');
+  const on  = devices.filter(d=>d.on).length;
+  const off = devices.filter(d=>!d.on).length;
+  document.getElementById('onCount').textContent  = `${on} device${on!==1?'s':''} on`;
+  document.getElementById('offCount').textContent = `${off} device${off!==1?'s':''} off`;
+  document.getElementById('lastUpdate').textContent = `Updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── App links ─────────────────────────────────────────────────
+function openApp(appUrl, fallback) {
+  setTimeout(() => { window.location = fallback; }, 900);
+  window.location = appUrl;
+}
+
+// ── Clock ─────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('date').textContent  = now.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
+}
+updateClock(); setInterval(updateClock, 10000);
+
+// ── Init ──────────────────────────────────────────────────────
+renderDevices();
+</script>
+</body>
+</html>
