@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Home Hub" />
 <meta name="theme-color" content="#071a3b" />
-<title>Home Hub V3</title>
+<title>Home Hub V4</title>
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
@@ -166,7 +166,7 @@ body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(r
 
   <section class="card agenda-card">
     <div class="agenda-title"><span style="color:var(--pink)">▣</span><span>Today at a Glance</span></div>
-    <div class="events-title"><span>Upcoming Events</span><span>›</span></div>
+    <div class="events-title"><span>Upcoming Events</span><span id="calendarFeedStatus">Family Calendar</span></div>
 
     <div class="glance-list">
       <div class="glance event-glance" onclick="openCalendar()" role="button" aria-label="Open family calendar">
@@ -207,7 +207,7 @@ body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(r
 <script>
 // ─────────────────────────────────────────────────────────────
 // Dashboard config: edit these later as your setup gets finalized
-// BUILD: Home Hub V3 - vibrant layout + screenshot-style Home Control
+// BUILD: Home Hub V4 - calendar feed fixed + upcoming events
 // ─────────────────────────────────────────────────────────────
 const CONFIG = {
   weatherLat: 38.4404,           // Santa Rosa fallback. Change later if needed.
@@ -343,10 +343,12 @@ function renderCalendarData(data){
   const topSub = document.getElementById('nextEventCountdown');
   const todayTarget = document.getElementById('todaySchedule');
   const upcomingTarget = document.getElementById('eventList');
+  const feedStatus = document.getElementById('calendarFeedStatus');
 
   const todayEvents = Array.isArray(data.todayEvents) ? data.todayEvents : [];
   const upcomingEvents = Array.isArray(data.upcomingEvents) ? data.upcomingEvents : [];
   const nextEvent = data.nextEvent || upcomingEvents[0] || null;
+  if(feedStatus) feedStatus.textContent = upcomingEvents.length ? `${upcomingEvents.length} upcoming` : 'Family Calendar';
 
   if(nextEvent){
     const e = eventLine(nextEvent);
@@ -404,6 +406,8 @@ async function loadCalendarFeed(manual=false){
     document.getElementById('glanceNextSub').textContent = 'Open full calendar or refresh later';
     document.getElementById('eventList').innerHTML = '<div class="empty-state">Could not load the calendar feed. Open the full calendar instead.</div>';
     document.getElementById('todaySchedule').innerHTML = '<div class="empty-state">Calendar feed did not load.</div>';
+    const feedStatus = document.getElementById('calendarFeedStatus');
+    if(feedStatus) feedStatus.textContent = 'Feed unavailable';
     if(manual) showToast('Calendar feed did not load');
   }
 }
@@ -451,6 +455,6 @@ setInterval(loadCalendarFeed, 5 * 60 * 1000);
 loadWeather();
 setInterval(loadWeather, 30 * 60 * 1000);
 </script>
-<div class="dashboard-version-badge">Home Hub V3</div>
+<div class="dashboard-version-badge">Home Hub V4</div>
 </body>
 </html>
