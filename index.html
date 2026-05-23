@@ -1,549 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Home Dashboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Home Hub" />
+<meta name="theme-color" content="#071a3b" />
+<title>Home Hub V2</title>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #000000;
-    --surface: #111111;
-    --border: rgba(255,255,255,0.1);
-    --border-active: rgba(255,255,255,0.22);
-    --text: #f5f5f5;
-    --text-dim: rgba(255,255,255,0.4);
-    --text-mid: rgba(255,255,255,0.65);
-    --radius: 22px;
-    --radius-sm: 14px;
-    --c-yellow:   #fff176;
-    --c-pink:     #f8bbd9;
-    --c-mint:     #b2f2e0;
-    --c-sky:      #b3e5fc;
-    --c-lavender: #e1bee7;
-    --c-coral:    #ffcdd2;
-    --chip-bg: #1a1a1a;
-    --chip-active-bg: #ffffff;
-    --chip-active-fg: #000000;
-    --google-bg: #e3f2fd;
-    --google-fg: #1565c0;
-    --govee-bg:  #f3e5f5;
-    --govee-fg:  #6a1b9a;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body {
-    background:#000;
-    color:var(--text);
-    font-family:'Nunito',sans-serif;
-    min-height:100vh; min-height:100dvh;
-    overflow-x:hidden;
-    padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
-  }
-  body::before {
-    content:''; position:fixed; top:-10%; left:-10%; width:45%; height:45%;
-    background:radial-gradient(circle,rgba(255,100,200,0.08) 0%,transparent 70%);
-    pointer-events:none; z-index:0;
-  }
-  body::after {
-    content:''; position:fixed; bottom:-10%; right:-5%; width:40%; height:40%;
-    background:radial-gradient(circle,rgba(80,180,255,0.08) 0%,transparent 70%);
-    pointer-events:none; z-index:0;
-  }
-  .wrapper { position:relative; z-index:1; width:100%; min-height:100dvh; margin:0; padding:24px; }
-  .dashboard-shell { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; align-items:stretch; min-height:calc(100dvh - 48px); }
-  .dashboard-column { min-width:0; }
-  .left-stack { display:grid; gap:16px; align-content:start; grid-template-rows:auto auto auto auto 1fr; }
-  .control-panel { background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.35); }
-  .panel-title { font-size:10px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; display:flex; align-items:center; gap:10px; }
-  .panel-title::after { content:''; flex:1; height:2px; background:var(--border); border-radius:2px; }
-  .calendar-column { display:flex; flex-direction:column; min-height:calc(100dvh - 48px); }
-  @media(max-width:900px){ .wrapper{padding:18px;} .dashboard-shell{ grid-template-columns:1fr; min-height:auto; } .calendar-column{ min-height:70dvh; } }
-  @media(min-width:1200px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
+:root{
+  --bg0:#020713;
+  --bg1:#061836;
+  --bg2:#0a2a5c;
+  --text:#f7fbff;
+  --muted:rgba(247,251,255,.68);
+  --dim:rgba(247,251,255,.42);
+  --line:rgba(255,255,255,.16);
+  --line2:rgba(126,213,255,.34);
+  --glass:rgba(17,35,73,.48);
+  --glass2:rgba(15,30,62,.70);
+  --purple:#b66cff;
+  --pink:#ff5ecb;
+  --blue:#43b7ff;
+  --cyan:#28f0ff;
+  --teal:#23e0be;
+  --green:#53e681;
+  --yellow:#ffd448;
+  --orange:#ff9b35;
+  --red:#ff5a6d;
+  --radius:26px;
+  --radius-sm:17px;
+  --shadow:0 22px 70px rgba(0,0,0,.38);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;background:#020713;color:var(--text);font-family:'Nunito',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden}
+body{
+  min-height:100dvh;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
+  background:
+    radial-gradient(circle at 14% 14%,rgba(171,92,255,.33),transparent 30%),
+    radial-gradient(circle at 78% 12%,rgba(38,187,255,.35),transparent 32%),
+    radial-gradient(circle at 88% 88%,rgba(255,76,196,.18),transparent 36%),
+    linear-gradient(135deg,#020713 0%,#06142d 42%,#071b3e 100%);
+}
+body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle at center,black 0%,transparent 82%);pointer-events:none}
+.dashboard{height:100dvh;width:100vw;padding:20px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:38% 62%;gap:16px;position:relative;z-index:1}
+.card{position:relative;background:linear-gradient(145deg,rgba(28,58,115,.58),rgba(8,21,46,.58));border:1px solid rgba(89,194,255,.33);box-shadow:var(--shadow),inset 0 0 0 1px rgba(255,255,255,.05);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.card:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(255,255,255,.12),transparent 38%);pointer-events:none}
+.time-card,.weather-card{min-height:0}
+.time-card{display:grid;grid-template-columns:41% 59%;align-items:center;padding:28px 32px;background:linear-gradient(135deg,rgba(52,35,110,.58),rgba(8,38,89,.66))}
+.analog-wrap{display:flex;align-items:center;justify-content:center;height:100%}
+.analog{width:min(26vw,250px);height:min(26vw,250px);border-radius:50%;position:relative;background:radial-gradient(circle,rgba(69,112,197,.16) 0%,rgba(29,48,103,.22) 62%,rgba(11,18,49,.35) 100%);box-shadow:0 0 0 3px rgba(71,216,255,.26),0 0 42px rgba(161,92,255,.32),inset 0 0 55px rgba(99,183,255,.17)}
+.analog .tick{position:absolute;left:50%;top:50%;width:2px;height:8px;background:rgba(255,255,255,.5);border-radius:3px;transform-origin:50% calc((min(26vw,250px) / 2) - 10px)}
+.analog .num{position:absolute;font-size:18px;font-weight:800;color:rgba(255,255,255,.78);transform:translate(-50%,-50%)}
+.n12{left:50%;top:13%}.n3{left:86%;top:50%}.n6{left:50%;top:87%}.n9{left:14%;top:50%}
+.hand{position:absolute;left:50%;top:50%;border-radius:999px;transform-origin:0 50%}
+.hand.hour{width:30%;height:9px;background:linear-gradient(90deg,var(--pink),var(--purple));transform:rotate(212deg)}
+.hand.min{width:40%;height:7px;background:linear-gradient(90deg,var(--cyan),var(--blue));transform:rotate(323deg)}
+.pin{position:absolute;width:22px;height:22px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:#102b5b;border:4px solid var(--cyan);box-shadow:0 0 20px rgba(40,240,255,.5)}
+.time-content{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;min-width:0}
+.clockline{display:flex;align-items:flex-end;gap:16px;line-height:.86}.clock{font-size:clamp(68px,8.8vw,140px);font-weight:900;letter-spacing:-.06em;text-shadow:0 10px 40px rgba(255,255,255,.14)}.ampm{font-size:clamp(26px,2.5vw,48px);font-weight:900;color:var(--pink);padding-bottom:12px}.date{font-size:clamp(19px,1.75vw,31px);font-weight:700;color:rgba(255,255,255,.76)}
+.next-pill{display:flex;align-items:center;gap:18px;margin-top:8px;min-width:min(420px,100%);padding:15px 18px;border-radius:22px;background:rgba(7,19,48,.38);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 0 38px rgba(78,184,255,.08)}
+.next-icon{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,94,203,.22),rgba(67,183,255,.14));border:1px solid rgba(255,94,203,.4);font-size:27px}.next-title{font-size:clamp(17px,1.45vw,25px);font-weight:800}.next-sub{font-size:clamp(15px,1.25vw,22px);font-weight:800;color:var(--pink)}.chev{margin-left:auto;color:rgba(255,255,255,.58);font-size:36px;font-weight:400}
+.weather-card{padding:26px 28px;background:linear-gradient(135deg,rgba(12,45,118,.76),rgba(6,22,58,.63));display:grid;grid-template-rows:auto 1fr}.weather-card:before{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,transparent,rgba(32,132,213,.18)),radial-gradient(ellipse at 70% 100%,rgba(130,209,255,.18),transparent 42%);pointer-events:none}.weather-top{display:grid;grid-template-columns:18% 24% 1fr;align-items:center;gap:8px;z-index:1}.weather-moon{font-size:82px;filter:drop-shadow(0 0 26px rgba(181,108,255,.45));text-align:center}.temperature{font-size:clamp(72px,8.2vw,138px);font-weight:900;letter-spacing:-.055em;line-height:.8}.condition{font-size:clamp(20px,2vw,36px);font-weight:800;margin-bottom:11px}.weather-meta{font-size:clamp(16px,1.35vw,24px);color:rgba(255,255,255,.78);display:flex;gap:18px;align-items:center;flex-wrap:wrap}.rain{color:#bbecff}.forecast{position:relative;z-index:1;margin-top:18px;border-radius:20px;background:rgba(7,27,66,.36);border:1px solid rgba(255,255,255,.16);display:grid;grid-template-columns:repeat(7,1fr);overflow:hidden}.day{padding:15px 6px;text-align:center;border-left:1px solid rgba(255,255,255,.14)}.day:first-child{border-left:0}.day-name{font-size:clamp(13px,1vw,17px);font-weight:900;color:rgba(255,255,255,.82);margin-bottom:9px}.weather-ico{font-size:clamp(28px,2.5vw,42px);line-height:1;margin-bottom:8px}.hi{font-size:clamp(20px,1.6vw,30px);font-weight:900}.lo{font-size:clamp(16px,1.25vw,23px);font-weight:700;color:rgba(255,255,255,.63);margin-top:3px}.pop-small{font-size:clamp(13px,1vw,18px);color:var(--cyan);font-weight:800;margin-top:2px}
+.home-card{grid-column:1;grid-row:2;padding:20px 24px 20px;display:grid;grid-template-rows:auto auto auto 1fr auto;gap:12px;background:linear-gradient(135deg,rgba(11,40,92,.64),rgba(5,16,39,.72))}.section-head{display:flex;align-items:center;gap:12px;font-size:clamp(23px,1.9vw,34px);font-weight:900}.section-head .icon{color:#88d8ff;font-size:28px}.small-label{font-size:clamp(15px,1.15vw,20px);font-weight:800;color:rgba(255,255,255,.72);margin-top:-6px}.scene-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.scene{min-height:86px;border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.17);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--text);font-family:inherit;cursor:pointer;transition:.16s transform,.16s border-color,.16s background}.scene:active{transform:scale(.96)}.scene .s-ico{font-size:33px}.scene .s-name{font-size:clamp(12px,1vw,16px);font-weight:900}.scene.morning{box-shadow:inset 0 0 34px rgba(182,108,255,.16)}.scene.dinner{box-shadow:inset 0 0 34px rgba(255,212,72,.13)}.scene.movie{box-shadow:inset 0 0 34px rgba(35,224,190,.13)}.scene.night{box-shadow:inset 0 0 34px rgba(116,139,255,.15)}.ecosystems{display:grid;grid-template-columns:1fr 1fr;gap:13px}.eco-card{border-radius:17px;background:rgba(9,19,45,.48);border:1px solid rgba(255,255,255,.15);padding:14px 16px 13px;min-height:119px}.eco-title{display:flex;align-items:center;gap:12px;font-size:clamp(18px,1.35vw,25px);font-weight:900;margin-bottom:12px}.g-home{width:32px;height:32px;position:relative;display:inline-block}.g-home:before{content:"";position:absolute;left:5px;top:9px;width:22px;height:18px;background:conic-gradient(from 225deg,#4285f4 0 25%,#34a853 0 50%,#fbbc04 0 75%,#ea4335 0);clip-path:polygon(50% 0,100% 35%,100% 100%,0 100%,0 35%)}.govee-logo{font-weight:900;font-size:30px;color:#21befe;letter-spacing:-.04em}.eco-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.mini-action{display:flex;flex-direction:column;align-items:center;gap:7px;color:var(--text);font-size:clamp(10px,.78vw,14px);font-weight:800;text-align:center;cursor:pointer}.mini-circle{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);font-size:20px}.camera-row{display:grid;grid-template-columns:26% 1fr;border-radius:17px;background:rgba(7,16,39,.44);border:1px solid rgba(255,255,255,.16);overflow:hidden;min-height:130px}.camera-info{padding:16px 14px;display:flex;flex-direction:column;gap:8px;justify-content:space-between}.camera-title{display:flex;gap:10px;align-items:flex-start;font-size:clamp(18px,1.35vw,26px);font-weight:900}.live{font-size:clamp(13px,1vw,17px);font-weight:800;color:rgba(255,255,255,.72)}.live:before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);margin-right:8px}.view-camera{border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:10px 12px;font-size:clamp(12px,1vw,16px);font-weight:900;font-family:inherit;cursor:pointer}.camera-view{position:relative;min-height:100%;background:linear-gradient(180deg,rgba(2,7,19,.1),rgba(2,7,19,.38)),radial-gradient(circle at 28% 64%,rgba(255,214,119,.35) 0 2%,transparent 9%),radial-gradient(circle at 62% 58%,rgba(255,214,119,.35) 0 2%,transparent 8%),linear-gradient(145deg,#07111e,#0f2238 42%,#2b231a 44%,#101c2c 100%)}.camera-view:before{content:"";position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(165deg,transparent 0 42%,rgba(88,88,88,.55) 43% 58%,transparent 59%),radial-gradient(ellipse at 26% 100%,rgba(41,118,57,.64),transparent 42%),radial-gradient(ellipse at 70% 100%,rgba(37,111,55,.62),transparent 39%)}.camera-view:after{content:"Front Door";position:absolute;left:14px;top:11px;font-size:18px;font-weight:900;text-shadow:0 2px 10px #000}.camera-live{position:absolute;right:14px;top:12px;color:#6aff91;font-weight:900}.camera-live:before{content:"• ";}.expand{position:absolute;right:13px;bottom:13px;width:38px;height:38px;border-radius:10px;background:rgba(8,14,30,.74);border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;font-size:19px}.status-strip{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:15px;border-radius:17px;background:rgba(8,18,43,.50);border:1px solid rgba(255,255,255,.15);padding:12px 16px}.shield{width:62px;height:62px;border-radius:19px;background:linear-gradient(135deg,rgba(89,255,128,.2),rgba(42,217,125,.06));display:grid;place-items:center;color:var(--green);font-size:34px;border:1px solid rgba(83,230,129,.32)}.status-title{font-size:clamp(18px,1.4vw,25px);font-weight:900}.status-sub{font-size:clamp(13px,1vw,18px);font-weight:800;color:#85f58f}.devices-btn{border:1px solid rgba(255,255,255,.17);background:rgba(255,255,255,.07);border-radius:14px;color:#fff;font-family:inherit;font-size:clamp(14px,1vw,18px);font-weight:900;padding:13px 21px;cursor:pointer}.agenda-card{grid-column:2;grid-row:2;padding:25px 26px;background:linear-gradient(135deg,rgba(24,35,105,.62),rgba(8,50,87,.62));display:grid;grid-template-columns:52% 48%;grid-template-rows:auto 1fr auto;column-gap:22px;row-gap:18px}.agenda-title{grid-column:1;font-size:clamp(22px,1.7vw,31px);font-weight:900;display:flex;gap:12px;align-items:center}.events-title{grid-column:2;justify-self:end;font-size:clamp(16px,1.2vw,22px);font-weight:800;color:rgba(255,255,255,.72);display:flex;gap:13px;align-items:center}.glance-list{grid-column:1;display:grid;gap:12px}.glance{border-radius:15px;min-height:72px;display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:14px;padding:10px 16px;border:1px solid rgba(255,255,255,.15)}.glance .gicon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:27px}.glance .main{font-size:clamp(16px,1.2vw,22px);font-weight:900}.glance .sub{font-size:clamp(12px,.9vw,16px);font-weight:700;color:rgba(255,255,255,.64)}.weather-glance{background:linear-gradient(90deg,rgba(20,169,255,.38),rgba(40,89,208,.20))}.weather-glance .gicon{background:rgba(40,194,255,.19);color:var(--cyan)}.event-glance{background:linear-gradient(90deg,rgba(173,91,255,.40),rgba(78,70,208,.20))}.event-glance .gicon{background:rgba(180,108,255,.24);color:var(--purple)}.reminder-glance{background:linear-gradient(90deg,rgba(36,225,158,.35),rgba(38,139,122,.18))}.reminder-glance .gicon{background:rgba(47,232,151,.20);color:var(--green)}.dinner-glance{background:linear-gradient(90deg,rgba(255,147,47,.45),rgba(208,78,70,.18))}.dinner-glance .gicon{background:rgba(255,155,53,.22);color:var(--orange)}.event-list{grid-column:2;grid-row:2;border-radius:17px;background:rgba(7,24,55,.28);border:1px solid rgba(255,255,255,.12);padding:14px 16px;display:grid;align-content:stretch}.event-row{display:grid;grid-template-columns:96px 20px 1fr;gap:8px;align-items:center;border-bottom:1px solid rgba(255,255,255,.13);min-height:65px}.event-row:last-child{border-bottom:0}.etime{font-size:clamp(13px,1vw,17px);font-weight:900}.dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 14px currentColor}.edetail .name{font-size:clamp(15px,1.15vw,21px);font-weight:900}.edetail .place{font-size:clamp(12px,.9vw,16px);font-weight:700;color:rgba(255,255,255,.58);margin-top:2px}.full-cal{grid-column:1/3;border:0;border-radius:17px;background:linear-gradient(90deg,#ff64bb,#7b55ff);color:#fff;font-family:inherit;font-size:clamp(17px,1.4vw,26px);font-weight:900;display:flex;align-items:center;justify-content:center;gap:16px;min-height:63px;cursor:pointer;box-shadow:0 18px 48px rgba(154,83,255,.22)}.toast{position:fixed;z-index:30;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:rgba(7,17,39,.88);border:1px solid rgba(255,255,255,.22);color:#fff;padding:13px 22px;border-radius:999px;font-weight:900;box-shadow:0 12px 42px rgba(0,0,0,.3);opacity:0;transition:.22s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:1100px){html,body{overflow:auto}.dashboard{height:auto;min-height:100dvh;grid-template-columns:1fr;grid-template-rows:auto;overflow:visible}.time-card,.weather-card,.home-card,.agenda-card{grid-column:1;grid-row:auto}.time-card{grid-template-columns:1fr}.analog-wrap{display:none}.agenda-card{grid-template-columns:1fr}.agenda-title,.events-title,.glance-list,.event-list,.full-cal{grid-column:1;grid-row:auto}.events-title{justify-self:start}.scene-grid,.ecosystems{grid-template-columns:1fr 1fr}.camera-row{grid-template-columns:1fr}.camera-view{min-height:210px}}
+@media(max-width:650px){.dashboard{padding:12px;gap:12px}.scene-grid,.ecosystems{grid-template-columns:1fr}.forecast{grid-template-columns:repeat(4,1fr)}.day:nth-child(n+5){display:none}.weather-top{grid-template-columns:1fr;text-align:center}.next-pill{min-width:0}.event-row{grid-template-columns:82px 16px 1fr}.status-strip{grid-template-columns:auto 1fr}.devices-btn{grid-column:1/3}}
 
-  /* Header */
-  .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0; animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:0 4px 16px rgba(0,0,0,0.35); }
-  .greeting { font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:3px; }
-  .title { font-size:34px; font-weight:900; letter-spacing:-0.02em; line-height:1.1; }
-  .title em { font-style:normal; color:#e040fb; }
-  .clock-block { text-align:right; }
-  .clock { font-size:30px; font-weight:800; letter-spacing:-0.03em; background:linear-gradient(135deg,#e040fb,#2196f3); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .date { font-size:11px; color:var(--text-dim); font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-top:2px; }
-
-
-  .safety-note { margin-top:0; background:#151515; border:2px solid rgba(255,255,255,0.12); border-radius:var(--radius); padding:14px 16px; font-size:12px; font-weight:700; color:var(--text-mid); line-height:1.35; animation:popIn 0.4s 0.1s cubic-bezier(0.34,1.56,0.64,1) both; }
-  .safety-note strong { color:#fff; }
-
-  /* Section label */
-  .section-label { font-size:10px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; margin-top:30px; display:flex; align-items:center; gap:10px; }
-  .section-label::after { content:''; flex:1; height:2px; background:var(--border); border-radius:2px; }
-
-  /* Scene chips */
-  .scene-row { display:flex; gap:9px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; animation:popIn 0.4s 0.08s cubic-bezier(0.34,1.56,0.64,1) both; }
-  .scene-row::-webkit-scrollbar { display:none; }
-  .scene-chip { flex-shrink:0; background:var(--chip-bg); border:2px solid var(--border); border-radius:30px; padding:9px 18px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; color:var(--text); cursor:pointer; transition:background 0.15s,border-color 0.15s,transform 0.12s,color 0.15s; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
-  .scene-chip:active { transform:scale(0.94); }
-  .scene-chip.active { background:var(--chip-active-bg); border-color:var(--chip-active-bg); color:var(--chip-active-fg); box-shadow:0 4px 14px rgba(255,255,255,0.15); }
-  .scene-chip span { margin-right:5px; }
-
-  /* Ecosystem cards */
-  .ecosystem-strip { display:grid; grid-template-columns:1fr 1fr; gap:10px; animation:popIn 0.4s 0.12s cubic-bezier(0.34,1.56,0.64,1) both; }
-  .ecosystem-card { border-radius:var(--radius); padding:16px 16px 14px; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; text-decoration:none; color:inherit; display:block; position:relative; overflow:hidden; border:2px solid transparent; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
-  .ecosystem-card.google { background:var(--google-bg); border-color:#90caf9; }
-  .ecosystem-card.govee  { background:var(--govee-bg);  border-color:#ce93d8; }
-  .ecosystem-card:active { transform:scale(0.96); }
-  .eco-icon { font-size:28px; margin-bottom:10px; display:block; }
-  .eco-name { font-size:16px; font-weight:900; margin-bottom:2px; }
-  .ecosystem-card.google .eco-name { color:var(--google-fg); }
-  .ecosystem-card.govee  .eco-name { color:var(--govee-fg); }
-  .eco-sub { font-size:11px; font-weight:600; color:rgba(0,0,0,0.45); }
-  .eco-badge { position:absolute; top:14px; right:14px; font-size:10px; font-weight:800; background:rgba(255,255,255,0.7); border:1px solid rgba(0,0,0,0.08); padding:3px 9px; border-radius:20px; color:rgba(0,0,0,0.5); }
-
-  /* Device grid */
-  .device-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; animation:popIn 0.4s 0.18s cubic-bezier(0.34,1.56,0.64,1) both; }
-  @media(min-width:600px) and (max-width:900px){ .device-grid{ grid-template-columns:repeat(3,1fr); } }
-  @media(min-width:901px){ .device-grid{ grid-template-columns:repeat(2,1fr); } }
-
-  .device-card { border-radius:var(--radius); padding:16px 14px 14px; cursor:pointer; border:2px solid transparent; transition:transform 0.13s,box-shadow 0.15s,filter 0.2s,opacity 0.2s; position:relative; overflow:hidden; user-select:none; box-shadow:0 3px 12px rgba(0,0,0,0.4); }
-  .device-card:active { transform:scale(0.95); }
-  .device-card.off { filter:saturate(0.2) brightness(0.85); opacity:0.65; }
-  .device-card.on  { box-shadow:0 6px 22px rgba(0,0,0,0.5); border-color:rgba(255,255,255,0.5); }
-  .device-card.loading { opacity:0.7; pointer-events:none; }
-
-  .device-card[data-color="yellow"]   { background:var(--c-yellow); }
-  .device-card[data-color="pink"]     { background:var(--c-pink); }
-  .device-card[data-color="mint"]     { background:var(--c-mint); }
-  .device-card[data-color="sky"]      { background:var(--c-sky); }
-  .device-card[data-color="lavender"] { background:var(--c-lavender); }
-  .device-card[data-color="coral"]    { background:var(--c-coral); }
-
-  .d-icon { font-size:32px; margin-bottom:10px; display:block; line-height:1; }
-  .d-name { font-size:13px; font-weight:900; margin-bottom:2px; letter-spacing:-0.01em; color:#1a1a2e; }
-  .d-location { font-size:10px; font-weight:700; color:rgba(26,26,46,0.5); }
-  .d-source { font-size:9px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; margin-top:10px; padding:3px 8px; border-radius:20px; display:inline-block; background:rgba(255,255,255,0.55); color:rgba(26,26,46,0.55); }
-  .d-status { position:absolute; bottom:14px; right:14px; font-size:9px; font-weight:800; color:rgba(26,26,46,0.4); }
-
-  /* Toggle */
-  .d-toggle { position:absolute; top:14px; right:14px; width:30px; height:17px; border-radius:9px; background:rgba(0,0,0,0.15); transition:background 0.2s; }
-  .d-toggle::after { content:''; position:absolute; top:3px; left:3px; width:11px; height:11px; border-radius:50%; background:#fff; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.25); }
-  .device-card.on .d-toggle { background:rgba(0,0,0,0.3); }
-  .device-card.on .d-toggle::after { transform:translateX(13px); }
-
-  /* Spinner for loading state */
-  .d-spinner { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:24px; height:24px; border:3px solid rgba(26,26,46,0.2); border-top-color:rgba(26,26,46,0.6); border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
-  .device-card.loading .d-spinner { display:block; }
-
-
-
-  /* Family Calendar */
-  .calendar-card { background:#111111; border:2px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.35); animation:popIn 0.4s 0.2s cubic-bezier(0.34,1.56,0.64,1) both; flex:1; display:flex; flex-direction:column; min-height:100%; }
-  .calendar-header { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px 18px 12px; border-bottom:1px solid var(--border); }
-  .calendar-title-wrap { display:flex; align-items:center; gap:12px; min-width:0; }
-  .calendar-icon { width:42px; height:42px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; background:linear-gradient(135deg,rgba(224,64,251,0.24),rgba(33,150,243,0.24)); border:1px solid rgba(255,255,255,0.12); }
-  .calendar-title { font-size:17px; font-weight:900; line-height:1.1; }
-  .calendar-sub { font-size:11px; font-weight:700; color:var(--text-dim); margin-top:3px; }
-  .calendar-open { flex-shrink:0; border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:8px 12px; background:#1a1a1a; color:var(--text); text-decoration:none; font-size:11px; font-weight:900; }
-  .calendar-frame-wrap { position:relative; min-height:0; background:#0b0b0b; flex:1; }
-  .calendar-frame { width:100%; height:100%; min-height:720px; border:0; display:block; background:#fff; }
-  .calendar-placeholder { padding:22px 18px 20px; color:var(--text-mid); font-size:13px; line-height:1.45; }
-  .calendar-placeholder strong { color:#fff; }
-  .calendar-placeholder code { display:block; margin:12px 0; padding:12px; background:#050505; border:1px solid var(--border); border-radius:12px; color:#d9b3ff; font-size:11px; white-space:normal; word-break:break-word; }
-  .calendar-steps { margin-top:12px; padding-left:18px; }
-  .calendar-steps li { margin:6px 0; }
-  .calendar-setup-box { margin-top:16px; display:grid; gap:10px; }
-  .calendar-input { width:100%; border:2px solid var(--border); border-radius:14px; background:#050505; color:#fff; padding:12px 13px; font-family:'Nunito',sans-serif; font-size:12px; outline:none; }
-  .calendar-input:focus { border-color:rgba(224,64,251,0.55); }
-  .calendar-button-row { display:flex; gap:10px; flex-wrap:wrap; }
-  .calendar-btn { border:0; border-radius:999px; padding:10px 14px; background:#fff; color:#000; font-family:'Nunito',sans-serif; font-size:12px; font-weight:900; cursor:pointer; }
-  .calendar-btn.secondary { background:#1a1a1a; color:#fff; border:1px solid var(--border); }
-  .calendar-btn:active { transform:scale(0.97); }
-  .calendar-mini-note { font-size:11px; color:var(--text-dim); line-height:1.35; }
-  @media(max-width:520px){ .calendar-header{align-items:flex-start;} .calendar-open{display:none;} .calendar-frame{min-height:380px;} .calendar-frame-wrap{min-height:340px;} }
-
-  /* Status bar */
-  .status-bar { margin-top:0; background:#111111; border:2px solid var(--border); border-radius:var(--radius); padding:16px 22px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 16px rgba(0,0,0,0.3); animation:popIn 0.4s 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
-  .status-items { display:flex; gap:22px; }
-  .status-item  { display:flex; align-items:center; gap:8px; }
-  .status-dot   { width:9px; height:9px; border-radius:50%; }
-  .dot-on  { background:#4caf50; box-shadow:0 0 8px #4caf50; animation:pulse 2.5s ease infinite; }
-  .dot-off { background:#555; }
-  .status-label { font-size:12px; font-weight:700; color:var(--text-mid); }
-  .status-count { font-size:11px; font-weight:600; color:var(--text-dim); }
-
-  /* Toast */
-  .toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(20px); background:#222; color:#fff; font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; padding:10px 20px; border-radius:30px; border:1px solid var(--border); opacity:0; transition:opacity 0.2s,transform 0.2s; z-index:200; white-space:nowrap; }
-  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-  /* Modal */
-  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:100; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.2s; }
-  .modal-overlay.open { opacity:1; pointer-events:all; }
-  .modal { background:#111; border-radius:28px 28px 0 0; border:2px solid var(--border-active); padding:26px 22px 44px; width:100%; transform:translateY(30px); transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1); }
-  .modal-overlay.open .modal { transform:translateY(0); }
-  .modal-pill { width:36px; height:5px; background:#333; border-radius:3px; margin:0 auto 18px; }
-  .modal-title { font-size:22px; font-weight:900; margin-bottom:3px; }
-  .modal-sub   { font-size:12px; font-weight:600; color:var(--text-dim); margin-bottom:22px; }
-  .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .modal-btn { padding:15px; border-radius:var(--radius-sm); border:2px solid var(--border); background:#1e1e1e; color:var(--text); font-family:'Nunito',sans-serif; font-size:14px; font-weight:800; cursor:pointer; transition:background 0.15s,transform 0.1s; }
-  .modal-btn:active { transform:scale(0.96); }
-  .modal-btn.govee-btn { background:rgba(179,136,255,0.1); border-color:rgba(179,136,255,0.3); color:#ce93d8; grid-column:1/-1; }
-  .modal-btn.danger    { background:rgba(239,83,80,0.1); border-color:rgba(239,83,80,0.3); color:#ef5350; }
-
-  @keyframes popIn  { from{opacity:0;transform:translateY(18px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
-  @keyframes pulse  { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  @keyframes spin   { to{transform:translate(-50%,-50%) rotate(360deg)} }
+.dashboard-version-badge{position:fixed;right:12px;bottom:10px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:5px 9px;z-index:9999}
 </style>
 </head>
 <body>
-<div class="wrapper">
+<div class="dashboard">
+  <section class="card time-card">
+    <div class="analog-wrap">
+      <div class="analog" id="analogClock"><span class="num n12">12</span><span class="num n3">3</span><span class="num n6">6</span><span class="num n9">9</span><div class="hand hour" id="hourHand"></div><div class="hand min" id="minHand"></div><div class="pin"></div></div>
+    </div>
+    <div class="time-content">
+      <div class="clockline"><div class="clock" id="clock">8:41</div><div class="ampm" id="ampm">PM</div></div>
+      <div class="date" id="date">Saturday, May 23</div>
+      <button class="next-pill" onclick="openCalendar()" aria-label="Open family calendar">
+        <div class="next-icon">▣</div><div><div class="next-title">Next: <span id="nextEventName">Soccer Practice</span></div><div class="next-sub" id="nextEventCountdown">in 42 min</div></div><div class="chev">›</div>
+      </button>
+    </div>
+  </section>
 
-  <div class="dashboard-shell">
-    <div class="dashboard-column left-stack">
-      <div class="header">
-        <div class="header-left">
-          <div class="greeting">Welcome home</div>
-          <div class="title">Home <em>Control</em></div>
-        </div>
-        <div class="clock-block">
-          <div class="clock" id="clock">--:--</div>
-          <div class="date"  id="date">---</div>
-        </div>
-      </div>
-      <div class="safety-note">
-        <strong>Safe public mode:</strong> API key removed. Device cards are demo toggles only. Use app buttons for real controls.
-      </div>
-
-      <div class="control-panel">
-        <div class="panel-title">Scenes</div>
-        <div class="scene-row" id="sceneRow">
-          <div class="scene-chip active" data-scene="all-on"><span>✨</span>All On</div>
-          <div class="scene-chip" data-scene="all-off"><span>🌙</span>All Off</div>
-          <div class="scene-chip" data-scene="lights-only"><span>💡</span>Lights Only</div>
-          <div class="scene-chip" data-scene="plug-only"><span>🔌</span>Plug Only</div>
-        </div>
-      </div>
-
-      <div class="control-panel">
-        <div class="panel-title">Apps</div>
-        <div class="ecosystem-strip">
-          <a class="ecosystem-card google" href="googlehome://" onclick="openApp('googlehome://','https://home.google.com'); return false;">
-            <div class="eco-badge">Open ↗</div>
-            <div class="eco-icon">🏠</div>
-            <div class="eco-name">Google Home</div>
-            <div class="eco-sub">Cameras · Other devices</div>
-          </a>
-          <a class="ecosystem-card govee" href="govee://" onclick="openApp('govee://','https://apps.apple.com/app/govee-home/id1395696823'); return false;">
-            <div class="eco-badge">Open ↗</div>
-            <div class="eco-icon">💡</div>
-            <div class="eco-name">Govee Home</div>
-            <div class="eco-sub">Full device controls</div>
-          </a>
-        </div>
-      </div>
-
-      <div class="control-panel">
-        <div class="panel-title">Devices</div>
-        <div class="device-grid" id="deviceGrid"></div>
-      </div>
-
-      <div class="status-bar">
-        <div class="status-items">
-          <div class="status-item"><div class="status-dot dot-on"></div><div class="status-label" id="onCount">— on</div></div>
-          <div class="status-item"><div class="status-dot dot-off"></div><div class="status-label" id="offCount">— off</div></div>
-        </div>
-        <div class="status-count" id="lastUpdate">Updated just now</div>
+  <section class="card weather-card">
+    <div class="weather-top">
+      <div class="weather-moon" id="weatherIconBig">☾</div>
+      <div class="temperature" id="currentTemp">68°</div>
+      <div>
+        <div class="condition" id="condition">Clear</div>
+        <div class="weather-meta"><span>H <strong id="weatherHigh">75°</strong></span><span>•</span><span>L <strong id="weatherLow">52°</strong></span><span>|</span><span class="rain">💧 <strong id="rainChance">0%</strong> chance of rain</span></div>
       </div>
     </div>
+    <div class="forecast" id="forecast"></div>
+  </section>
 
-    <div class="dashboard-column calendar-column">
-      <div class="calendar-card">
-        <div class="calendar-header">
-          <div class="calendar-title-wrap">
-            <div class="calendar-icon">📅</div>
-            <div>
-              <div class="calendar-title">Family Calendar</div>
-              <div class="calendar-sub" id="calendarStatus">Upcoming events</div>
-            </div>
-          </div>
-          <a class="calendar-open" id="calendarOpenLink" href="https://calendar.google.com" target="_blank" rel="noopener">Open Calendar ↗</a>
+  <section class="card home-card">
+    <div class="section-head"><span class="icon">⌂</span><span>Home Control</span></div>
+    <div class="small-label">Scenes</div>
+    <div class="scene-grid">
+      <button class="scene morning" onclick="sceneToast('Good Morning')"><div class="s-ico" style="color:var(--pink)">⌂</div><div class="s-name">Good Morning</div></button>
+      <button class="scene dinner" onclick="sceneToast('Dinner Time')"><div class="s-ico" style="color:var(--yellow)">⌒</div><div class="s-name">Dinner Time</div></button>
+      <button class="scene movie" onclick="sceneToast('Movie Night')"><div class="s-ico" style="color:var(--teal)">▣</div><div class="s-name">Movie Night</div></button>
+      <button class="scene night" onclick="sceneToast('Good Night')"><div class="s-ico" style="color:#9aa7ff">☾</div><div class="s-name">Good Night</div></button>
+    </div>
+    <div class="ecosystems">
+      <div class="eco-card">
+        <div class="eco-title"><span class="g-home"></span><span>Google Home</span></div>
+        <div class="eco-actions">
+          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">💡</span><span>Lights</span></div>
+          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">📹</span><span>Cameras</span></div>
+          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">72°</span><span>Thermostat</span></div>
+          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">▶</span><span>Routines</span></div>
         </div>
-        <div class="calendar-frame-wrap" id="calendarFrameWrap"></div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-title"><span class="govee-logo">G</span><span>Govee</span></div>
+        <div class="eco-actions">
+          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">💡</span><span>Color Lights</span></div>
+          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">🎨</span><span>Scenes</span></div>
+          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">🌅</span><span>Ambience</span></div>
+          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">〰</span><span>DIY</span></div>
+        </div>
       </div>
     </div>
-  </div>
+    <div class="camera-row">
+      <div class="camera-info">
+        <div><div class="camera-title"><span>▣</span><span>Front Door</span></div><div class="live">Live</div></div>
+        <button class="view-camera" onclick="openFrontDoor()">View Camera ↗</button>
+      </div>
+      <div class="camera-view" id="frontDoorPreview"><span class="camera-live">Live</span><span class="expand">⤢</span></div>
+    </div>
+    <div class="status-strip">
+      <div class="shield">✓</div>
+      <div><div class="status-title">Home: <span id="deviceCount">3</span> devices listed</div><div class="status-sub">All systems normal</div></div>
+      <button class="devices-btn" onclick="openGoogleHome()">View Devices ›</button>
+    </div>
+  </section>
+
+  <section class="card agenda-card">
+    <div class="agenda-title"><span style="color:var(--pink)">▣</span><span>Today at a Glance</span></div>
+    <div class="events-title"><span>Upcoming Events</span><span>›</span></div>
+    <div class="glance-list">
+      <div class="glance weather-glance"><div class="gicon">☁</div><div><div class="main">Weather: <span id="glanceWeather">68°, clear</span></div><div class="sub">Perfect evening!</div></div><div class="chev">›</div></div>
+      <div class="glance event-glance"><div class="gicon">▣</div><div><div class="main">Next Event: <span id="glanceNext">Family Dinner, 6:30 PM</span></div><div class="sub">Dining Room</div></div><div class="chev">›</div></div>
+      <div class="glance reminder-glance"><div class="gicon">♲</div><div><div class="main">Reminder: <span id="glanceReminder">Trash night</span></div><div class="sub">Put bins out by 6 AM</div></div><div class="chev">›</div></div>
+      <div class="glance dinner-glance"><div class="gicon">🍴</div><div><div class="main">Dinner: <span id="glanceDinner">Hawaiian wings + spicy rice</span></div><div class="sub">Ready to enjoy!</div></div><div class="chev">›</div></div>
+    </div>
+    <div class="event-list" id="eventList"></div>
+    <button class="full-cal" onclick="openCalendar()"><span>▣</span><span>View Full Calendar</span><span>›</span></button>
+  </section>
 </div>
-
 <div class="toast" id="toast"></div>
-
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-pill"></div>
-    <div class="modal-title" id="modalTitle">Device</div>
-    <div class="modal-sub"   id="modalSub">—</div>
-    <div class="modal-actions" id="modalActions"></div>
-  </div>
-</div>
-
 <script>
-// ── Config ────────────────────────────────────────────────────
-// API key removed for public hosting.
-// Do not place your live Govee API key in a public GitHub Pages file.
-const API_KEY = '';
-const DEMO_MODE = true;
-const API_BASE = 'https://developer-api.govee.com/v1/devices';
+// ─────────────────────────────────────────────────────────────
+// Dashboard config: edit these later as your setup gets finalized
+// BUILD: Home Hub V2 - vibrant layout + screenshot-style Home Control
+// ─────────────────────────────────────────────────────────────
+const CONFIG = {
+  weatherLat: 38.4404,           // Santa Rosa fallback. Change later if needed.
+  weatherLon: -122.7141,
+  familyCalendarUrl: 'https://calendar.google.com/calendar/embed?src=family11563085076736409084%40group.calendar.google.com&ctz=America%2FLos_Angeles',
+  frontDoorUrl: '',              // Add your camera app/web URL later.
+  googleHomeUrl: 'googlehome://',
+  googleHomeFallback: 'https://home.google.com',
+  goveeUrl: 'govee://',
+  goveeFallback: 'https://apps.apple.com/app/govee-home/id1395696823',
+  reminder: 'Trash night',
+  dinner: 'Hawaiian wings + spicy rice',
+  deviceCount: 3,
+  // Placeholder events until we wire a live calendar feed.
+  events: [
+    {when:'6:30 PM', title:'Family Dinner', place:'Dining Room', color:'var(--pink)'},
+    {when:'Tomorrow\n9:00 AM', title:'Soccer Practice', place:'Riverside Park', color:'var(--cyan)'},
+    {when:'Mon, May 25\n10:00 AM', title:"Emma’s Dentist Appt.", place:'Bright Smiles Dental', color:'var(--teal)'},
+    {when:'Tue, May 26\n7:00 PM', title:'Book Club', place:"Amy’s House", color:'var(--orange)'}
+  ]
+};
 
-// ── Family Calendar ───────────────────────────────────────────
-// Paste ONLY the src URL from your Google Calendar embed code below.
-// Example format:
-// https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID&ctz=America%2FLos_Angeles&mode=AGENDA
-const FAMILY_CALENDAR_EMBED_URL = 'https://calendar.google.com/calendar/embed?src=family11563085076736409084%40group.calendar.google.com&ctz=America%2FLos_Angeles';
-
-
-const devices = [
-  { id:'D4:AD:FC:B4:D5:8F', model:'H7021', name:'Deck Light',             icon:'🌿', location:'Deck',         color:'mint',     on:false },
-  { id:'60:74:F4:E2:6F:DA', model:'H6099', name:'Backlight Living',        icon:'🌈', location:'Living Room',  color:'lavender', on:false },
-  { id:'D4:AD:FC:1F:F7:0A', model:'H5082', name:'Dual Smart Plug',         icon:'🔌', location:'Home',         color:'coral',    on:false },
-];
-
-
-function normalizeCalendarUrl(rawValue) {
-  let value = (rawValue || '').trim();
-  if (!value) return '';
-
-  // Accept the full iframe code or only the src URL.
-  const srcMatch = value.match(/src=["']([^"']+)["']/i);
-  if (srcMatch) value = srcMatch[1];
-
-  // Convert HTML entities copied from Google Calendar embed code.
-  value = value.replace(/&amp;/g, '&');
-
-  // Keep the dashboard safe from pasted non-calendar scripts/links.
-  if (!/^https:\/\/calendar\.google\.com\/calendar\/embed\?/i.test(value)) {
-    return '';
+function makeTicks(){
+  const clock = document.getElementById('analogClock');
+  for(let i=0;i<60;i++){
+    const t=document.createElement('span');
+    t.className='tick';
+    t.style.height=(i%5===0?'10px':'5px');
+    t.style.opacity=(i%5===0?'.72':'.34');
+    t.style.transform=`rotate(${i*6}deg) translateY(calc(-1 * (min(26vw,250px) / 2 - 10px)))`;
+    clock.appendChild(t);
   }
-
-  // Force an agenda-style view and local timezone unless the URL already specifies them.
-  if (!/([?&])mode=/i.test(value)) {
-    value += (value.includes('?') ? '&' : '?') + 'mode=AGENDA';
-  }
-  if (!/([?&])ctz=/i.test(value)) {
-    value += '&ctz=America%2FLos_Angeles';
-  }
-  return value;
 }
 
-function getCalendarUrl() {
-  const saved = localStorage.getItem('familyCalendarEmbedUrl') || '';
-  return normalizeCalendarUrl(saved || FAMILY_CALENDAR_EMBED_URL);
+function updateClock(){
+  const now = new Date();
+  let h = now.getHours();
+  const m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  document.getElementById('clock').textContent = `${h12}:${String(m).padStart(2,'0')}`;
+  document.getElementById('ampm').textContent = ampm;
+  document.getElementById('date').textContent = now.toLocaleDateString([], {weekday:'long', month:'long', day:'numeric'});
+  const minDeg = (m / 60) * 360 - 90;
+  const hourDeg = ((h12 % 12) / 12) * 360 + (m / 60) * 30 - 90;
+  document.getElementById('minHand').style.transform = `rotate(${minDeg}deg)`;
+  document.getElementById('hourHand').style.transform = `rotate(${hourDeg}deg)`;
 }
 
-function saveFamilyCalendar() {
-  const input = document.getElementById('calendarUrlInput');
-  const url = normalizeCalendarUrl(input ? input.value : '');
-  if (!url) {
-    showToast('Paste a valid Google Calendar embed link');
-    return;
-  }
-  localStorage.setItem('familyCalendarEmbedUrl', url);
-  showToast('Family calendar saved ✓');
-  initFamilyCalendar();
+function weatherCodeToIcon(code){
+  if([0].includes(code)) return '☀️';
+  if([1,2].includes(code)) return '🌤️';
+  if([3].includes(code)) return '☁️';
+  if([45,48].includes(code)) return '🌫️';
+  if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return '🌧️';
+  if([71,73,75,77,85,86].includes(code)) return '❄️';
+  if([95,96,99].includes(code)) return '⛈️';
+  return '🌤️';
 }
-
-function clearFamilyCalendar() {
-  localStorage.removeItem('familyCalendarEmbedUrl');
-  showToast('Calendar link cleared');
-  initFamilyCalendar();
+function weatherCodeToText(code){
+  if(code===0) return 'Clear';
+  if(code===1) return 'Mainly clear';
+  if(code===2) return 'Partly cloudy';
+  if(code===3) return 'Cloudy';
+  if([45,48].includes(code)) return 'Fog';
+  if([51,53,55,56,57].includes(code)) return 'Drizzle';
+  if([61,63,65,66,67,80,81,82].includes(code)) return 'Rain';
+  if([71,73,75,77,85,86].includes(code)) return 'Snow';
+  if([95,96,99].includes(code)) return 'Thunderstorm';
+  return 'Weather';
 }
-
-function renderCalendarSetup() {
-  const wrap = document.getElementById('calendarFrameWrap');
-  const status = document.getElementById('calendarStatus');
-  const openLink = document.getElementById('calendarOpenLink');
-  if (status) status.textContent = 'Setup needed';
-  if (openLink) openLink.href = 'https://calendar.google.com';
-
-  wrap.innerHTML = `
-    <div class="calendar-placeholder">
-      <strong>Add your Family Calendar link.</strong>
-      <div style="margin-top:8px;">Paste the Google Calendar embed code or just the <strong>src</strong> link below. The dashboard will save it on this iPad/browser.</div>
-      <div class="calendar-setup-box">
-        <input id="calendarUrlInput" class="calendar-input" placeholder="Paste Google Calendar embed link or iframe code here" autocomplete="off" autocapitalize="off" spellcheck="false">
-        <div class="calendar-button-row">
-          <button class="calendar-btn" onclick="saveFamilyCalendar()">Save Calendar</button>
-          <button class="calendar-btn secondary" onclick="window.open('https://calendar.google.com/calendar/u/0/r/settings', '_blank')">Open Google Calendar Settings</button>
-        </div>
-        <div class="calendar-mini-note">On a computer: Google Calendar → Settings → select your family calendar → Integrate calendar → copy the embed code. If the iPad is signed into the right Google account, private calendars may display. For a shared family dashboard, sharing the calendar with that Google account is usually cleaner.</div>
-      </div>
-      <ol class="calendar-steps">
-        <li>Open Google Calendar on your computer.</li>
-        <li>Go to Settings and select the family calendar.</li>
-        <li>Find <strong>Integrate calendar</strong>.</li>
-        <li>Copy the embed code or the URL inside <strong>src="..."</strong>.</li>
-        <li>Paste it here on the dashboard and tap <strong>Save Calendar</strong>.</li>
-      </ol>
-    </div>`;
+function renderForecast(days){
+  const target=document.getElementById('forecast');
+  target.innerHTML = days.map(d => `
+    <div class="day">
+      <div class="day-name">${d.name}</div>
+      <div class="weather-ico">${d.icon}</div>
+      <div class="hi">${d.high}°</div>
+      <div class="lo">${d.low}°</div>
+      ${d.pop ? `<div class="pop-small">${d.pop}%</div>` : ''}
+    </div>`).join('');
 }
-
-function initFamilyCalendar() {
-  const wrap = document.getElementById('calendarFrameWrap');
-  const status = document.getElementById('calendarStatus');
-  const openLink = document.getElementById('calendarOpenLink');
-  if (!wrap) return;
-
-  const calendarUrl = getCalendarUrl();
-  if (!calendarUrl) {
-    renderCalendarSetup();
-    return;
-  }
-
-  if (status) status.textContent = 'Live Google Calendar view';
-  if (openLink) openLink.href = calendarUrl;
-  wrap.innerHTML = `
-    <iframe class="calendar-frame" src="${calendarUrl}" scrolling="no"></iframe>
-    <button class="calendar-btn secondary" onclick="clearFamilyCalendar()" style="position:absolute;right:14px;bottom:14px;z-index:2;background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);">Change Calendar</button>`;
+function fallbackWeather(){
+  renderForecast([
+    {name:'SUN',icon:'☀️',high:75,low:52,pop:0},{name:'MON',icon:'🌤️',high:77,low:54,pop:0},{name:'TUE',icon:'☀️',high:80,low:56,pop:0},{name:'WED',icon:'🌤️',high:78,low:57,pop:0},{name:'THU',icon:'☀️',high:76,low:55,pop:0},{name:'FRI',icon:'🌧️',high:72,low:54,pop:30},{name:'SAT',icon:'🌤️',high:73,low:53,pop:0}
+  ]);
 }
-
-// ── Govee API ─────────────────────────────────────────────────
-async function goveeControl(device, cmd, value) {
-  // Public-hosted dashboard safety mode.
-  // GitHub Pages is public, so this file intentionally does not include
-  // a live Govee API key or send direct API control requests.
-  // Use the Govee app shortcut for real controls, or move API control
-  // behind a private backend/Home Assistant later.
-  if (!API_KEY || DEMO_MODE) {
-    console.log(`[Demo mode] ${cmd} ${value} requested for ${device.name}`);
-    return true;
-  }
-
-  const body = {
-    device: device.id,
-    model:  device.model,
-    cmd: { name: cmd, value: value }
-  };
-  try {
-    const res = await fetch(`${API_BASE}/control`, {
-      method: 'PUT',
-      headers: { 'Govee-API-Key': API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+async function loadWeather(){
+  fallbackWeather();
+  try{
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.weatherLat}&longitude=${CONFIG.weatherLon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&temperature_unit=fahrenheit&timezone=auto`;
+    const res = await fetch(url, {cache:'no-store'});
+    if(!res.ok) throw new Error('Weather unavailable');
+    const data = await res.json();
+    const temp = Math.round(data.current.temperature_2m);
+    const code = data.current.weather_code;
+    const condition = weatherCodeToText(code);
+    const high = Math.round(data.daily.temperature_2m_max[0]);
+    const low = Math.round(data.daily.temperature_2m_min[0]);
+    const rain = data.daily.precipitation_probability_max[0] ?? 0;
+    document.getElementById('currentTemp').textContent = `${temp}°`;
+    document.getElementById('condition').textContent = condition;
+    document.getElementById('weatherHigh').textContent = `${high}°`;
+    document.getElementById('weatherLow').textContent = `${low}°`;
+    document.getElementById('rainChance').textContent = `${rain}%`;
+    document.getElementById('glanceWeather').textContent = `${temp}°, ${condition.toLowerCase()}`;
+    document.getElementById('weatherIconBig').textContent = (new Date().getHours() > 18 || new Date().getHours() < 6) ? '☾' : weatherCodeToIcon(code);
+    const days = data.daily.time.slice(0,7).map((iso,i)=>{
+      const dt = new Date(iso + 'T12:00:00');
+      return {name:dt.toLocaleDateString([], {weekday:'short'}).toUpperCase(), icon:weatherCodeToIcon(data.daily.weather_code[i]), high:Math.round(data.daily.temperature_2m_max[i]), low:Math.round(data.daily.temperature_2m_min[i]), pop:data.daily.precipitation_probability_max[i]};
     });
-    return res.ok;
-  } catch(e) {
-    return false;
+    renderForecast(days);
+  }catch(e){
+    console.warn(e);
   }
 }
-
-async function goveeTurnOn(device)  { return goveeControl(device, 'turn', 'on'); }
-async function goveeTurnOff(device) { return goveeControl(device, 'turn', 'off'); }
-
-// ── Toggle ────────────────────────────────────────────────────
-async function toggleDevice(id) {
-  const d = devices.find(d => d.id === id);
-  if (!d) return;
-
-  const card = document.querySelector(`.device-card[data-id="${id}"]`);
-  if (card) card.classList.add('loading');
-
-  const newState = !d.on;
-  const ok = newState ? await goveeTurnOn(d) : await goveeTurnOff(d);
-
-  if (ok) {
-    d.on = newState;
-    showToast(`${d.name} turned ${newState ? 'on' : 'off'}`);
-  } else {
-    showToast(`Couldn't reach ${d.name} — check connection`);
+function renderEvents(){
+  document.getElementById('deviceCount').textContent = CONFIG.deviceCount;
+  document.getElementById('glanceReminder').textContent = CONFIG.reminder;
+  document.getElementById('glanceDinner').textContent = CONFIG.dinner;
+  const list = document.getElementById('eventList');
+  list.innerHTML = CONFIG.events.map((e,idx)=>`
+    <div class="event-row">
+      <div class="etime" style="color:${e.color}">${e.when.replace('\n','<br>')}</div>
+      <div class="dot" style="color:${e.color};background:${e.color}"></div>
+      <div class="edetail"><div class="name">${e.title}</div><div class="place">${e.place}</div></div>
+    </div>`).join('');
+  if(CONFIG.events[0]){
+    document.getElementById('glanceNext').textContent = `${CONFIG.events[0].title}, ${CONFIG.events[0].when.split('\n').pop()}`;
   }
-
-  renderDevices();
-  closeModal();
 }
-
-// ── Scenes ────────────────────────────────────────────────────
-document.getElementById('sceneRow').addEventListener('click', async e => {
-  const chip = e.target.closest('.scene-chip');
-  if (!chip) return;
-  document.querySelectorAll('.scene-chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active');
-
-  const scene = chip.dataset.scene;
-  const targets = {
-    'all-on':      devices.map(d => ({ d, state: true  })),
-    'all-off':     devices.map(d => ({ d, state: false })),
-    'lights-only': devices.map(d => ({ d, state: d.model !== 'H5082' })),
-    'plug-only':   devices.map(d => ({ d, state: d.model === 'H5082' })),
-  }[scene] || [];
-
-  showToast('Applying scene...');
-  await Promise.all(targets.map(async ({ d, state }) => {
-    const ok = state ? await goveeTurnOn(d) : await goveeTurnOff(d);
-    if (ok) d.on = state;
-  }));
-  renderDevices();
-  showToast('Scene applied ✓');
-});
-
-// ── Modal ─────────────────────────────────────────────────────
-function showModal(id) {
-  const d = devices.find(d => d.id === id); if (!d) return;
-  document.getElementById('modalTitle').textContent = d.name;
-  document.getElementById('modalSub').textContent   = `${d.location} · ${d.model}`;
-  document.getElementById('modalActions').innerHTML = `
-    <button class="modal-btn govee-btn" onclick="openApp('govee://','https://apps.apple.com/app/govee-home/id1395696823')">↗ Open Govee App</button>
-    <button class="modal-btn" onclick="toggleDevice('${id}')" style="grid-column:1/-1">${d.on ? '⏹ Turn Off' : '▶ Turn On'}</button>
-    <button class="modal-btn" onclick="closeModal()">Cancel</button>
-    <button class="modal-btn danger" onclick="closeModal()">Dismiss</button>
-  `;
-  document.getElementById('modalOverlay').classList.add('open');
+function openApp(url, fallback){
+  const started = Date.now();
+  window.location.href = url;
+  setTimeout(()=>{ if(Date.now() - started < 1600) window.location.href = fallback; }, 900);
 }
-
-function closeModal(e) {
-  if (!e || e.target === document.getElementById('modalOverlay'))
-    document.getElementById('modalOverlay').classList.remove('open');
+function openGoogleHome(){ openApp(CONFIG.googleHomeUrl, CONFIG.googleHomeFallback); }
+function openGovee(){ openApp(CONFIG.goveeUrl, CONFIG.goveeFallback); }
+function openCalendar(){ window.location.href = CONFIG.familyCalendarUrl; }
+function openFrontDoor(){
+  if(CONFIG.frontDoorUrl) window.location.href = CONFIG.frontDoorUrl;
+  else showToast('Front Door camera link can be added later');
 }
-
-// ── Render ────────────────────────────────────────────────────
-function renderDevices() {
-  document.getElementById('deviceGrid').innerHTML = devices.map(d => `
-    <div class="device-card ${d.on?'on':'off'}" data-id="${d.id}" data-color="${d.color}" onclick="showModal('${d.id}')">
-      <div class="d-toggle"></div>
-      <div class="d-spinner"></div>
-      <span class="d-icon">${d.icon}</span>
-      <div class="d-name">${d.name}</div>
-      <div class="d-location">${d.location}</div>
-      <div class="d-source">${d.model}</div>
-    </div>
-  `).join('');
-  const on  = devices.filter(d=>d.on).length;
-  const off = devices.filter(d=>!d.on).length;
-  document.getElementById('onCount').textContent  = `${on} device${on!==1?'s':''} on`;
-  document.getElementById('offCount').textContent = `${off} device${off!==1?'s':''} off`;
-  document.getElementById('lastUpdate').textContent = `Updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
-}
-
-// ── Toast ─────────────────────────────────────────────────────
+function sceneToast(name){ showToast(`${name} scene selected. We can wire this later.`); }
 let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-// ── App links ─────────────────────────────────────────────────
-function openApp(appUrl, fallback) {
-  setTimeout(() => { window.location = fallback; }, 900);
-  window.location = appUrl;
-}
-
-// ── Clock ─────────────────────────────────────────────────────
-function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('date').textContent  = now.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
-}
-updateClock(); setInterval(updateClock, 10000);
-
-// ── Init ──────────────────────────────────────────────────────
-renderDevices();
-initFamilyCalendar();
+makeTicks();
+updateClock();
+setInterval(updateClock, 10000);
+renderEvents();
+loadWeather();
+setInterval(loadWeather, 30 * 60 * 1000);
 </script>
+<div class="dashboard-version-badge">Home Hub V2</div>
 </body>
 </html>
