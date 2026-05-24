@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Home Hub" />
 <meta name="theme-color" content="#071a3b" />
-<title>Home Hub V9 Alexa Scenes</title>
+<title>Home Hub V11 Room Controls</title>
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
@@ -179,6 +179,25 @@ body:before{background-image:linear-gradient(rgba(255,255,255,.012) 1px,transpar
 #houseNotes{background:rgba(0,0,0,.24);border-color:rgba(255,255,255,.105)}
 .dashboard-version-badge{background:rgba(0,0,0,.42);border-color:rgba(255,255,255,.10);color:rgba(255,255,255,.46)}
 
+/* V10 selected Govee controls */
+.govee-selected-panel{grid-template-columns:1fr;}
+.govee-control-card{min-height:104px;padding:9px 12px;}
+.govee-control-title{justify-content:space-between;margin-bottom:8px;}
+.govee-control-title>div{display:flex;align-items:center;gap:10px;}
+.govee-open{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.055);color:rgba(255,255,255,.78);border-radius:999px;padding:7px 11px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;}
+.govee-control-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.govee-device{border:1px solid rgba(255,255,255,.10);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.014));border-radius:13px;padding:8px 9px;display:grid;grid-template-rows:auto auto;gap:6px;min-width:0;}
+.govee-device-name{display:flex;align-items:center;gap:7px;font-size:clamp(10px,.82vw,14px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.govee-device-name span:last-child{overflow:hidden;text-overflow:ellipsis;}
+.govee-buttons{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.govee-buttons button{border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:7px 5px;background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:clamp(10px,.75vw,13px);font-weight:900;cursor:pointer;transition:.15s transform,.15s opacity,.15s background;}
+.govee-buttons button:first-child{background:linear-gradient(135deg,rgba(88,230,138,.20),rgba(36,120,96,.12));border-color:rgba(88,230,138,.23);}
+.govee-buttons button:last-child{background:linear-gradient(135deg,rgba(255,101,119,.16),rgba(106,50,70,.10));border-color:rgba(255,101,119,.20);}
+.govee-buttons button:active{transform:scale(.95);}
+.all-selected{box-shadow:inset 0 0 24px rgba(157,124,255,.09);}
+@media(max-width:1100px){.govee-control-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.govee-control-grid{grid-template-columns:1fr}.govee-control-title{align-items:flex-start;gap:8px;flex-direction:column}.govee-open{width:100%}}
+
 </style>
 </head>
 <body>
@@ -217,23 +236,29 @@ body:before{background-image:linear-gradient(rgba(255,255,255,.012) 1px,transpar
       <button class="scene dinner" onclick="sendScene('dinner','Dinner Time', this)"><div class="s-ico" style="color:var(--orange)">🍽</div><div class="s-name">Dinner Time</div></button>
       <button class="scene night" onclick="sendScene('bedtime','Good Night', this)"><div class="s-ico" style="color:#9aa7ff">☾</div><div class="s-name">Good Night</div></button>
     </div>
-    <div class="ecosystems">
-      <div class="eco-card">
-        <div class="eco-title"><span class="g-home"></span><span>Google Home</span></div>
-        <div class="eco-actions">
-          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">💡</span><span>Lights</span></div>
-          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">📹</span><span>Cameras</span></div>
-          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">72°</span><span>Thermostat</span></div>
-          <div class="mini-action" onclick="openGoogleHome()"><span class="mini-circle">▶</span><span>Routines</span></div>
+    <div class="ecosystems govee-selected-panel">
+      <div class="eco-card govee-control-card">
+        <div class="eco-title govee-control-title">
+          <div><span class="govee-logo">G</span><span>Room Controls</span></div>
+          <button class="govee-open" onclick="openGovee()">Open Govee ↗</button>
         </div>
-      </div>
-      <div class="eco-card">
-        <div class="eco-title"><span class="govee-logo">G</span><span>Govee</span></div>
-        <div class="eco-actions">
-          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">💡</span><span>Color Lights</span></div>
-          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">🎨</span><span>Scenes</span></div>
-          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">🌅</span><span>Ambience</span></div>
-          <div class="mini-action" onclick="openGovee()"><span class="mini-circle">〰</span><span>DIY</span></div>
+        <div class="govee-control-grid">
+          <div class="govee-device" data-device="deck">
+            <div class="govee-device-name"><span>🌿</span><span>Deck Light</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('deck','on','Deck Light', this)">On</button><button onclick="sendGovee('deck','off','Deck Light', this)">Off</button></div>
+          </div>
+          <div class="govee-device" data-device="backlight">
+            <div class="govee-device-name"><span>🌈</span><span>Living Room Backlight</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('backlight','on','Living Room Backlight', this)">On</button><button onclick="sendGovee('backlight','off','Living Room Backlight', this)">Off</button></div>
+          </div>
+          <div class="govee-device" data-device="plug">
+            <div class="govee-device-name"><span>🔌</span><span id="smartPlugLabel">Dual Smart Plug</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('plug','on',document.getElementById('smartPlugLabel').textContent, this)">On</button><button onclick="sendGovee('plug','off',document.getElementById('smartPlugLabel').textContent, this)">Off</button></div>
+          </div>
+          <div class="govee-device all-selected" data-device="all">
+            <div class="govee-device-name"><span>✨</span><span>All Selected</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('all','on','All Selected', this)">On</button><button onclick="sendGovee('all','off','All Selected', this)">Off</button></div>
+          </div>
         </div>
       </div>
     </div>
@@ -301,7 +326,7 @@ body:before{background-image:linear-gradient(rgba(255,255,255,.012) 1px,transpar
 <script>
 // ─────────────────────────────────────────────────────────────
 // Dashboard config: edit these later as your setup gets finalized
-// BUILD: Home Hub V9 - Alexa scene announcements
+// BUILD: Home Hub V11 - Alexa scenes + selected room controls
 // ─────────────────────────────────────────────────────────────
 const CONFIG = {
   weatherLat: 38.4404,           // Santa Rosa fallback. Change later if needed.
@@ -317,6 +342,7 @@ const CONFIG = {
   goveeUrl: 'govee://',
   goveeFallback: 'https://apps.apple.com/app/govee-home/id1395696823',
   deviceCount: 3,
+  selectedGoveeCount: 3,
   events: []
 };
 
@@ -559,6 +585,34 @@ async function sendScene(sceneKey, label, button){
     }
   }
 }
+
+async function sendGovee(deviceKey, command, label, button){
+  const originalOpacity = button ? button.style.opacity : '';
+  if(button){
+    button.disabled = true;
+    button.style.opacity = '.62';
+  }
+  const actionWord = command === 'on' ? 'turning on' : 'turning off';
+  showToast(`${label}: ${actionWord}…`);
+  try{
+    const sep = CONFIG.calendarFeedUrl.includes('?') ? '&' : '?';
+    const url = `${CONFIG.calendarFeedUrl}${sep}action=govee&device=${encodeURIComponent(deviceKey)}&command=${encodeURIComponent(command)}&_=${Date.now()}`;
+    const res = await fetch(url, { cache:'no-store' });
+    let data = null;
+    try { data = await res.json(); } catch(e) {}
+    if(!res.ok || (data && data.ok === false)) throw new Error((data && (data.error || data.goveeResponse?.message)) || 'Govee command failed');
+    showToast(`${label} turned ${command}`);
+  } catch(err){
+    console.warn(err);
+    showToast(`${label} did not respond. Try again.`);
+  } finally {
+    if(button){
+      button.disabled = false;
+      button.style.opacity = originalOpacity;
+    }
+  }
+}
+
 let toastTimer;
 function showToast(msg){
   const t=document.getElementById('toast');
@@ -578,6 +632,6 @@ setInterval(loadCalendarFeed, 5 * 60 * 1000);
 loadWeather();
 setInterval(loadWeather, 30 * 60 * 1000);
 </script>
-<div class="dashboard-version-badge">Home Hub V9 Alexa Scenes</div>
+<div class="dashboard-version-badge">Home Hub V11 Room Controls</div>
 </body>
 </html>
