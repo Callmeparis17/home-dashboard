@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Home Hub" />
 <meta name="theme-color" content="#030407" />
-<title>Home Hub V18 Notes List and Single Tile Controls</title>
+<title>Home Hub V19 Toggle Room Controls</title>
 
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -540,92 +540,104 @@ input {
   cursor: pointer;
 }
 
-.room-tile-grid {
+.room-toggle-grid {
   height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  grid-auto-rows: 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.room-tile {
+.room-toggle-tile {
   position: relative;
   overflow: hidden;
-  border-radius: 22px;
-  min-height: 150px;
-  padding: 18px 14px;
+  border-radius: 26px;
+  padding: 24px 22px;
   border: 1px solid rgba(255, 255, 255, 0.115);
-  background: linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.018));
+  background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.018));
   color: #fff;
   cursor: pointer;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  align-items: start;
   text-align: left;
-  transition: transform 0.12s, opacity 0.15s, border-color 0.15s;
+  transition: transform 0.12s, opacity 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
-.room-tile::before {
+.room-toggle-tile::before {
   content: "";
   position: absolute;
   inset: -30%;
-  opacity: 0.55;
+  opacity: 0.6;
   pointer-events: none;
+  background: radial-gradient(circle at 18% 10%, rgba(255, 101, 119, 0.12), transparent 45%);
 }
 
-.room-tile.on::before {
-  background: radial-gradient(circle at 20% 10%, rgba(88, 230, 138, 0.25), transparent 45%);
+.room-toggle-tile.is-on {
+  border-color: rgba(88, 230, 138, 0.36);
+  box-shadow:
+    inset 0 0 38px rgba(88, 230, 138, 0.11),
+    0 0 22px rgba(88, 230, 138, 0.06);
 }
 
-.room-tile.off::before {
-  background: radial-gradient(circle at 20% 10%, rgba(255, 101, 119, 0.18), transparent 45%);
+.room-toggle-tile.is-on::before {
+  background: radial-gradient(circle at 18% 10%, rgba(88, 230, 138, 0.22), transparent 45%);
 }
 
-.room-tile:active {
+.room-toggle-tile:active {
   transform: scale(0.96);
 }
 
-.room-tile.sending {
-  opacity: 0.6;
+.room-toggle-tile.sending {
+  opacity: 0.58;
   pointer-events: none;
 }
 
-.room-tile-icon {
+.room-toggle-icon {
   position: relative;
   z-index: 2;
-  font-size: clamp(26px, 2vw, 40px);
+  font-size: clamp(34px, 3vw, 58px);
   line-height: 1;
 }
 
-.room-tile-title {
+.room-toggle-title {
   position: relative;
   z-index: 2;
   align-self: end;
-  font-size: clamp(15px, 1.15vw, 22px);
+  max-width: 88%;
+  font-size: clamp(22px, 2vw, 38px);
   font-weight: 900;
-  line-height: 1.05;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
 }
 
-.room-tile-action {
+.room-toggle-state {
   position: relative;
   z-index: 2;
-  margin-top: 9px;
-  font-size: clamp(13px, 0.9vw, 17px);
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: clamp(15px, 1.15vw, 20px);
   font-weight: 900;
-  color: var(--muted);
-}
-
-.room-tile.on .room-tile-action {
-  color: var(--green);
-}
-
-.room-tile.off .room-tile-action {
   color: var(--red);
 }
 
-.room-tile.all {
-  box-shadow: inset 0 0 30px rgba(157, 124, 255, 0.12);
+.state-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 16px rgba(255, 101, 119, 0.45);
+}
+
+.room-toggle-tile.is-on .room-toggle-state {
+  color: var(--green);
+}
+
+.room-toggle-tile.is-on .state-dot {
+  background: var(--green);
+  box-shadow: 0 0 16px rgba(88, 230, 138, 0.52);
 }
 
 /* STATUS STRIP */
@@ -896,15 +908,6 @@ input {
   padding-right: 3px;
 }
 
-.house-notes-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.house-notes-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.17);
-  border-radius: 20px;
-}
-
 .house-note-item {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -976,11 +979,13 @@ input {
   padding-right: 4px;
 }
 
-.upcoming-list::-webkit-scrollbar {
+.upcoming-list::-webkit-scrollbar,
+.house-notes-list::-webkit-scrollbar {
   width: 4px;
 }
 
-.upcoming-list::-webkit-scrollbar-thumb {
+.upcoming-list::-webkit-scrollbar-thumb,
+.house-notes-list::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.17);
   border-radius: 20px;
 }
@@ -1087,10 +1092,6 @@ input {
     grid-row: auto;
   }
 
-  .room-tile-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .agenda-body {
     grid-template-columns: 1fr;
   }
@@ -1117,8 +1118,9 @@ input {
   }
 
   .scenes,
-  .room-tile-grid {
+  .room-toggle-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
   }
 
   .status-strip {
@@ -1232,65 +1234,41 @@ input {
         <button class="govee-open" onclick="openGovee()">Open Govee ↗</button>
       </div>
 
-      <div class="room-tile-grid">
-        <button class="room-tile on" onclick="sendGovee('deck','on','Deck Light', this)">
-          <div class="room-tile-icon">🌿</div>
-          <div class="room-tile-title">Deck Light</div>
-          <div class="room-tile-action">Turn On</div>
+      <div class="room-toggle-grid">
+        <button class="room-toggle-tile" data-device="deck" onclick="toggleRoomDevice('deck', 'Deck Light', this)">
+          <div class="room-toggle-icon">🌳</div>
+          <div class="room-toggle-title">Deck Light</div>
+          <div class="room-toggle-state">
+            <span class="state-dot"></span>
+            <span class="state-text">Off</span>
+          </div>
         </button>
 
-        <button class="room-tile off" onclick="sendGovee('deck','off','Deck Light', this)">
-          <div class="room-tile-icon">🌿</div>
-          <div class="room-tile-title">Deck Light</div>
-          <div class="room-tile-action">Turn Off</div>
+        <button class="room-toggle-tile" data-device="backlight" onclick="toggleRoomDevice('backlight', 'Living Room Backlight', this)">
+          <div class="room-toggle-icon">📺</div>
+          <div class="room-toggle-title">Living Room Backlight</div>
+          <div class="room-toggle-state">
+            <span class="state-dot"></span>
+            <span class="state-text">Off</span>
+          </div>
         </button>
 
-        <button class="room-tile on" onclick="sendGovee('backlight','on','Living Room Backlight', this)">
-          <div class="room-tile-icon">🌈</div>
-          <div class="room-tile-title">Living Room Backlight</div>
-          <div class="room-tile-action">Turn On</div>
+        <button class="room-toggle-tile" data-device="plug1" onclick="toggleRoomDevice('plug1', 'Smart Plug 1', this)">
+          <div class="room-toggle-icon">🔌</div>
+          <div class="room-toggle-title">Smart Plug 1</div>
+          <div class="room-toggle-state">
+            <span class="state-dot"></span>
+            <span class="state-text">Off</span>
+          </div>
         </button>
 
-        <button class="room-tile off" onclick="sendGovee('backlight','off','Living Room Backlight', this)">
-          <div class="room-tile-icon">🌈</div>
-          <div class="room-tile-title">Living Room Backlight</div>
-          <div class="room-tile-action">Turn Off</div>
-        </button>
-
-        <button class="room-tile on" onclick="sendGovee('plug1','on','Smart Plug 1', this)">
-          <div class="room-tile-icon">🔌</div>
-          <div class="room-tile-title">Smart Plug 1</div>
-          <div class="room-tile-action">Turn On</div>
-        </button>
-
-        <button class="room-tile off" onclick="sendGovee('plug1','off','Smart Plug 1', this)">
-          <div class="room-tile-icon">🔌</div>
-          <div class="room-tile-title">Smart Plug 1</div>
-          <div class="room-tile-action">Turn Off</div>
-        </button>
-
-        <button class="room-tile on" onclick="sendGovee('plug2','on','Living Room Lamp', this)">
-          <div class="room-tile-icon">💡</div>
-          <div class="room-tile-title">Living Room Lamp</div>
-          <div class="room-tile-action">Turn On</div>
-        </button>
-
-        <button class="room-tile off" onclick="sendGovee('plug2','off','Living Room Lamp', this)">
-          <div class="room-tile-icon">💡</div>
-          <div class="room-tile-title">Living Room Lamp</div>
-          <div class="room-tile-action">Turn Off</div>
-        </button>
-
-        <button class="room-tile on all" onclick="sendGovee('all','on','All Selected', this)">
-          <div class="room-tile-icon">✨</div>
-          <div class="room-tile-title">All Selected</div>
-          <div class="room-tile-action">Turn On</div>
-        </button>
-
-        <button class="room-tile off all" onclick="sendGovee('all','off','All Selected', this)">
-          <div class="room-tile-icon">✨</div>
-          <div class="room-tile-title">All Selected</div>
-          <div class="room-tile-action">Turn Off</div>
+        <button class="room-toggle-tile" data-device="plug2" onclick="toggleRoomDevice('plug2', 'Living Room Lamp', this)">
+          <div class="room-toggle-icon">💡</div>
+          <div class="room-toggle-title">Living Room Lamp</div>
+          <div class="room-toggle-state">
+            <span class="state-dot"></span>
+            <span class="state-text">Off</span>
+          </div>
         </button>
       </div>
     </div>
@@ -1367,12 +1345,11 @@ input {
   </section>
 </div>
 
-<div class="dashboard-version-badge">Home Hub V18 Notes List and Single Tile Controls</div>
+<div class="dashboard-version-badge">Home Hub V19 Toggle Room Controls</div>
 <div class="toast" id="toast"></div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-0Z7Sf93-DERMWL9MMoHEd76MlrnlJ3Xi6tH4wqfiAJ-_iYI9l8lkfIERsYHEFTYOxw/exec";
-
 const FAMILY_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=family11563085076736409084%40group.calendar.google.com&ctz=America%2FLos_Angeles";
 
 const WEATHER_FALLBACK = {
@@ -1438,23 +1415,49 @@ async function sendScene(scene, button) {
   }, 1800);
 }
 
-async function sendGovee(device, command, label, button) {
-  const actionText = button.querySelector(".room-tile-action");
-  const originalText = actionText ? actionText.textContent : button.textContent;
+/* Room Control Toggle State */
 
-  button.classList.add("sending");
+function getRoomState(device) {
+  return localStorage.getItem(`roomDeviceState_${device}`) === "on";
+}
 
-  if (actionText) {
-    actionText.textContent = command === "on" ? "Turning On..." : "Turning Off...";
-  } else {
-    button.textContent = command === "on" ? "Turning On..." : "Turning Off...";
+function saveRoomState(device, isOn) {
+  localStorage.setItem(`roomDeviceState_${device}`, isOn ? "on" : "off");
+}
+
+function renderRoomStates() {
+  document.querySelectorAll(".room-toggle-tile").forEach(tile => {
+    const device = tile.dataset.device;
+    const isOn = getRoomState(device);
+    updateRoomTile(tile, isOn);
+  });
+}
+
+function updateRoomTile(tile, isOn) {
+  const stateText = tile.querySelector(".state-text");
+
+  tile.classList.toggle("is-on", isOn);
+
+  if (stateText) {
+    stateText.textContent = isOn ? "On" : "Off";
   }
+}
+
+async function toggleRoomDevice(device, label, tile) {
+  const currentlyOn = getRoomState(device);
+  const command = currentlyOn ? "off" : "on";
+
+  tile.classList.add("sending");
 
   try {
     const response = await fetch(`${SCRIPT_URL}?action=govee&device=${encodeURIComponent(device)}&command=${encodeURIComponent(command)}&t=${Date.now()}`);
     const data = await response.json();
 
     if (data.ok) {
+      const newState = command === "on";
+      saveRoomState(device, newState);
+      updateRoomTile(tile, newState);
+
       showToast(`${label} turned ${command}`);
       document.getElementById("homeStatusSub").textContent = `${label} turned ${command}`;
     } else {
@@ -1467,14 +1470,11 @@ async function sendGovee(device, command, label, button) {
   }
 
   setTimeout(() => {
-    button.classList.remove("sending");
-    if (actionText) {
-      actionText.textContent = originalText;
-    } else {
-      button.textContent = originalText;
-    }
-  }, 1200);
+    tile.classList.remove("sending");
+  }, 800);
 }
+
+/* Calendar */
 
 async function loadCalendarFeed(manual) {
   if (manual) showToast("Refreshing calendar...");
@@ -1578,7 +1578,7 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-/* House Notes List */
+/* House Notes */
 
 function getHouseNotes() {
   try {
@@ -1781,6 +1781,7 @@ setInterval(updateClock, 10000);
 
 setupHouseNotesInput();
 renderHouseNotes();
+renderRoomStates();
 
 loadCalendarFeed(false);
 loadWeather();
