@@ -6,1610 +6,632 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Home Hub" />
-<meta name="theme-color" content="#030407" />
-<title>Home Hub V16 No Front Door Preview</title>
-
+<meta name="theme-color" content="#071a3b" />
+<title>Home Hub V11 Room Controls</title>
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
 <style>
-:root {
-  --bg: #030407;
-  --panel: rgba(12, 15, 26, 0.88);
-  --panel2: rgba(18, 22, 36, 0.82);
-  --panel3: rgba(255, 255, 255, 0.045);
-  --line: rgba(255, 255, 255, 0.11);
-  --line2: rgba(255, 255, 255, 0.18);
-  --text: #f6f7fb;
-  --muted: rgba(246, 247, 251, 0.66);
-  --dim: rgba(246, 247, 251, 0.38);
-  --purple: #9d7cff;
-  --pink: #d65cff;
-  --blue: #5c8dff;
-  --cyan: #62d8ff;
-  --teal: #3ce0c4;
-  --green: #58e68a;
-  --yellow: #f4cb5b;
-  --orange: #f29a4a;
-  --red: #ff6577;
-  --radius: 26px;
-  --radius2: 18px;
-  --shadow: 0 22px 70px rgba(0, 0, 0, 0.6);
+:root{
+  --bg0:#020713;
+  --bg1:#061836;
+  --bg2:#0a2a5c;
+  --text:#f7fbff;
+  --muted:rgba(247,251,255,.68);
+  --dim:rgba(247,251,255,.42);
+  --line:rgba(255,255,255,.16);
+  --line2:rgba(126,213,255,.34);
+  --glass:rgba(17,35,73,.48);
+  --glass2:rgba(15,30,62,.70);
+  --purple:#b66cff;
+  --pink:#ff5ecb;
+  --blue:#43b7ff;
+  --cyan:#28f0ff;
+  --teal:#23e0be;
+  --green:#53e681;
+  --yellow:#ffd448;
+  --orange:#ff9b35;
+  --red:#ff5a6d;
+  --radius:26px;
+  --radius-sm:17px;
+  --shadow:0 22px 70px rgba(0,0,0,.38);
 }
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-  width: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--text);
-  background: #030407;
-}
-
-body {
-  min-height: 100dvh;
-  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;background:#020713;color:var(--text);font-family:'Nunito',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden}
+body{
+  min-height:100dvh;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
   background:
-    radial-gradient(circle at 16% 14%, rgba(117, 69, 255, 0.14), transparent 30%),
-    radial-gradient(circle at 78% 9%, rgba(50, 128, 255, 0.12), transparent 30%),
-    radial-gradient(circle at 83% 86%, rgba(214, 92, 255, 0.08), transparent 32%),
-    linear-gradient(135deg, #030407 0%, #060812 42%, #090d18 100%);
+    radial-gradient(circle at 14% 14%,rgba(171,92,255,.33),transparent 30%),
+    radial-gradient(circle at 78% 12%,rgba(38,187,255,.35),transparent 32%),
+    radial-gradient(circle at 88% 88%,rgba(255,76,196,.18),transparent 36%),
+    linear-gradient(135deg,#020713 0%,#06142d 42%,#071b3e 100%);
 }
+body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle at center,black 0%,transparent 82%);pointer-events:none}
+.dashboard{height:100dvh;width:100vw;padding:18px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:28% 72%;gap:14px;position:relative;z-index:1}
+.card{position:relative;background:linear-gradient(145deg,rgba(28,58,115,.58),rgba(8,21,46,.58));border:1px solid rgba(89,194,255,.33);box-shadow:var(--shadow),inset 0 0 0 1px rgba(255,255,255,.05);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.card:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(255,255,255,.12),transparent 38%);pointer-events:none}
+.time-card,.weather-card{min-height:0}
+.time-card{display:grid;grid-template-columns:32% 68%;align-items:center;padding:18px 24px;background:linear-gradient(135deg,rgba(52,35,110,.58),rgba(8,38,89,.66))}
+.analog-wrap{display:flex;align-items:center;justify-content:center;height:100%}
+.analog{width:min(18vw,175px);height:min(18vw,175px);border-radius:50%;position:relative;background:radial-gradient(circle,rgba(69,112,197,.16) 0%,rgba(29,48,103,.22) 62%,rgba(11,18,49,.35) 100%);box-shadow:0 0 0 3px rgba(71,216,255,.26),0 0 42px rgba(161,92,255,.32),inset 0 0 55px rgba(99,183,255,.17)}
+.analog .tick{position:absolute;left:50%;top:50%;width:2px;height:8px;background:rgba(255,255,255,.5);border-radius:3px;transform-origin:50% calc((min(18vw,175px) / 2) - 10px)}
+.analog .num{position:absolute;font-size:14px;font-weight:800;color:rgba(255,255,255,.78);transform:translate(-50%,-50%)}
+.n12{left:50%;top:13%}.n3{left:86%;top:50%}.n6{left:50%;top:87%}.n9{left:14%;top:50%}
+.hand{position:absolute;left:50%;top:50%;border-radius:999px;transform-origin:0 50%}
+.hand.hour{width:30%;height:7px;background:linear-gradient(90deg,var(--pink),var(--purple));transform:rotate(212deg)}
+.hand.min{width:40%;height:5px;background:linear-gradient(90deg,var(--cyan),var(--blue));transform:rotate(323deg)}
+.pin{position:absolute;width:17px;height:17px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:#102b5b;border:3px solid var(--cyan);box-shadow:0 0 20px rgba(40,240,255,.5)}
+.time-content{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;min-width:0}
+.clockline{display:flex;align-items:flex-end;gap:16px;line-height:.86}.clock{font-size:clamp(48px,6.2vw,95px);font-weight:900;letter-spacing:-.06em;text-shadow:0 10px 40px rgba(255,255,255,.14)}.ampm{font-size:clamp(18px,1.8vw,32px);font-weight:900;color:var(--pink);padding-bottom:8px}.date{font-size:clamp(15px,1.2vw,22px);font-weight:700;color:rgba(255,255,255,.76)}
+.next-pill{display:flex;align-items:center;gap:12px;margin-top:4px;min-width:min(360px,100%);padding:10px 14px;border-radius:18px;background:rgba(7,19,48,.38);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 0 38px rgba(78,184,255,.08)}
+.next-icon{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,94,203,.22),rgba(67,183,255,.14));border:1px solid rgba(255,94,203,.4);font-size:21px}.next-title{font-size:clamp(14px,1.05vw,19px);font-weight:800}.next-sub{font-size:clamp(12px,.95vw,17px);font-weight:800;color:var(--pink)}.chev{margin-left:auto;color:rgba(255,255,255,.58);font-size:26px;font-weight:400}
+.weather-card{padding:16px 20px;background:linear-gradient(135deg,rgba(12,45,118,.76),rgba(6,22,58,.63));display:grid;grid-template-rows:auto 1fr}.weather-card:before{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,transparent,rgba(32,132,213,.18)),radial-gradient(ellipse at 70% 100%,rgba(130,209,255,.18),transparent 42%);pointer-events:none}.weather-top{display:grid;grid-template-columns:14% 22% 1fr;align-items:center;gap:8px;z-index:1}.weather-moon{font-size:50px;filter:drop-shadow(0 0 26px rgba(181,108,255,.45));text-align:center}.temperature{font-size:clamp(50px,5.8vw,90px);font-weight:900;letter-spacing:-.055em;line-height:.8}.condition{font-size:clamp(16px,1.35vw,24px);font-weight:800;margin-bottom:6px}.weather-meta{font-size:clamp(12px,.95vw,17px);color:rgba(255,255,255,.78);display:flex;gap:10px;align-items:center;flex-wrap:wrap}.rain{color:#bbecff}.forecast{position:relative;z-index:1;margin-top:10px;border-radius:20px;background:rgba(7,27,66,.36);border:1px solid rgba(255,255,255,.16);display:grid;grid-template-columns:repeat(7,1fr);overflow:hidden}.day{padding:8px 5px;text-align:center;border-left:1px solid rgba(255,255,255,.14)}.day:first-child{border-left:0}.day-name{font-size:clamp(10px,.78vw,13px);font-weight:900;color:rgba(255,255,255,.82);margin-bottom:4px}.weather-ico{font-size:clamp(18px,1.55vw,28px);line-height:1;margin-bottom:4px}.hi{font-size:clamp(14px,1.05vw,20px);font-weight:900}.lo{font-size:clamp(12px,.85vw,16px);font-weight:700;color:rgba(255,255,255,.63);margin-top:3px}.pop-small{font-size:clamp(10px,.72vw,13px);color:var(--cyan);font-weight:800;margin-top:2px}
+.home-card{grid-column:1;grid-row:2;padding:16px 22px 18px;display:grid;grid-template-rows:auto auto 72px 104px minmax(235px,1fr) auto;gap:10px;background:linear-gradient(135deg,rgba(11,40,92,.64),rgba(5,16,39,.72))}.section-head{display:flex;align-items:center;gap:12px;font-size:clamp(23px,1.9vw,34px);font-weight:900}.section-head .icon{color:#88d8ff;font-size:28px}.small-label{font-size:clamp(15px,1.15vw,20px);font-weight:800;color:rgba(255,255,255,.72);margin-top:-6px}.scene-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.scene{min-height:72px;border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.17);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--text);font-family:inherit;cursor:pointer;transition:.16s transform,.16s border-color,.16s background}.scene:active{transform:scale(.96)}.scene .s-ico{font-size:28px}.scene .s-name{font-size:clamp(12px,1vw,16px);font-weight:900}.scene.morning{box-shadow:inset 0 0 34px rgba(182,108,255,.16)}.scene.dinner{box-shadow:inset 0 0 34px rgba(255,212,72,.13)}.scene.breakfast{box-shadow:inset 0 0 34px rgba(255,212,72,.13)}.scene.dinner{box-shadow:inset 0 0 34px rgba(255,147,47,.13)}.scene.night{box-shadow:inset 0 0 34px rgba(116,139,255,.15)}.ecosystems{display:grid;grid-template-columns:1fr 1fr;gap:13px}.eco-card{border-radius:17px;background:rgba(9,19,45,.48);border:1px solid rgba(255,255,255,.15);padding:10px 14px;min-height:104px}.eco-title{display:flex;align-items:center;gap:10px;font-size:clamp(17px,1.25vw,23px);font-weight:900;margin-bottom:8px}.g-home{width:32px;height:32px;position:relative;display:inline-block}.g-home:before{content:"";position:absolute;left:5px;top:9px;width:22px;height:18px;background:conic-gradient(from 225deg,#4285f4 0 25%,#34a853 0 50%,#fbbc04 0 75%,#ea4335 0);clip-path:polygon(50% 0,100% 35%,100% 100%,0 100%,0 35%)}.govee-logo{font-weight:900;font-size:30px;color:#21befe;letter-spacing:-.04em}.eco-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.mini-action{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text);font-size:clamp(9px,.72vw,13px);font-weight:800;text-align:center;cursor:pointer}.mini-circle{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);font-size:17px}.camera-row{display:grid;grid-template-columns:23% 1fr;border-radius:17px;background:rgba(7,16,39,.44);border:1px solid rgba(255,255,255,.16);overflow:hidden;min-height:235px}.camera-info{padding:18px 14px;display:flex;flex-direction:column;gap:8px;justify-content:space-between}.camera-title{display:flex;gap:10px;align-items:flex-start;font-size:clamp(18px,1.35vw,26px);font-weight:900}.live{font-size:clamp(13px,1vw,17px);font-weight:800;color:rgba(255,255,255,.72)}.live:before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);margin-right:8px}.view-camera{border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:10px 12px;font-size:clamp(12px,1vw,16px);font-weight:900;font-family:inherit;cursor:pointer}.camera-actions{display:grid;gap:9px}.camera-note{font-size:clamp(11px,.82vw,14px);font-weight:800;color:rgba(255,255,255,.50);margin-top:6px;line-height:1.25}.view-camera.primary{background:linear-gradient(90deg,rgba(69,183,255,.32),rgba(182,108,255,.24));border-color:rgba(121,218,255,.35)}.ring-camera-row .camera-view{cursor:pointer}.ring-camera-row .camera-info{gap:12px}.camera-view{position:relative;min-height:100%;background:linear-gradient(180deg,rgba(2,7,19,.1),rgba(2,7,19,.38)),radial-gradient(circle at 28% 64%,rgba(255,214,119,.35) 0 2%,transparent 9%),radial-gradient(circle at 62% 58%,rgba(255,214,119,.35) 0 2%,transparent 8%),linear-gradient(145deg,#07111e,#0f2238 42%,#2b231a 44%,#101c2c 100%)}.camera-view:before{content:"";position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(165deg,transparent 0 42%,rgba(88,88,88,.55) 43% 58%,transparent 59%),radial-gradient(ellipse at 26% 100%,rgba(41,118,57,.64),transparent 42%),radial-gradient(ellipse at 70% 100%,rgba(37,111,55,.62),transparent 39%)}.camera-view:after{content:"Front Door";position:absolute;left:14px;top:11px;font-size:18px;font-weight:900;text-shadow:0 2px 10px #000}.camera-live{position:absolute;right:14px;top:12px;color:#6aff91;font-weight:900}.camera-live:before{content:"• ";}.expand{position:absolute;right:13px;bottom:13px;width:38px;height:38px;border-radius:10px;background:rgba(8,14,30,.74);border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;font-size:19px}.status-strip{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;border-radius:17px;background:rgba(8,18,43,.50);border:1px solid rgba(255,255,255,.15);padding:10px 16px}.shield{width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,rgba(89,255,128,.2),rgba(42,217,125,.06));display:grid;place-items:center;color:var(--green);font-size:30px;border:1px solid rgba(83,230,129,.32)}.status-title{font-size:clamp(18px,1.4vw,25px);font-weight:900}.status-sub{font-size:clamp(13px,1vw,18px);font-weight:800;color:#85f58f}.devices-btn{border:1px solid rgba(255,255,255,.17);background:rgba(255,255,255,.07);border-radius:14px;color:#fff;font-family:inherit;font-size:clamp(14px,1vw,18px);font-weight:900;padding:13px 21px;cursor:pointer}.agenda-card{grid-column:2;grid-row:2;padding:25px 26px;background:linear-gradient(135deg,rgba(24,35,105,.62),rgba(8,50,87,.62));display:grid;grid-template-columns:52% 48%;grid-template-rows:auto 1fr auto;column-gap:22px;row-gap:18px}.agenda-title{grid-column:1;font-size:clamp(22px,1.7vw,31px);font-weight:900;display:flex;gap:12px;align-items:center}.events-title{grid-column:2;justify-self:end;font-size:clamp(16px,1.2vw,22px);font-weight:800;color:rgba(255,255,255,.72);display:flex;gap:13px;align-items:center}.glance-list{grid-column:1;display:grid;gap:12px}.glance{border-radius:15px;min-height:72px;display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:14px;padding:10px 16px;border:1px solid rgba(255,255,255,.15)}.glance .gicon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:27px}.glance .main{font-size:clamp(16px,1.2vw,22px);font-weight:900}.glance .sub{font-size:clamp(12px,.9vw,16px);font-weight:700;color:rgba(255,255,255,.64)}.weather-glance{background:linear-gradient(90deg,rgba(20,169,255,.38),rgba(40,89,208,.20))}.weather-glance .gicon{background:rgba(40,194,255,.19);color:var(--cyan)}.event-glance{background:linear-gradient(90deg,rgba(173,91,255,.40),rgba(78,70,208,.20))}.event-glance .gicon{background:rgba(180,108,255,.24);color:var(--purple)}.reminder-glance{background:linear-gradient(90deg,rgba(36,225,158,.35),rgba(38,139,122,.18))}.reminder-glance .gicon{background:rgba(47,232,151,.20);color:var(--green)}.dinner-glance{background:linear-gradient(90deg,rgba(255,147,47,.45),rgba(208,78,70,.18))}.dinner-glance .gicon{background:rgba(255,155,53,.22);color:var(--orange)}.event-list{grid-column:2;grid-row:2;border-radius:17px;background:rgba(7,24,55,.28);border:1px solid rgba(255,255,255,.12);padding:14px 16px;display:grid;align-content:stretch}.event-row{display:grid;grid-template-columns:96px 20px 1fr;gap:8px;align-items:center;border-bottom:1px solid rgba(255,255,255,.13);min-height:65px}.event-row:last-child{border-bottom:0}.etime{font-size:clamp(13px,1vw,17px);font-weight:900}.dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 14px currentColor}.edetail .name{font-size:clamp(15px,1.15vw,21px);font-weight:900}.edetail .place{font-size:clamp(12px,.9vw,16px);font-weight:700;color:rgba(255,255,255,.58);margin-top:2px}.full-cal{grid-column:1/3;border:0;border-radius:17px;background:linear-gradient(90deg,#ff64bb,#7b55ff);color:#fff;font-family:inherit;font-size:clamp(17px,1.4vw,26px);font-weight:900;display:flex;align-items:center;justify-content:center;gap:16px;min-height:63px;cursor:pointer;box-shadow:0 18px 48px rgba(154,83,255,.22)}.toast{position:fixed;z-index:30;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:rgba(7,17,39,.88);border:1px solid rgba(255,255,255,.22);color:#fff;padding:13px 22px;border-radius:999px;font-weight:900;box-shadow:0 12px 42px rgba(0,0,0,.3);opacity:0;transition:.22s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(circle at center, black 0%, transparent 82%);
-  pointer-events: none;
+.schedule-card,.notes-card{border-radius:15px;background:rgba(7,24,55,.28);border:1px solid rgba(255,255,255,.13);padding:14px 16px;min-height:114px}
+.mini-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:clamp(15px,1.1vw,20px);font-weight:900;color:rgba(255,255,255,.82);margin-bottom:10px}
+.mini-section-title button{border:1px solid rgba(255,255,255,.17);background:rgba(255,255,255,.07);border-radius:999px;color:#fff;font-family:inherit;font-size:12px;font-weight:900;padding:6px 10px;cursor:pointer}
+.schedule-list{display:grid;gap:8px}
+.schedule-item{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:center;border-top:1px solid rgba(255,255,255,.1);padding-top:8px}
+.schedule-item:first-child{border-top:0;padding-top:0}
+.schedule-time{font-size:clamp(13px,1vw,17px);font-weight:900}
+.schedule-name{font-size:clamp(15px,1.1vw,20px);font-weight:900}
+.schedule-place{font-size:clamp(12px,.85vw,15px);font-weight:700;color:rgba(255,255,255,.56);margin-top:2px}
+#houseNotes{width:100%;height:88px;resize:none;border:1px solid rgba(255,255,255,.16);outline:none;border-radius:13px;background:rgba(0,0,0,.18);color:#fff;font-family:inherit;font-size:clamp(15px,1.05vw,19px);font-weight:700;line-height:1.25;padding:12px}
+#houseNotes::placeholder{color:rgba(255,255,255,.42)}
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.quick-actions button{border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,rgba(255,94,203,.22),rgba(67,183,255,.14));border-radius:14px;color:#fff;font-family:inherit;font-size:clamp(13px,1vw,18px);font-weight:900;padding:12px 8px;cursor:pointer}
+.empty-state{align-self:center;justify-self:stretch;text-align:center;color:rgba(255,255,255,.6);font-weight:800;font-size:clamp(14px,1vw,18px);padding:18px 10px}
+.glance{cursor:pointer}
+
+@media(max-width:1100px){html,body{overflow:auto}.dashboard{height:auto;min-height:100dvh;grid-template-columns:1fr;grid-template-rows:auto;overflow:visible}.time-card,.weather-card,.home-card,.agenda-card{grid-column:1;grid-row:auto}.time-card{grid-template-columns:1fr}.analog-wrap{display:none}.agenda-card{grid-template-columns:1fr}.agenda-title,.events-title,.glance-list,.event-list,.full-cal{grid-column:1;grid-row:auto}.events-title{justify-self:start}.scene-grid,.ecosystems{grid-template-columns:1fr 1fr}.camera-row{grid-template-columns:1fr}.camera-view{min-height:260px}}
+@media(max-width:650px){.dashboard{padding:12px;gap:12px}.scene-grid,.ecosystems{grid-template-columns:1fr}.forecast{grid-template-columns:repeat(4,1fr)}.day:nth-child(n+5){display:none}.weather-top{grid-template-columns:1fr;text-align:center}.next-pill{min-width:0}.event-row{grid-template-columns:82px 16px 1fr}.status-strip{grid-template-columns:auto 1fr}.devices-btn{grid-column:1/3}}
+
+.dashboard-version-badge{position:fixed;right:12px;bottom:10px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:5px 9px;z-index:9999}
+
+
+/* ─────────────────────────────────────────────
+   V7 DARK MODE COLOR SYSTEM
+   Keeps the layout, but removes the bright blue wash.
+   ───────────────────────────────────────────── */
+:root{
+  --bg0:#030407;
+  --bg1:#070a12;
+  --bg2:#0c1020;
+  --text:#f6f7fb;
+  --muted:rgba(246,247,251,.66);
+  --dim:rgba(246,247,251,.38);
+  --line:rgba(255,255,255,.105);
+  --line2:rgba(135,155,255,.18);
+  --glass:rgba(18,20,31,.72);
+  --glass2:rgba(10,12,20,.84);
+  --purple:#9d7cff;
+  --pink:#d65cff;
+  --blue:#5c8dff;
+  --cyan:#62d8ff;
+  --teal:#3ce0c4;
+  --green:#58e68a;
+  --yellow:#f4cb5b;
+  --orange:#f29a4a;
+  --red:#ff6577;
+  --shadow:0 20px 70px rgba(0,0,0,.62);
 }
-
-button,
-textarea {
-  font-family: inherit;
-}
-
-.dashboard {
-  position: relative;
-  z-index: 1;
-  width: 100vw;
-  height: 100dvh;
-  padding: 18px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 27% 73%;
-  gap: 14px;
-}
-
-.card {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius);
-  background: linear-gradient(145deg, rgba(22, 25, 38, 0.86), rgba(7, 9, 15, 0.88));
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.055), transparent 34%);
-  pointer-events: none;
-}
-
-/* TOP LEFT TIME CARD */
-
-.time-card {
-  grid-column: 1;
-  grid-row: 1;
-  display: grid;
-  grid-template-columns: 30% 70%;
-  align-items: center;
-  padding: 16px 24px;
-  background: linear-gradient(135deg, rgba(20, 18, 37, 0.88), rgba(8, 13, 26, 0.91));
-  border-color: rgba(157, 124, 255, 0.22);
-}
-
-.analog-wrap {
-  height: 100%;
-  display: grid;
-  place-items: center;
-}
-
-.analog {
-  position: relative;
-  width: min(15vw, 145px);
-  height: min(15vw, 145px);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(78, 65, 142, 0.14) 0%, rgba(20, 27, 47, 0.18) 62%, rgba(7, 9, 16, 0.46) 100%);
-  box-shadow:
-    0 0 0 2px rgba(98, 216, 255, 0.18),
-    0 0 35px rgba(157, 124, 255, 0.18),
-    inset 0 0 50px rgba(98, 216, 255, 0.06);
-}
-
-.num {
-  position: absolute;
-  font-size: 13px;
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.72);
-  transform: translate(-50%, -50%);
-}
-
-.n12 { left: 50%; top: 13%; }
-.n3 { left: 86%; top: 50%; }
-.n6 { left: 50%; top: 87%; }
-.n9 { left: 14%; top: 50%; }
-
-.hand {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  border-radius: 999px;
-  transform-origin: 0 50%;
-}
-
-.hand.hour {
-  width: 30%;
-  height: 7px;
-  background: linear-gradient(90deg, var(--pink), var(--purple));
-  transform: rotate(212deg);
-}
-
-.hand.min {
-  width: 40%;
-  height: 5px;
-  background: linear-gradient(90deg, var(--cyan), var(--blue));
-  transform: rotate(323deg);
-}
-
-.pin {
-  position: absolute;
-  width: 17px;
-  height: 17px;
-  left: 50%;
-  top: 50%;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: #102b5b;
-  border: 3px solid var(--cyan);
-  box-shadow: 0 0 20px rgba(98, 216, 255, 0.42);
-}
-
-.time-content {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 7px;
-}
-
-.clockline {
-  display: flex;
-  align-items: flex-end;
-  gap: 14px;
-  line-height: 0.86;
-}
-
-.clock {
-  font-size: clamp(48px, 6vw, 92px);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-}
-
-.ampm {
-  padding-bottom: 8px;
-  font-size: clamp(18px, 1.7vw, 30px);
-  font-weight: 900;
-  color: var(--pink);
-}
-
-.date {
-  font-size: clamp(15px, 1.15vw, 21px);
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.76);
-}
-
-.next-pill {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 2px;
-  min-width: min(360px, 100%);
-  padding: 9px 14px;
-  border-radius: 18px;
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 30px rgba(157, 124, 255, 0.06);
-}
-
-.next-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, rgba(157, 124, 255, 0.2), rgba(98, 216, 255, 0.08));
-  border: 1px solid rgba(157, 124, 255, 0.26);
-  font-size: 20px;
-}
-
-.next-title {
-  font-size: clamp(14px, 1vw, 18px);
-  font-weight: 900;
-}
-
-.next-sub {
-  font-size: clamp(12px, 0.95vw, 16px);
-  font-weight: 900;
-  color: var(--pink);
-}
-
-.chev {
-  margin-left: auto;
-  color: rgba(255, 255, 255, 0.54);
-  font-size: 24px;
-}
-
-/* TOP RIGHT WEATHER */
-
-.weather-card {
-  grid-column: 2;
-  grid-row: 1;
-  padding: 15px 20px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  background: linear-gradient(135deg, rgba(11, 16, 30, 0.92), rgba(6, 9, 16, 0.88));
-  border-color: rgba(98, 216, 255, 0.16);
-}
-
-.weather-card::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 34%;
+html,body{background:#030407;}
+body{
   background:
-    linear-gradient(180deg, transparent, rgba(38, 66, 126, 0.075)),
-    radial-gradient(ellipse at 70% 100%, rgba(98, 216, 255, 0.08), transparent 42%);
-  pointer-events: none;
-}
-
-.weather-top {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 14% 22% 1fr;
-  align-items: center;
-  gap: 8px;
-}
-
-.weather-moon {
-  font-size: 48px;
-  text-align: center;
-  filter: drop-shadow(0 0 18px rgba(157, 124, 255, 0.28));
-}
-
-.temperature {
-  font-size: clamp(50px, 5.6vw, 88px);
-  font-weight: 900;
-  letter-spacing: -0.055em;
-  line-height: 0.8;
-}
-
-.condition {
-  margin-bottom: 6px;
-  font-size: clamp(16px, 1.3vw, 24px);
-  font-weight: 900;
-}
-
-.weather-meta {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: clamp(12px, 0.95vw, 17px);
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.rain {
-  color: #bbecff;
-}
-
-.forecast {
-  position: relative;
-  z-index: 1;
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  overflow: hidden;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-.day {
-  padding: 8px 5px;
-  text-align: center;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.day:first-child {
-  border-left: none;
-}
-
-.day-name {
-  margin-bottom: 4px;
-  font-size: clamp(10px, 0.78vw, 13px);
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.weather-ico {
-  margin-bottom: 4px;
-  font-size: clamp(18px, 1.55vw, 28px);
-  line-height: 1;
-}
-
-.hi {
-  font-size: clamp(14px, 1.05vw, 20px);
-  font-weight: 900;
-}
-
-.lo {
-  margin-top: 3px;
-  font-size: clamp(12px, 0.85vw, 16px);
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.pop-small {
-  margin-top: 2px;
-  font-size: clamp(10px, 0.72vw, 13px);
-  font-weight: 900;
-  color: var(--cyan);
-}
-
-/* HOME CONTROL */
-
-.home-card {
-  grid-column: 1;
-  grid-row: 2;
-  padding: 16px 22px 18px;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: 12px;
-  background: linear-gradient(135deg, rgba(10, 14, 26, 0.9), rgba(5, 7, 12, 0.94));
-  border-color: rgba(255, 255, 255, 0.105);
-}
-
-.section-head {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: clamp(22px, 1.65vw, 34px);
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
-
-.section-title .icon {
-  color: var(--purple);
-}
-
-.section-sub {
-  margin-top: 2px;
-  font-size: clamp(12px, 0.9vw, 15px);
-  font-weight: 800;
-  color: var(--muted);
-}
-
-.scenes {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.scene {
-  min-height: 68px;
-  padding: 10px 10px;
-  border-radius: 17px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
-  color: var(--text);
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 9px;
-  transition: transform 0.12s, opacity 0.15s, background 0.15s;
-}
-
-.scene:active {
-  transform: scale(0.96);
-}
-
-.scene.sending {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.scene-ico {
-  font-size: 25px;
-  line-height: 1;
-}
-
-.scene-label {
-  font-size: clamp(12px, 0.92vw, 17px);
-  font-weight: 900;
-}
-
-.scene-status {
-  grid-column: 1 / -1;
-  min-height: 13px;
-  font-size: 10px;
-  font-weight: 900;
-  color: var(--dim);
-}
-
-.scene.morning { box-shadow: inset 0 0 30px rgba(157, 124, 255, 0.1); }
-.scene.breakfast { box-shadow: inset 0 0 30px rgba(244, 203, 91, 0.08); }
-.scene.dinner { box-shadow: inset 0 0 30px rgba(242, 154, 74, 0.1); }
-.scene.night { box-shadow: inset 0 0 30px rgba(92, 141, 255, 0.1); }
-
-/* ROOM CONTROLS */
-
-.room-controls {
-  position: relative;
-  z-index: 2;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 24px;
-  background: rgba(6, 8, 15, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.room-controls-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.room-controls-title {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: clamp(19px, 1.45vw, 28px);
-  font-weight: 900;
-}
-
-.govee-logo {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(98, 216, 255, 0.22), rgba(157, 124, 255, 0.16));
-  border: 1px solid rgba(98, 216, 255, 0.18);
-  color: var(--cyan);
-  font-weight: 900;
-}
-
-.govee-open {
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.055);
-  color: rgba(255, 255, 255, 0.78);
-  border-radius: 999px;
-  padding: 9px 15px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.govee-control-grid {
-  height: 100%;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.govee-device {
-  min-height: 0;
-  padding: 22px 16px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 18px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.018));
-}
-
-.govee-device-name {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: clamp(15px, 1.08vw, 20px);
-  font-weight: 900;
-  min-width: 0;
-}
-
-.govee-device-name span:first-child {
-  font-size: 28px;
-  line-height: 1;
-}
-
-.govee-device-name span:last-child {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.govee-buttons {
-  align-self: stretch;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.govee-buttons button {
-  min-height: 100px;
-  border-radius: 18px;
-  padding: 14px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
-  font-size: clamp(17px, 1.25vw, 24px);
-  font-weight: 900;
-  cursor: pointer;
-  transition: transform 0.12s, opacity 0.15s, background 0.15s;
-}
-
-.govee-buttons button:active {
-  transform: scale(0.95);
-}
-
-.govee-buttons button:first-child {
-  background: linear-gradient(135deg, rgba(65, 229, 127, 0.32), rgba(23, 104, 79, 0.2));
-  border-color: rgba(88, 230, 138, 0.34);
-}
-
-.govee-buttons button:last-child {
-  background: linear-gradient(135deg, rgba(255, 83, 114, 0.26), rgba(106, 45, 68, 0.18));
-  border-color: rgba(255, 101, 119, 0.31);
-}
-
-.govee-buttons button.sending {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.all-selected {
-  box-shadow: inset 0 0 28px rgba(157, 124, 255, 0.12);
-}
-
-/* STATUS STRIP */
-
-.status-strip {
-  position: relative;
-  z-index: 2;
-  min-height: 70px;
-  padding: 12px 15px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 16px;
-  border-radius: 20px;
-  background: rgba(6, 8, 15, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.status-left {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-width: 0;
-}
-
-.shield {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 15px;
-  background: linear-gradient(135deg, rgba(88, 230, 138, 0.14), rgba(42, 217, 125, 0.035));
-  border: 1px solid rgba(88, 230, 138, 0.22);
-  color: var(--green);
-  font-size: 22px;
-}
-
-.status-title {
-  font-size: clamp(15px, 1.1vw, 20px);
-  font-weight: 900;
-}
-
-.status-sub {
-  margin-top: 1px;
-  font-size: clamp(12px, 0.85vw, 15px);
-  font-weight: 800;
-  color: var(--green);
-}
-
-.status-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 9px;
-  flex-wrap: wrap;
-}
-
-.status-actions button {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 13px;
-  color: #fff;
-  font-size: clamp(12px, 0.9vw, 15px);
-  font-weight: 900;
-  padding: 10px 13px;
-  cursor: pointer;
-}
-
-.status-actions button.primary {
-  background: linear-gradient(90deg, rgba(69, 183, 255, 0.22), rgba(182, 108, 255, 0.16));
-  border-color: rgba(121, 218, 255, 0.25);
-}
-
-/* AGENDA */
-
-.agenda-card {
-  grid-column: 2;
-  grid-row: 2;
-  padding: 18px 20px 20px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 14px;
-  background: linear-gradient(135deg, rgba(13, 16, 30, 0.92), rgba(5, 8, 14, 0.94));
-  border-color: rgba(255, 255, 255, 0.105);
-}
-
-.agenda-head {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.agenda-title {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: clamp(22px, 1.65vw, 34px);
-  font-weight: 900;
-}
-
-.agenda-sub {
-  margin-top: 2px;
-  font-size: clamp(12px, 0.9vw, 15px);
-  font-weight: 800;
-  color: var(--muted);
-}
-
-.refresh-btn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.agenda-body {
-  position: relative;
-  z-index: 2;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: 44% 56%;
-  gap: 13px;
-}
-
-.glance-col {
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: 12px;
-}
-
-.next-event-card,
-.schedule-card,
-.notes-card,
-.event-list {
-  border-radius: 21px;
-  background: rgba(6, 8, 15, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.next-event-card {
-  padding: 16px;
-  min-height: 130px;
-  display: grid;
-  align-content: center;
-  gap: 6px;
-  background: linear-gradient(90deg, rgba(123, 87, 255, 0.24), rgba(51, 43, 115, 0.13));
-}
-
-.mini-title {
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-
-.next-event-name {
-  font-size: clamp(18px, 1.35vw, 26px);
-  font-weight: 900;
-  line-height: 1.05;
-}
-
-.next-event-meta {
-  font-size: clamp(13px, 1vw, 17px);
-  font-weight: 800;
-  color: var(--muted);
-}
-
-.schedule-card {
-  min-height: 150px;
-  padding: 14px;
-}
-
-.schedule-list,
-.upcoming-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 9px;
-}
-
-.schedule-item,
-.upcoming-item {
-  display: grid;
-  grid-template-columns: 76px 1fr;
-  gap: 10px;
-  align-items: start;
-}
-
-.item-time {
-  font-size: 13px;
-  font-weight: 900;
-  color: var(--cyan);
-}
-
-.item-title {
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1.15;
-}
-
-.item-location {
-  margin-top: 2px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--dim);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.empty-state {
-  padding: 10px 0;
-  color: var(--dim);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.notes-card {
-  padding: 14px;
-  min-height: 0;
-}
-
-#houseNotes {
-  margin-top: 9px;
-  width: 100%;
-  height: 100px;
-  resize: none;
-  outline: none;
-  border-radius: 16px;
-  padding: 12px;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 800;
-  background: rgba(0, 0, 0, 0.24);
-  border: 1px solid rgba(255, 255, 255, 0.105);
-}
-
-.quick-actions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 9px;
-}
-
-.quick-actions button,
-.full-cal {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  border-radius: 15px;
-  padding: 12px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.full-cal {
-  background: linear-gradient(90deg, #7d54ff, #2f79ff);
-  box-shadow: 0 18px 48px rgba(74, 83, 255, 0.16);
-}
-
-.event-list {
-  min-height: 0;
-  padding: 15px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
-
-.event-list-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.event-count {
-  font-size: 12px;
-  font-weight: 900;
-  color: var(--dim);
-}
-
-.upcoming-list {
-  min-height: 0;
-  overflow: auto;
-  padding-right: 4px;
-}
-
-.upcoming-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.upcoming-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.17);
-  border-radius: 20px;
-}
-
-.upcoming-item {
-  position: relative;
-  padding: 11px 0 11px 14px;
-  border-left: 2px solid rgba(255, 255, 255, 0.13);
-}
-
-.upcoming-item::before {
-  content: "";
-  position: absolute;
-  left: -6px;
-  top: 18px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--purple);
-  box-shadow: 0 0 18px rgba(157, 124, 255, 0.45);
-}
-
-.upcoming-date {
-  font-size: 12px;
-  font-weight: 900;
-  color: var(--purple);
-}
-
-.upcoming-time {
-  margin-top: 3px;
-  font-size: 13px;
-  font-weight: 900;
-  color: var(--cyan);
-}
-
-.dashboard-version-badge {
-  position: fixed;
-  right: 14px;
-  bottom: 10px;
-  z-index: 40;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.46);
-  font-size: 10px;
-  font-weight: 900;
-  pointer-events: none;
-}
-
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 40px;
-  z-index: 100;
-  transform: translateX(-50%) translateY(18px);
-  padding: 12px 20px;
-  border-radius: 999px;
-  background: rgba(12, 15, 26, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 900;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-@media (max-width: 1100px) {
-  html,
-  body {
-    overflow: auto;
-  }
+    radial-gradient(circle at 16% 14%,rgba(117,69,255,.14),transparent 30%),
+    radial-gradient(circle at 78% 9%,rgba(50,128,255,.12),transparent 30%),
+    radial-gradient(circle at 83% 86%,rgba(214,92,255,.08),transparent 32%),
+    linear-gradient(135deg,#030407 0%,#060812 42%,#090d18 100%);
+}
+body:before{background-image:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);}
+.card{
+  background:linear-gradient(145deg,rgba(22,25,38,.86),rgba(7,9,15,.88));
+  border:1px solid rgba(255,255,255,.105);
+  box-shadow:var(--shadow),inset 0 0 0 1px rgba(255,255,255,.025);
+}
+.card:after{background:radial-gradient(circle at 0% 0%,rgba(255,255,255,.055),transparent 34%);}
+.time-card{
+  background:linear-gradient(135deg,rgba(20,18,37,.88),rgba(8,13,26,.91));
+  border-color:rgba(157,124,255,.22);
+}
+.analog{background:radial-gradient(circle,rgba(78,65,142,.14) 0%,rgba(20,27,47,.18) 62%,rgba(7,9,16,.46) 100%);box-shadow:0 0 0 2px rgba(98,216,255,.18),0 0 35px rgba(157,124,255,.18),inset 0 0 50px rgba(98,216,255,.06)}
+.next-pill{background:rgba(0,0,0,.22);border-color:rgba(255,255,255,.10);box-shadow:inset 0 0 30px rgba(157,124,255,.06)}
+.next-icon{background:linear-gradient(135deg,rgba(157,124,255,.20),rgba(98,216,255,.08));border-color:rgba(157,124,255,.26)}
+.weather-card{
+  background:linear-gradient(135deg,rgba(11,16,30,.92),rgba(6,9,16,.88));
+  border-color:rgba(98,216,255,.16);
+}
+.weather-card:before{background:linear-gradient(180deg,transparent,rgba(38,66,126,.075)),radial-gradient(ellipse at 70% 100%,rgba(98,216,255,.08),transparent 42%)}
+.weather-moon{filter:drop-shadow(0 0 18px rgba(157,124,255,.28))}
+.forecast{background:rgba(0,0,0,.20);border-color:rgba(255,255,255,.09)}
+.day{border-left-color:rgba(255,255,255,.08)}
+.home-card{
+  background:linear-gradient(135deg,rgba(10,14,26,.90),rgba(5,7,12,.94));
+  border-color:rgba(255,255,255,.105);
+}
+.section-head .icon{color:var(--purple)}
+.scene{background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border-color:rgba(255,255,255,.10)}
+.scene.morning{box-shadow:inset 0 0 30px rgba(157,124,255,.10)}
+.scene.dinner{box-shadow:inset 0 0 30px rgba(244,203,91,.08)}
+.scene.breakfast{box-shadow:inset 0 0 30px rgba(244,203,91,.08)}
+.scene.night{box-shadow:inset 0 0 30px rgba(92,141,255,.10)}
+.eco-card,.camera-row,.status-strip,.schedule-card,.notes-card,.event-list{background:rgba(6,8,15,.56);border-color:rgba(255,255,255,.10)}
+.mini-circle{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.12)}
+.camera-view{background:linear-gradient(180deg,rgba(2,4,9,.12),rgba(2,4,9,.50)),radial-gradient(circle at 28% 64%,rgba(240,194,104,.24) 0 2%,transparent 9%),radial-gradient(circle at 62% 58%,rgba(240,194,104,.20) 0 2%,transparent 8%),linear-gradient(145deg,#06080d,#0a101c 42%,#171411 44%,#08101b 100%)}
+.camera-view:before{background:linear-gradient(165deg,transparent 0 42%,rgba(80,80,80,.36) 43% 58%,transparent 59%),radial-gradient(ellipse at 26% 100%,rgba(30,92,44,.42),transparent 42%),radial-gradient(ellipse at 70% 100%,rgba(26,78,40,.40),transparent 39%)}
+.shield{background:linear-gradient(135deg,rgba(88,230,138,.14),rgba(42,217,125,.035));border-color:rgba(88,230,138,.22)}
+.devices-btn,.view-camera,.quick-actions button,.mini-section-title button{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.12)}
+.agenda-card{
+  background:linear-gradient(135deg,rgba(13,16,30,.92),rgba(5,8,14,.94));
+  border-color:rgba(255,255,255,.105);
+}
+.glance{border-color:rgba(255,255,255,.10)}
+.weather-glance{background:linear-gradient(90deg,rgba(39,116,171,.22),rgba(41,57,113,.12))}
+.event-glance{background:linear-gradient(90deg,rgba(123,87,255,.24),rgba(51,43,115,.13))}
+.reminder-glance{background:linear-gradient(90deg,rgba(40,164,126,.22),rgba(27,84,75,.12))}
+.dinner-glance{background:linear-gradient(90deg,rgba(186,108,45,.24),rgba(107,54,38,.12))}
+.full-cal{background:linear-gradient(90deg,#7d54ff,#2f79ff);box-shadow:0 18px 48px rgba(74,83,255,.16)}
+#houseNotes{background:rgba(0,0,0,.24);border-color:rgba(255,255,255,.105)}
+.dashboard-version-badge{background:rgba(0,0,0,.42);border-color:rgba(255,255,255,.10);color:rgba(255,255,255,.46)}
+
+/* V10 selected Govee controls */
+.govee-selected-panel{grid-template-columns:1fr;}
+.govee-control-card{min-height:104px;padding:9px 12px;}
+.govee-control-title{justify-content:space-between;margin-bottom:8px;}
+.govee-control-title>div{display:flex;align-items:center;gap:10px;}
+.govee-open{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.055);color:rgba(255,255,255,.78);border-radius:999px;padding:7px 11px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;}
+.govee-control-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.govee-device{border:1px solid rgba(255,255,255,.10);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.014));border-radius:13px;padding:8px 9px;display:grid;grid-template-rows:auto auto;gap:6px;min-width:0;}
+.govee-device-name{display:flex;align-items:center;gap:7px;font-size:clamp(10px,.82vw,14px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.govee-device-name span:last-child{overflow:hidden;text-overflow:ellipsis;}
+.govee-buttons{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.govee-buttons button{border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:7px 5px;background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:clamp(10px,.75vw,13px);font-weight:900;cursor:pointer;transition:.15s transform,.15s opacity,.15s background;}
+.govee-buttons button:first-child{background:linear-gradient(135deg,rgba(88,230,138,.20),rgba(36,120,96,.12));border-color:rgba(88,230,138,.23);}
+.govee-buttons button:last-child{background:linear-gradient(135deg,rgba(255,101,119,.16),rgba(106,50,70,.10));border-color:rgba(255,101,119,.20);}
+.govee-buttons button:active{transform:scale(.95);}
+.all-selected{box-shadow:inset 0 0 24px rgba(157,124,255,.09);}
+@media(max-width:1100px){.govee-control-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.govee-control-grid{grid-template-columns:1fr}.govee-control-title{align-items:flex-start;gap:8px;flex-direction:column}.govee-open{width:100%}}
 
-  .dashboard {
-    height: auto;
-    min-height: 100dvh;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
-  }
-
-  .time-card,
-  .weather-card,
-  .home-card,
-  .agenda-card {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
-  .govee-control-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .govee-buttons button {
-    min-height: 72px;
-  }
-
-  .agenda-body {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 650px) {
-  .time-card {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    text-align: center;
-  }
-
-  .time-content {
-    align-items: center;
-  }
-
-  .weather-top {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .forecast {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .scenes,
-  .govee-control-grid,
-  .quick-actions {
-    grid-template-columns: 1fr;
-  }
-
-  .status-strip {
-    grid-template-columns: 1fr;
-  }
-
-  .status-actions {
-    justify-content: flex-start;
-  }
-}
 </style>
 </head>
-
 <body>
 <div class="dashboard">
-
   <section class="card time-card">
     <div class="analog-wrap">
-      <div class="analog">
-        <div class="num n12">12</div>
-        <div class="num n3">3</div>
-        <div class="num n6">6</div>
-        <div class="num n9">9</div>
-        <div class="hand hour"></div>
-        <div class="hand min"></div>
-        <div class="pin"></div>
-      </div>
+      <div class="analog" id="analogClock"><span class="num n12">12</span><span class="num n3">3</span><span class="num n6">6</span><span class="num n9">9</span><div class="hand hour" id="hourHand"></div><div class="hand min" id="minHand"></div><div class="pin"></div></div>
     </div>
-
     <div class="time-content">
-      <div class="clockline">
-        <div class="clock" id="clock">--:--</div>
-        <div class="ampm" id="ampm">--</div>
-      </div>
-      <div class="date" id="date">---</div>
-      <div class="next-pill">
-        <div class="next-icon">📅</div>
-        <div>
-          <div class="next-title" id="topNextTitle">Next: Loading...</div>
-          <div class="next-sub" id="topNextSub">Checking family calendar</div>
-        </div>
-        <div class="chev">›</div>
-      </div>
+      <div class="clockline"><div class="clock" id="clock">8:41</div><div class="ampm" id="ampm">PM</div></div>
+      <div class="date" id="date">Saturday, May 23</div>
+      <button class="next-pill" onclick="openCalendar()" aria-label="Open family calendar">
+        <div class="next-icon">▣</div><div><div class="next-title">Next: <span id="nextEventName">Soccer Practice</span></div><div class="next-sub" id="nextEventCountdown">in 42 min</div></div><div class="chev">›</div>
+      </button>
     </div>
   </section>
 
   <section class="card weather-card">
     <div class="weather-top">
-      <div class="weather-moon" id="weatherIcon">🌙</div>
-      <div class="temperature" id="tempNow">--°</div>
+      <div class="weather-moon" id="weatherIconBig">☾</div>
+      <div class="temperature" id="currentTemp">68°</div>
       <div>
-        <div class="condition" id="weatherCondition">Loading weather</div>
-        <div class="weather-meta">
-          <span id="weatherHighLow">H --° • L --°</span>
-          <span class="rain" id="weatherRain">💧 --%</span>
-        </div>
+        <div class="condition" id="condition">Clear</div>
+        <div class="weather-meta"><span>H <strong id="weatherHigh">75°</strong></span><span>•</span><span>L <strong id="weatherLow">52°</strong></span><span>|</span><span class="rain">💧 <strong id="rainChance">0%</strong> chance of rain</span></div>
       </div>
     </div>
-
-    <div class="forecast" id="forecast">
-      <div class="day"><div class="day-name">SUN</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">MON</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">TUE</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">WED</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">THU</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">FRI</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">SAT</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-    </div>
+    <div class="forecast" id="forecast"></div>
   </section>
 
   <section class="card home-card">
-    <div class="section-head">
-      <div>
-        <div class="section-title"><span class="icon">⌂</span> Home Control</div>
-        <div class="section-sub">Alexa scenes and selected room controls</div>
-      </div>
+    <div class="section-head"><span class="icon">⌂</span><span>Home Control</span></div>
+    <div class="small-label">Scenes</div>
+    <div class="scene-grid">
+      <button class="scene morning" onclick="sendScene('morning','Good Morning', this)"><div class="s-ico" style="color:var(--pink)">☀</div><div class="s-name">Good Morning</div></button>
+      <button class="scene breakfast" onclick="sendScene('breakfast','Breakfast Time', this)"><div class="s-ico" style="color:var(--yellow)">☕</div><div class="s-name">Breakfast Time</div></button>
+      <button class="scene dinner" onclick="sendScene('dinner','Dinner Time', this)"><div class="s-ico" style="color:var(--orange)">🍽</div><div class="s-name">Dinner Time</div></button>
+      <button class="scene night" onclick="sendScene('bedtime','Good Night', this)"><div class="s-ico" style="color:#9aa7ff">☾</div><div class="s-name">Good Night</div></button>
     </div>
-
-    <div class="scenes">
-      <button class="scene morning" onclick="sendScene('morning', this)">
-        <span class="scene-ico">🌤️</span>
-        <span class="scene-label">Good Morning</span>
-        <span class="scene-status"></span>
-      </button>
-
-      <button class="scene breakfast" onclick="sendScene('breakfast', this)">
-        <span class="scene-ico">🥞</span>
-        <span class="scene-label">Breakfast Time</span>
-        <span class="scene-status"></span>
-      </button>
-
-      <button class="scene dinner" onclick="sendScene('dinner', this)">
-        <span class="scene-ico">🍽️</span>
-        <span class="scene-label">Dinner Time</span>
-        <span class="scene-status"></span>
-      </button>
-
-      <button class="scene night" onclick="sendScene('bedtime', this)">
-        <span class="scene-ico">🌙</span>
-        <span class="scene-label">Good Night</span>
-        <span class="scene-status"></span>
-      </button>
-    </div>
-
-    <div class="room-controls">
-      <div class="room-controls-head">
-        <div class="room-controls-title">
-          <span class="govee-logo">G</span>
-          <span>Room Controls</span>
+    <div class="ecosystems govee-selected-panel">
+      <div class="eco-card govee-control-card">
+        <div class="eco-title govee-control-title">
+          <div><span class="govee-logo">G</span><span>Room Controls</span></div>
+          <button class="govee-open" onclick="openGovee()">Open Govee ↗</button>
         </div>
-        <button class="govee-open" onclick="openGovee()">Open Govee ↗</button>
-      </div>
-
-      <div class="govee-control-grid">
-        <div class="govee-device">
-          <div class="govee-device-name"><span>🌿</span><span>Deck Light</span></div>
-          <div class="govee-buttons">
-            <button onclick="sendGovee('deck','on','Deck Light', this)">On</button>
-            <button onclick="sendGovee('deck','off','Deck Light', this)">Off</button>
+        <div class="govee-control-grid">
+          <div class="govee-device" data-device="deck">
+            <div class="govee-device-name"><span>🌿</span><span>Deck Light</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('deck','on','Deck Light', this)">On</button><button onclick="sendGovee('deck','off','Deck Light', this)">Off</button></div>
           </div>
-        </div>
-
-        <div class="govee-device">
-          <div class="govee-device-name"><span>🌈</span><span>Living Room Backlight</span></div>
-          <div class="govee-buttons">
-            <button onclick="sendGovee('backlight','on','Living Room Backlight', this)">On</button>
-            <button onclick="sendGovee('backlight','off','Living Room Backlight', this)">Off</button>
+          <div class="govee-device" data-device="backlight">
+            <div class="govee-device-name"><span>🌈</span><span>Living Room Backlight</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('backlight','on','Living Room Backlight', this)">On</button><button onclick="sendGovee('backlight','off','Living Room Backlight', this)">Off</button></div>
           </div>
-        </div>
-
-        <div class="govee-device">
-          <div class="govee-device-name"><span>🔌</span><span id="smartPlugOutlet1Label">Smart Plug 1</span></div>
-          <div class="govee-buttons">
-            <button onclick="sendGovee('plug1','on',document.getElementById('smartPlugOutlet1Label').textContent, this)">On</button>
-            <button onclick="sendGovee('plug1','off',document.getElementById('smartPlugOutlet1Label').textContent, this)">Off</button>
+          <div class="govee-device" data-device="plug">
+            <div class="govee-device-name"><span>🔌</span><span id="smartPlugLabel">Dual Smart Plug</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('plug','on',document.getElementById('smartPlugLabel').textContent, this)">On</button><button onclick="sendGovee('plug','off',document.getElementById('smartPlugLabel').textContent, this)">Off</button></div>
           </div>
-        </div>
-
-        <div class="govee-device">
-          <div class="govee-device-name"><span>💡</span><span id="smartPlugOutlet2Label">Living Room Lamp</span></div>
-          <div class="govee-buttons">
-            <button onclick="sendGovee('plug2','on',document.getElementById('smartPlugOutlet2Label').textContent, this)">On</button>
-            <button onclick="sendGovee('plug2','off',document.getElementById('smartPlugOutlet2Label').textContent, this)">Off</button>
-          </div>
-        </div>
-
-        <div class="govee-device all-selected">
-          <div class="govee-device-name"><span>✨</span><span>All Selected</span></div>
-          <div class="govee-buttons">
-            <button onclick="sendGovee('all','on','All Selected', this)">On</button>
-            <button onclick="sendGovee('all','off','All Selected', this)">Off</button>
+          <div class="govee-device all-selected" data-device="all">
+            <div class="govee-device-name"><span>✨</span><span>All Selected</span></div>
+            <div class="govee-buttons"><button onclick="sendGovee('all','on','All Selected', this)">On</button><button onclick="sendGovee('all','off','All Selected', this)">Off</button></div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="status-strip">
-      <div class="status-left">
-        <div class="shield">✓</div>
+    <div class="camera-row ring-camera-row">
+      <div class="camera-info">
         <div>
-          <div class="status-title">Home: selected devices ready</div>
-          <div class="status-sub" id="homeStatusSub">Alexa scenes and room controls active</div>
+          <div class="camera-title"><span>▣</span><span>Front Door</span></div>
+          <div class="live">Ring Camera</div>
+          <div class="camera-note">Opens Ring for Live View</div>
+        </div>
+        <div class="camera-actions">
+          <button class="view-camera primary" onclick="openFrontDoor()">Open Ring App ↗</button>
+          <button class="view-camera" onclick="openRingWeb()">Ring.com</button>
         </div>
       </div>
-
-      <div class="status-actions">
-        <button class="primary" onclick="openRing()">Front Door / Ring</button>
-        <button onclick="openGoogleHome()">Google Home</button>
-      </div>
+      <div class="camera-view" id="frontDoorPreview" onclick="openFrontDoor()"><span class="camera-live">Ring</span><span class="expand">⤢</span></div>
+    </div>
+    <div class="status-strip">
+      <div class="shield">✓</div>
+      <div><div class="status-title">Home: <span id="deviceCount">3</span> devices listed</div><div class="status-sub">All systems normal</div></div>
+      <button class="devices-btn" onclick="openGoogleHome()">View Devices ›</button>
     </div>
   </section>
 
   <section class="card agenda-card">
-    <div class="agenda-head">
-      <div>
-        <div class="agenda-title">📋 Today at a Glance</div>
-        <div class="agenda-sub">Family calendar, notes, and quick actions</div>
+    <div class="agenda-title"><span style="color:var(--pink)">▣</span><span>Today at a Glance</span></div>
+    <div class="events-title"><span>Upcoming Events</span><span id="calendarFeedStatus">Family Calendar</span></div>
+
+    <div class="glance-list">
+      <div class="glance event-glance" onclick="openCalendar()" role="button" aria-label="Open family calendar">
+        <div class="gicon">▣</div>
+        <div>
+          <div class="main">Next Event: <span id="glanceNextTitle">Checking calendar...</span></div>
+          <div class="sub" id="glanceNextSub">Family Calendar feed loading</div>
+        </div>
+        <div class="chev">›</div>
       </div>
-      <button class="refresh-btn" onclick="loadCalendarFeed(true)">Refresh</button>
-    </div>
 
-    <div class="agenda-body">
-      <div class="glance-col">
-        <div class="next-event-card">
-          <div class="mini-title">Next Event</div>
-          <div class="next-event-name" id="nextEventName">Loading calendar...</div>
-          <div class="next-event-meta" id="nextEventMeta">Checking upcoming events</div>
-        </div>
-
-        <div class="schedule-card">
-          <div class="mini-title">Today's Schedule</div>
-          <div class="schedule-list" id="todaySchedule">
-            <div class="empty-state">Loading today's events...</div>
-          </div>
-        </div>
-
-        <div class="notes-card">
-          <div class="mini-title">House Notes</div>
-          <textarea id="houseNotes" placeholder="Tap to add a house note..."></textarea>
-        </div>
-
-        <div class="quick-actions">
-          <button class="full-cal" onclick="openCalendar()">Calendar</button>
-          <button onclick="openGoogleHome()">Google Home</button>
-          <button onclick="openGovee()">Govee</button>
+      <div class="schedule-card">
+        <div class="mini-section-title"><span>Today’s Schedule</span><button onclick="loadCalendarFeed(true)">Refresh</button></div>
+        <div class="schedule-list" id="todaySchedule">
+          <div class="empty-state">Checking Family Calendar...</div>
         </div>
       </div>
 
-      <div class="event-list">
-        <div class="event-list-head">
-          <div class="mini-title">Upcoming Events</div>
-          <div class="event-count" id="eventCount">Loading</div>
-        </div>
+      <div class="notes-card">
+        <div class="mini-section-title"><span>House Notes</span><button onclick="clearHouseNotes()">Clear</button></div>
+        <textarea id="houseNotes" maxlength="220" placeholder="Tap here to add a quick family note..."></textarea>
+      </div>
 
-        <div class="upcoming-list" id="upcomingList">
-          <div class="empty-state">Loading upcoming events...</div>
-        </div>
-
-        <button class="full-cal" onclick="openCalendar()">View Full Calendar ›</button>
+      <div class="quick-actions">
+        <button onclick="openCalendar()">Calendar</button>
+        <button onclick="openGoogleHome()">Google Home</button>
+        <button onclick="openGovee()">Govee</button>
       </div>
     </div>
+
+    <div class="event-list" id="eventList">
+      <div class="empty-state">Checking upcoming events...</div>
+    </div>
+    <button class="full-cal" onclick="openCalendar()"><span>▣</span><span>View Full Calendar</span><span>›</span></button>
   </section>
 </div>
-
-<div class="dashboard-version-badge">Home Hub V16 No Front Door Preview</div>
 <div class="toast" id="toast"></div>
-
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-0Z7Sf93-DERMWL9MMoHEd76MlrnlJ3Xi6tH4wqfiAJ-_iYI9l8lkfIERsYHEFTYOxw/exec";
-
-const FAMILY_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=family11563085076736409084%40group.calendar.google.com&ctz=America%2FLos_Angeles";
-
-const WEATHER_FALLBACK = {
-  latitude: 38.4405,
-  longitude: -122.7144
+// ─────────────────────────────────────────────────────────────
+// Dashboard config: edit these later as your setup gets finalized
+// BUILD: Home Hub V11 - Alexa scenes + selected room controls
+// ─────────────────────────────────────────────────────────────
+const CONFIG = {
+  weatherLat: 38.4404,           // Santa Rosa fallback. Change later if needed.
+  weatherLon: -122.7141,
+  familyCalendarUrl: 'https://calendar.google.com/calendar/embed?src=family11563085076736409084%40group.calendar.google.com&ctz=America%2FLos_Angeles',
+  calendarFeedUrl: 'https://script.google.com/macros/s/AKfycbx-0Z7Sf93-DERMWL9MMoHEd76MlrnlJ3Xi6tH4wqfiAJ-_iYI9l8lkfIERsYHEFTYOxw/exec',
+  houseNotesKey: 'homeHubHouseNotesV1',
+  frontDoorUrl: 'ring://',        // Attempts to open the Ring iPad app.
+  frontDoorFallback: 'https://ring.com/app',
+  ringWebUrl: 'https://ring.com/users/sign_in',
+  googleHomeUrl: 'googlehome://',
+  googleHomeFallback: 'https://home.google.com',
+  goveeUrl: 'govee://',
+  goveeFallback: 'https://apps.apple.com/app/govee-home/id1395696823',
+  deviceCount: 3,
+  selectedGoveeCount: 3,
+  events: []
 };
 
-let toastTimer;
-
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+function makeTicks(){
+  const clock = document.getElementById('analogClock');
+  for(let i=0;i<60;i++){
+    const t=document.createElement('span');
+    t.className='tick';
+    t.style.height=(i%5===0?'10px':'5px');
+    t.style.opacity=(i%5===0?'.72':'.34');
+    t.style.transform=`rotate(${i*6}deg) translateY(calc(-1 * (min(26vw,250px) / 2 - 10px)))`;
+    clock.appendChild(t);
+  }
 }
 
-function updateClock() {
+function updateClock(){
   const now = new Date();
-
-  const timeParts = now.toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true
-  }).split(" ");
-
-  document.getElementById("clock").textContent = timeParts[0] || "--:--";
-  document.getElementById("ampm").textContent = timeParts[1] || "";
-
-  document.getElementById("date").textContent = now.toLocaleDateString([], {
-    weekday: "long",
-    month: "long",
-    day: "numeric"
-  });
+  let h = now.getHours();
+  const m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  document.getElementById('clock').textContent = `${h12}:${String(m).padStart(2,'0')}`;
+  document.getElementById('ampm').textContent = ampm;
+  document.getElementById('date').textContent = now.toLocaleDateString([], {weekday:'long', month:'long', day:'numeric'});
+  const minDeg = (m / 60) * 360 - 90;
+  const hourDeg = ((h12 % 12) / 12) * 360 + (m / 60) * 30 - 90;
+  document.getElementById('minHand').style.transform = `rotate(${minDeg}deg)`;
+  document.getElementById('hourHand').style.transform = `rotate(${hourDeg}deg)`;
 }
 
-async function sendScene(scene, button) {
-  const status = button.querySelector(".scene-status");
-  const originalStatus = status.textContent;
+function weatherCodeToIcon(code){
+  if([0].includes(code)) return '☀️';
+  if([1,2].includes(code)) return '🌤️';
+  if([3].includes(code)) return '☁️';
+  if([45,48].includes(code)) return '🌫️';
+  if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return '🌧️';
+  if([71,73,75,77,85,86].includes(code)) return '❄️';
+  if([95,96,99].includes(code)) return '⛈️';
+  return '🌤️';
+}
+function weatherCodeToText(code){
+  if(code===0) return 'Clear';
+  if(code===1) return 'Mainly clear';
+  if(code===2) return 'Partly cloudy';
+  if(code===3) return 'Cloudy';
+  if([45,48].includes(code)) return 'Fog';
+  if([51,53,55,56,57].includes(code)) return 'Drizzle';
+  if([61,63,65,66,67,80,81,82].includes(code)) return 'Rain';
+  if([71,73,75,77,85,86].includes(code)) return 'Snow';
+  if([95,96,99].includes(code)) return 'Thunderstorm';
+  return 'Weather';
+}
+function renderForecast(days){
+  const target=document.getElementById('forecast');
+  target.innerHTML = days.map(d => `
+    <div class="day">
+      <div class="day-name">${d.name}</div>
+      <div class="weather-ico">${d.icon}</div>
+      <div class="hi">${d.high}°</div>
+      <div class="lo">${d.low}°</div>
+      ${d.pop ? `<div class="pop-small">${d.pop}%</div>` : ''}
+    </div>`).join('');
+}
+function fallbackWeather(){
+  renderForecast([
+    {name:'SUN',icon:'☀️',high:75,low:52,pop:0},{name:'MON',icon:'🌤️',high:77,low:54,pop:0},{name:'TUE',icon:'☀️',high:80,low:56,pop:0},{name:'WED',icon:'🌤️',high:78,low:57,pop:0},{name:'THU',icon:'☀️',high:76,low:55,pop:0},{name:'FRI',icon:'🌧️',high:72,low:54,pop:30},{name:'SAT',icon:'🌤️',high:73,low:53,pop:0}
+  ]);
+}
+async function loadWeather(){
+  fallbackWeather();
+  try{
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.weatherLat}&longitude=${CONFIG.weatherLon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&temperature_unit=fahrenheit&timezone=auto`;
+    const res = await fetch(url, {cache:'no-store'});
+    if(!res.ok) throw new Error('Weather unavailable');
+    const data = await res.json();
+    const temp = Math.round(data.current.temperature_2m);
+    const code = data.current.weather_code;
+    const condition = weatherCodeToText(code);
+    const high = Math.round(data.daily.temperature_2m_max[0]);
+    const low = Math.round(data.daily.temperature_2m_min[0]);
+    const rain = data.daily.precipitation_probability_max[0] ?? 0;
+    document.getElementById('currentTemp').textContent = `${temp}°`;
+    document.getElementById('condition').textContent = condition;
+    document.getElementById('weatherHigh').textContent = `${high}°`;
+    document.getElementById('weatherLow').textContent = `${low}°`;
+    document.getElementById('rainChance').textContent = `${rain}%`;
+    document.getElementById('weatherIconBig').textContent = (new Date().getHours() > 18 || new Date().getHours() < 6) ? '☾' : weatherCodeToIcon(code);
+    const days = data.daily.time.slice(0,7).map((iso,i)=>{
+      const dt = new Date(iso + 'T12:00:00');
+      return {name:dt.toLocaleDateString([], {weekday:'short'}).toUpperCase(), icon:weatherCodeToIcon(data.daily.weather_code[i]), high:Math.round(data.daily.temperature_2m_max[i]), low:Math.round(data.daily.temperature_2m_min[i]), pop:data.daily.precipitation_probability_max[i]};
+    });
+    renderForecast(days);
+  }catch(e){
+    console.warn(e);
+  }
+}
+function renderEvents(){
+  document.getElementById('deviceCount').textContent = CONFIG.deviceCount;
+  renderCalendarData({ ok:true, nextEvent:null, todayEvents:[], upcomingEvents:[] });
+}
 
-  button.classList.add("sending");
-  status.textContent = "Sending...";
+const EVENT_COLORS = ['var(--pink)','var(--cyan)','var(--teal)','var(--orange)','var(--purple)','var(--yellow)'];
 
-  try {
-    const response = await fetch(`${SCRIPT_URL}?action=scene&scene=${encodeURIComponent(scene)}&t=${Date.now()}`);
-    const data = await response.json();
+function eventLine(event){
+  const location = event.location || event.place || '';
+  const date = event.date || '';
+  const time = event.time || event.when || '';
+  return {
+    title: event.title || 'Untitled event',
+    sub: [date, time, location].filter(Boolean).join(' • '),
+    when: [date, time].filter(Boolean).join('\n'),
+    place: location
+  };
+}
 
-    if (data.ok) {
-      status.textContent = "Sent ✓";
-      showToast(`${data.label || "Scene"} sent`);
-    } else {
-      status.textContent = "Failed";
-      showToast(data.error || "Scene did not send");
+function renderCalendarData(data){
+  const nextTitle = document.getElementById('glanceNextTitle');
+  const nextSub = document.getElementById('glanceNextSub');
+  const topName = document.getElementById('nextEventName');
+  const topSub = document.getElementById('nextEventCountdown');
+  const todayTarget = document.getElementById('todaySchedule');
+  const upcomingTarget = document.getElementById('eventList');
+  const feedStatus = document.getElementById('calendarFeedStatus');
+
+  const todayEvents = Array.isArray(data.todayEvents) ? data.todayEvents : [];
+  const upcomingEvents = Array.isArray(data.upcomingEvents) ? data.upcomingEvents : [];
+  const nextEvent = data.nextEvent || upcomingEvents[0] || null;
+  if(feedStatus) feedStatus.textContent = upcomingEvents.length ? `${upcomingEvents.length} upcoming` : 'Family Calendar';
+
+  if(nextEvent){
+    const e = eventLine(nextEvent);
+    nextTitle.textContent = e.title;
+    nextSub.textContent = e.sub || 'Open calendar for details';
+    topName.textContent = e.title;
+    topSub.textContent = e.sub || 'Open calendar';
+  } else {
+    nextTitle.textContent = 'No upcoming events';
+    nextSub.textContent = 'Family Calendar is clear';
+    topName.textContent = 'No upcoming events';
+    topSub.textContent = 'Family Calendar is clear';
+  }
+
+  if(todayEvents.length){
+    todayTarget.innerHTML = todayEvents.slice(0,4).map((event, idx) => {
+      const e = eventLine(event);
+      const color = EVENT_COLORS[idx % EVENT_COLORS.length];
+      return `<div class="schedule-item">
+        <div class="schedule-time" style="color:${color}">${event.time || 'All day'}</div>
+        <div><div class="schedule-name">${e.title}</div><div class="schedule-place">${event.location || ''}</div></div>
+      </div>`;
+    }).join('');
+  } else {
+    todayTarget.innerHTML = '<div class="empty-state">No more events scheduled for today.</div>';
+  }
+
+  if(upcomingEvents.length){
+    upcomingTarget.innerHTML = upcomingEvents.slice(0,6).map((event, idx) => {
+      const e = eventLine(event);
+      const color = EVENT_COLORS[idx % EVENT_COLORS.length];
+      return `<div class="event-row">
+        <div class="etime" style="color:${color}">${e.when.replace('\n','<br>')}</div>
+        <div class="dot" style="color:${color};background:${color}"></div>
+        <div class="edetail"><div class="name">${e.title}</div><div class="place">${e.place || 'Family Calendar'}</div></div>
+      </div>`;
+    }).join('');
+  } else {
+    upcomingTarget.innerHTML = '<div class="empty-state">No upcoming events found.</div>';
+  }
+}
+
+async function loadCalendarFeed(manual=false){
+  try{
+    const sep = CONFIG.calendarFeedUrl.includes('?') ? '&' : '?';
+    const res = await fetch(`${CONFIG.calendarFeedUrl}${sep}_=${Date.now()}`, { cache:'no-store' });
+    if(!res.ok) throw new Error('Calendar feed unavailable');
+    const data = await res.json();
+    if(!data.ok) throw new Error(data.error || 'Calendar feed error');
+    renderCalendarData(data);
+    if(manual) showToast('Calendar refreshed');
+  } catch(err){
+    console.warn(err);
+    document.getElementById('glanceNextTitle').textContent = 'Calendar feed unavailable';
+    document.getElementById('glanceNextSub').textContent = 'Open full calendar or refresh later';
+    document.getElementById('eventList').innerHTML = '<div class="empty-state">Could not load the calendar feed. Open the full calendar instead.</div>';
+    document.getElementById('todaySchedule').innerHTML = '<div class="empty-state">Calendar feed did not load.</div>';
+    const feedStatus = document.getElementById('calendarFeedStatus');
+    if(feedStatus) feedStatus.textContent = 'Feed unavailable';
+    if(manual) showToast('Calendar feed did not load');
+  }
+}
+
+function loadHouseNotes(){
+  const notes = document.getElementById('houseNotes');
+  notes.value = localStorage.getItem(CONFIG.houseNotesKey) || '';
+  notes.addEventListener('input', () => localStorage.setItem(CONFIG.houseNotesKey, notes.value));
+}
+function clearHouseNotes(){
+  document.getElementById('houseNotes').value = '';
+  localStorage.removeItem(CONFIG.houseNotesKey);
+  showToast('House Notes cleared');
+}
+
+function openApp(url, fallback){
+  const started = Date.now();
+  window.location.href = url;
+  setTimeout(()=>{ if(Date.now() - started < 1600) window.location.href = fallback; }, 900);
+}
+function openGoogleHome(){ openApp(CONFIG.googleHomeUrl, CONFIG.googleHomeFallback); }
+function openGovee(){ openApp(CONFIG.goveeUrl, CONFIG.goveeFallback); }
+function openCalendar(){ window.location.href = CONFIG.familyCalendarUrl; }
+function openFrontDoor(){
+  showToast('Opening Ring…');
+  openApp(CONFIG.frontDoorUrl, CONFIG.frontDoorFallback);
+}
+function openRingWeb(){
+  window.location.href = CONFIG.ringWebUrl;
+}
+async function sendScene(sceneKey, label, button){
+  const originalOpacity = button ? button.style.opacity : '';
+  if(button){
+    button.disabled = true;
+    button.style.opacity = '.62';
+  }
+  showToast(`Sending ${label} announcement…`);
+  try{
+    const sep = CONFIG.calendarFeedUrl.includes('?') ? '&' : '?';
+    const url = `${CONFIG.calendarFeedUrl}${sep}action=scene&scene=${encodeURIComponent(sceneKey)}&_=${Date.now()}`;
+    const res = await fetch(url, { cache:'no-store' });
+    let data = null;
+    try { data = await res.json(); } catch(e) {}
+    if(!res.ok || (data && data.ok === false)) throw new Error((data && data.error) || 'Scene failed');
+    showToast(`${label} announcement sent`);
+  } catch(err){
+    console.warn(err);
+    showToast(`${label} did not send. Try again.`);
+  } finally {
+    if(button){
+      button.disabled = false;
+      button.style.opacity = originalOpacity;
     }
-  } catch (err) {
-    status.textContent = "Failed";
-    showToast("Scene did not send");
   }
-
-  setTimeout(() => {
-    button.classList.remove("sending");
-    status.textContent = originalStatus;
-  }, 1800);
 }
 
-async function sendGovee(device, command, label, button) {
-  const originalText = button.textContent;
-  button.classList.add("sending");
-  button.textContent = command === "on" ? "Turning On..." : "Turning Off...";
-
-  try {
-    const response = await fetch(`${SCRIPT_URL}?action=govee&device=${encodeURIComponent(device)}&command=${encodeURIComponent(command)}&t=${Date.now()}`);
-    const data = await response.json();
-
-    if (data.ok) {
-      showToast(`${label} turned ${command}`);
-      document.getElementById("homeStatusSub").textContent = `${label} turned ${command}`;
-    } else {
-      showToast(data.error || `${label} did not respond`);
-      document.getElementById("homeStatusSub").textContent = `${label} did not respond`;
+async function sendGovee(deviceKey, command, label, button){
+  const originalOpacity = button ? button.style.opacity : '';
+  if(button){
+    button.disabled = true;
+    button.style.opacity = '.62';
+  }
+  const actionWord = command === 'on' ? 'turning on' : 'turning off';
+  showToast(`${label}: ${actionWord}…`);
+  try{
+    const sep = CONFIG.calendarFeedUrl.includes('?') ? '&' : '?';
+    const url = `${CONFIG.calendarFeedUrl}${sep}action=govee&device=${encodeURIComponent(deviceKey)}&command=${encodeURIComponent(command)}&_=${Date.now()}`;
+    const res = await fetch(url, { cache:'no-store' });
+    let data = null;
+    try { data = await res.json(); } catch(e) {}
+    if(!res.ok || (data && data.ok === false)) throw new Error((data && (data.error || data.goveeResponse?.message)) || 'Govee command failed');
+    showToast(`${label} turned ${command}`);
+  } catch(err){
+    console.warn(err);
+    showToast(`${label} did not respond. Try again.`);
+  } finally {
+    if(button){
+      button.disabled = false;
+      button.style.opacity = originalOpacity;
     }
-  } catch (err) {
-    showToast(`${label} did not respond`);
-    document.getElementById("homeStatusSub").textContent = `${label} did not respond`;
-  }
-
-  setTimeout(() => {
-    button.classList.remove("sending");
-    button.textContent = originalText;
-  }, 1200);
-}
-
-async function loadCalendarFeed(manual) {
-  if (manual) showToast("Refreshing calendar...");
-
-  try {
-    const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
-    const data = await response.json();
-
-    if (!data.ok) {
-      throw new Error(data.error || "Calendar feed error");
-    }
-
-    renderNextEvent(data.nextEvent);
-    renderTodaySchedule(data.todayEvents || []);
-    renderUpcomingEvents(data.upcomingEvents || []);
-
-    if (manual) showToast("Calendar refreshed");
-  } catch (err) {
-    document.getElementById("nextEventName").textContent = "Calendar unavailable";
-    document.getElementById("nextEventMeta").textContent = "Open full calendar for details";
-    document.getElementById("todaySchedule").innerHTML = `<div class="empty-state">Could not load today's schedule.</div>`;
-    document.getElementById("upcomingList").innerHTML = `<div class="empty-state">Could not load upcoming events.</div>`;
-    document.getElementById("eventCount").textContent = "Unavailable";
-    if (manual) showToast("Calendar could not refresh");
   }
 }
 
-function renderNextEvent(event) {
-  const name = document.getElementById("nextEventName");
-  const meta = document.getElementById("nextEventMeta");
-  const topTitle = document.getElementById("topNextTitle");
-  const topSub = document.getElementById("topNextSub");
-
-  if (!event) {
-    name.textContent = "No upcoming events";
-    meta.textContent = "Nothing scheduled in the next window";
-    topTitle.textContent = "Next: No upcoming events";
-    topSub.textContent = "Family calendar is clear";
-    return;
-  }
-
-  name.textContent = event.title || "Untitled Event";
-
-  const eventMeta = `${event.date || ""} • ${event.time || ""}${event.location ? " • " + event.location : ""}`;
-  meta.textContent = eventMeta;
-
-  topTitle.textContent = `Next: ${event.title || "Untitled Event"}`;
-  topSub.textContent = `${event.date || ""} at ${event.time || ""}`;
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-function renderTodaySchedule(events) {
-  const container = document.getElementById("todaySchedule");
-
-  if (!events.length) {
-    container.innerHTML = `<div class="empty-state">No more events today.</div>`;
-    return;
-  }
-
-  container.innerHTML = events.slice(0, 4).map(event => `
-    <div class="schedule-item">
-      <div class="item-time">${escapeHtml(event.time || "")}</div>
-      <div>
-        <div class="item-title">${escapeHtml(event.title || "Untitled Event")}</div>
-        <div class="item-location">${escapeHtml(event.location || "")}</div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function renderUpcomingEvents(events) {
-  const container = document.getElementById("upcomingList");
-  const count = document.getElementById("eventCount");
-
-  count.textContent = `${events.length} upcoming`;
-
-  if (!events.length) {
-    container.innerHTML = `<div class="empty-state">No upcoming events found.</div>`;
-    return;
-  }
-
-  container.innerHTML = events.slice(0, 10).map(event => `
-    <div class="upcoming-item">
-      <div>
-        <div class="upcoming-date">${escapeHtml(event.date || "")}</div>
-        <div class="upcoming-time">${escapeHtml(event.time || "")}</div>
-      </div>
-      <div>
-        <div class="item-title">${escapeHtml(event.title || "Untitled Event")}</div>
-        <div class="item-location">${escapeHtml(event.location || "")}</div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function saveNotes() {
-  const notes = document.getElementById("houseNotes").value;
-  localStorage.setItem("homeHubHouseNotes", notes);
-}
-
-function loadNotes() {
-  document.getElementById("houseNotes").value = localStorage.getItem("homeHubHouseNotes") || "";
-  document.getElementById("houseNotes").addEventListener("input", saveNotes);
-}
-
-async function loadWeather() {
-  const location = await getWeatherLocation();
-  const url =
-    `https://api.open-meteo.com/v1/forecast` +
-    `?latitude=${location.latitude}` +
-    `&longitude=${location.longitude}` +
-    `&current=temperature_2m,weather_code` +
-    `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
-    `&temperature_unit=fahrenheit` +
-    `&timezone=auto`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const currentTemp = Math.round(data.current.temperature_2m);
-    const todayHigh = Math.round(data.daily.temperature_2m_max[0]);
-    const todayLow = Math.round(data.daily.temperature_2m_min[0]);
-    const rainChance = data.daily.precipitation_probability_max[0] ?? 0;
-    const condition = weatherCodeToText(data.current.weather_code);
-    const icon = weatherCodeToIcon(data.current.weather_code);
-
-    document.getElementById("tempNow").textContent = `${currentTemp}°`;
-    document.getElementById("weatherCondition").textContent = condition;
-    document.getElementById("weatherHighLow").textContent = `H ${todayHigh}° • L ${todayLow}°`;
-    document.getElementById("weatherRain").textContent = `💧 ${rainChance}%`;
-    document.getElementById("weatherIcon").textContent = icon;
-
-    renderForecast(data.daily);
-  } catch (err) {
-    document.getElementById("weatherCondition").textContent = "Weather unavailable";
-  }
-}
-
-function getWeatherLocation() {
-  return new Promise(resolve => {
-    if (!navigator.geolocation) {
-      resolve(WEATHER_FALLBACK);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-      },
-      () => resolve(WEATHER_FALLBACK),
-      {
-        timeout: 2500,
-        maximumAge: 1000 * 60 * 60
-      }
-    );
-  });
-}
-
-function renderForecast(daily) {
-  const days = daily.time.slice(0, 7).map((date, index) => {
-    const dayName = new Date(date + "T12:00:00").toLocaleDateString([], { weekday: "short" }).toUpperCase();
-    const hi = Math.round(daily.temperature_2m_max[index]);
-    const lo = Math.round(daily.temperature_2m_min[index]);
-    const rain = daily.precipitation_probability_max[index] || 0;
-    const code = daily.weather_code[index];
-
-    return `
-      <div class="day">
-        <div class="day-name">${dayName}</div>
-        <div class="weather-ico">${weatherCodeToIcon(code)}</div>
-        <div class="hi">${hi}°</div>
-        <div class="lo">${lo}°</div>
-        ${rain > 20 ? `<div class="pop-small">${rain}%</div>` : ""}
-      </div>
-    `;
-  });
-
-  document.getElementById("forecast").innerHTML = days.join("");
-}
-
-function weatherCodeToText(code) {
-  if ([0].includes(code)) return "Clear";
-  if ([1, 2].includes(code)) return "Partly cloudy";
-  if ([3].includes(code)) return "Cloudy";
-  if ([45, 48].includes(code)) return "Fog";
-  if ([51, 53, 55, 56, 57].includes(code)) return "Drizzle";
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "Rain";
-  if ([71, 73, 75, 77, 85, 86].includes(code)) return "Snow";
-  if ([95, 96, 99].includes(code)) return "Thunderstorm";
-  return "Clear";
-}
-
-function weatherCodeToIcon(code) {
-  if ([0].includes(code)) return "☀️";
-  if ([1, 2].includes(code)) return "🌤️";
-  if ([3].includes(code)) return "☁️";
-  if ([45, 48].includes(code)) return "🌫️";
-  if ([51, 53, 55, 56, 57].includes(code)) return "🌦️";
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "🌧️";
-  if ([71, 73, 75, 77, 85, 86].includes(code)) return "❄️";
-  if ([95, 96, 99].includes(code)) return "⛈️";
-  return "🌙";
-}
-
-function openCalendar() {
-  window.open(FAMILY_CALENDAR_URL, "_blank");
-}
-
-function openGoogleHome() {
-  window.location.href = "https://home.google.com";
-}
-
-function openGovee() {
-  window.location.href = "https://apps.apple.com/app/govee-home/id1395696823";
-}
-
-function openRing() {
-  window.location.href = "https://ring.com/app";
-}
-
+makeTicks();
 updateClock();
 setInterval(updateClock, 10000);
-
-loadNotes();
-loadCalendarFeed(false);
+renderEvents();
+loadHouseNotes();
+loadCalendarFeed();
+setInterval(loadCalendarFeed, 5 * 60 * 1000);
 loadWeather();
-
-setInterval(() => loadCalendarFeed(false), 1000 * 60 * 5);
-setInterval(loadWeather, 1000 * 60 * 20);
+setInterval(loadWeather, 30 * 60 * 1000);
 </script>
+<div class="dashboard-version-badge">Home Hub V11 Room Controls</div>
 </body>
 </html>
