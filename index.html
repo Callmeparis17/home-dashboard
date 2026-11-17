@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Home Hub">
 <meta name="theme-color" content="#0C0E1E">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-<title>Home Hub V21.5</title>
+<title>Home Hub V21.6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -317,7 +317,7 @@ input[type=range]{width:100%;height:36px}
     <aside class="m-side" id="mSide"></aside>
   </div>
 
-  <div style="position:absolute;right:26px;bottom:20px;font-size:11px;font-weight:700;color:#4A4F78">V21.5</div>
+  <div style="position:absolute;right:26px;bottom:20px;font-size:11px;font-weight:700;color:#4A4F78">V21.6</div>
   <div class="toast" id="toast"></div>
   <div class="setup" id="setup"><div><b>Almost there.</b><br>Paste your Apps Script Web app URL into the <b>APPS_URL</b> line near the top of the script in index.html, then commit.</div></div>
 </div>
@@ -828,13 +828,35 @@ $('mNext').addEventListener('click', () => { mM++; if (mM > 12) { mM = 1; mY++; 
 $('mToday').addEventListener('click', openMonth);
 $('mClose').addEventListener('click', () => $('month').classList.remove('open'));
 document.querySelectorAll('[data-open="month"]').forEach((b) => b.addEventListener('click', openMonth));
-// Front Door: open the Ring app on the tablet
+// Front Door: open the Ring app on the tablet.
+// Tries, in order: Fully Kiosk's bridge, FreeKiosk's local REST API, then an Android app link.
 const RING_PACKAGE = 'com.ringapp';
+const FREEKIOSK_API = 'http://127.0.0.1:8080/api/app/launch';
+function ringOpened() { return document.hidden; }
+function tryIntent() {
+  const f = document.createElement('iframe');
+  f.style.display = 'none';
+  f.src = 'intent://#Intent;package=' + RING_PACKAGE + ';end';
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 2000);
+}
 $('navRing').addEventListener('click', () => {
   try {
     if (window.fully && typeof window.fully.startApplication === 'function') { window.fully.startApplication(RING_PACKAGE); return; }
-  } catch (e) { /* fall through */ }
-  window.location.href = 'intent://#Intent;package=' + RING_PACKAGE + ';end';
+  } catch (e) { /* not Fully Kiosk */ }
+  const body = JSON.stringify({ package: RING_PACKAGE });
+  fetch(FREEKIOSK_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body })
+    .catch(() => fetch(FREEKIOSK_API, { method: 'POST', mode: 'no-cors', body: body }))
+    .catch(() => {})
+    .finally(() => {
+      setTimeout(() => {
+        if (ringOpened()) return;
+        tryIntent();
+        setTimeout(() => {
+          if (!ringOpened()) toast('Could not open Ring. In FreeKiosk, turn on the REST API and allow the Ring app.');
+        }, 2500);
+      }, 1200);
+    });
 });
 $('navHome').addEventListener('click', () => { $('month').classList.remove('open'); closePanel(); });
 
