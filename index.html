@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Home Hub">
 <meta name="theme-color" content="#0C0E1E">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-<title>Home Hub V21.3</title>
+<title>Home Hub V21.4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -65,6 +65,11 @@ h2{font-size:16px;font-weight:800}
 .ev .ti{font-size:14px;font-weight:700}
 .ev .tm{font-size:12px;color:var(--muted)}
 .empty{font-size:13px;font-weight:600;color:var(--muted);padding:0 12px}
+.next-card{border-radius:18px;padding:14px 16px 16px;background:linear-gradient(135deg,#2E2766,#1E2350);border:1px solid #4A4290;display:flex;flex-direction:column;gap:6px}
+.next-card .lbl{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#C9B8FF}
+.next-card .when{font-size:12px;font-weight:800;letter-spacing:0;text-transform:none;color:#1A1236;background:#C9B8FF;border-radius:999px;padding:3px 10px}
+.next-card .nt{font-size:21px;font-weight:800;line-height:1.15}
+.next-card .nm{font-size:14px;font-weight:700;color:#DCD3FF}
 
 /* map */
 .map{position:relative;border-radius:26px;background:#111430;border:1px solid var(--line);overflow:hidden}
@@ -191,7 +196,6 @@ input[type=range]{width:100%;height:36px}
   <!-- TOP CHIPS -->
   <div class="chips">
     <span class="chip amber" id="chipOn">-- of 6 on</span>
-    <span class="chip" id="chipNext">Loading calendar...</span>
   </div>
 
   <!-- LEFT COLUMN -->
@@ -212,6 +216,7 @@ input[type=range]{width:100%;height:36px}
     </section>
     <section class="card cal">
       <div class="cal-head"><h2>Family Calendar</h2><button class="small-btn" data-open="month">Month</button></div>
+      <div class="next-card" id="nextCard"><div class="lbl"><span>Next up</span></div><div class="nt">Loading...</div></div>
       <div id="calList" style="display:flex;flex-direction:column;gap:12px"><div class="empty">Loading...</div></div>
     </section>
   </div>
@@ -312,7 +317,7 @@ input[type=range]{width:100%;height:36px}
     <aside class="m-side" id="mSide"></aside>
   </div>
 
-  <div style="position:absolute;right:26px;bottom:20px;font-size:11px;font-weight:700;color:#4A4F78">V21.3</div>
+  <div style="position:absolute;right:26px;bottom:20px;font-size:11px;font-weight:700;color:#4A4F78">V21.4</div>
   <div class="toast" id="toast"></div>
   <div class="setup" id="setup"><div><b>Almost there.</b><br>Paste your Apps Script Web app URL into the <b>APPS_URL</b> line near the top of the script in index.html, then commit.</div></div>
 </div>
@@ -740,12 +745,31 @@ function loadCalendar() {
   if (!configured()) return;
   api({ action: 'calendar' }).then((j) => {
     const ne = j.nextEvent;
-    $('chipNext').textContent = ne ? 'Next: ' + ne.title + ' · ' + (ne.dayKey === todayKey() ? ne.time : ne.day + ' ' + ne.time) : 'Nothing coming up';
+    if (ne) {
+      $('nextCard').innerHTML = '<div class="lbl"><span>Next up</span><span class="when">' + esc(untilText(ne)) + '</span></div>' +
+        '<div class="nt">' + esc(ne.title) + '</div>' +
+        '<div class="nm">' + esc((ne.dayKey === todayKey() ? 'Today' : ne.day) + ' · ' + ne.time) + (ne.location ? ' · ' + esc(ne.location.split(',')[0]) : '') + '</div>';
+    } else {
+      $('nextCard').innerHTML = '<div class="lbl"><span>Next up</span></div><div class="nm">Nothing on the calendar soon</div>';
+    }
+    const same = (e) => ne && e.title === ne.title && e.start === ne.start;
     let html = '';
-    (j.todayEvents || []).forEach((e) => { html += '<div class="ev hl"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">Today · ' + esc(e.time) + '</div></div></div>'; });
-    (j.upcomingEvents || []).slice(0, Math.max(2, 7 - (j.todayEvents || []).length)).forEach((e) => { html += '<div class="ev"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">' + esc(e.day) + ' · ' + esc(e.time) + '</div></div></div>'; });
-    $('calList').innerHTML = html || '<div class="empty">Nothing on the calendar soon.</div>';
+    (j.todayEvents || []).filter((e) => !same(e)).forEach((e) => { html += '<div class="ev hl"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">Today · ' + esc(e.time) + '</div></div></div>'; });
+    (j.upcomingEvents || []).filter((e) => !same(e)).slice(0, Math.max(2, 4 - (j.todayEvents || []).length)).forEach((e) => { html += '<div class="ev"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">' + esc(e.day) + ' · ' + esc(e.time) + '</div></div></div>'; });
+    $('calList').innerHTML = html || '<div class="empty">Nothing else coming up.</div>';
   }).catch((e) => { $('calList').innerHTML = '<div class="empty">Calendar unavailable</div>'; toast('Calendar: ' + e.message); });
+}
+function untilText(e) {
+  const start = new Date(e.start);
+  const mins = Math.round((start - new Date()) / 60000);
+  if (mins <= 0) return 'Happening now';
+  if (!e.allDay && mins < 60) return 'In ' + mins + ' min';
+  const d0 = new Date(); d0.setHours(0, 0, 0, 0);
+  const d1 = new Date(start); d1.setHours(0, 0, 0, 0);
+  const days = Math.round((d1 - d0) / 86400000);
+  if (days === 0) return 'In ' + Math.round(mins / 60) + ' hr';
+  if (days === 1) return 'Tomorrow';
+  return 'In ' + days + ' days';
 }
 function todayKey() {
   const d = new Date();
