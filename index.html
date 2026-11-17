@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,7 +21,7 @@
   --accent:#5B68E8; --accent2:#AEB8FF; --green:#4ADE80; --red:#FF5A76;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;background:var(--bg);color:var(--text);
   font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}
 button,input{font-family:inherit}
 button{cursor:pointer;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
@@ -375,11 +375,27 @@ function toast(msg) {
 
 /* ---------------- fit 1280x800 design to any screen ---------------- */
 function fit() {
-  const s = Math.min(window.innerWidth / 1280, window.innerHeight / 800);
-  $('stage').style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+  // Use the area actually visible on screen, whatever the browser reports
+  const vv = window.visualViewport;
+  const w = Math.min(document.documentElement.clientWidth || window.innerWidth, window.innerWidth, vv ? vv.width * vv.scale : Infinity);
+  const h = Math.min(document.documentElement.clientHeight || window.innerHeight, window.innerHeight, vv ? vv.height * vv.scale : Infinity);
+  const s = Math.min(w / 1280, h / 800);
+  const st = $('stage');
+  st.style.left = (w / 2) + 'px';
+  st.style.top = (h / 2) + 'px';
+  st.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
 }
 window.addEventListener('resize', fit);
+window.addEventListener('orientationchange', () => setTimeout(fit, 300));
+if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+// Block pinch and double tap zoom on browsers that ignore the viewport setting
+document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('touchmove', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+let lastTouch = 0;
+document.addEventListener('touchend', (e) => { const n = Date.now(); if (n - lastTouch < 300) e.preventDefault(); lastTouch = n; }, { passive: false });
 fit();
+window.addEventListener('load', fit);
+setTimeout(fit, 1000);
 
 /* ---------------- clock ---------------- */
 function tick() {
