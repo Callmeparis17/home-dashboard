@@ -1,1793 +1,851 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Home Hub" />
-<meta name="theme-color" content="#030407" />
-<title>Home Hub V19 Toggle Room Controls</title>
-
-<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Home Hub">
+<meta name="theme-color" content="#0C0E1E">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<title>Home Hub V21</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #030407;
-  --panel: rgba(12, 15, 26, 0.88);
-  --panel2: rgba(18, 22, 36, 0.82);
-  --line: rgba(255, 255, 255, 0.11);
-  --line2: rgba(255, 255, 255, 0.18);
-  --text: #f6f7fb;
-  --muted: rgba(246, 247, 251, 0.66);
-  --dim: rgba(246, 247, 251, 0.38);
-  --purple: #9d7cff;
-  --pink: #d65cff;
-  --blue: #5c8dff;
-  --cyan: #62d8ff;
-  --teal: #3ce0c4;
-  --green: #58e68a;
-  --yellow: #f4cb5b;
-  --orange: #f29a4a;
-  --red: #ff6577;
-  --radius: 26px;
-  --radius2: 18px;
-  --shadow: 0 22px 70px rgba(0, 0, 0, 0.6);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-  width: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--text);
-  background: #030407;
-}
-
-body {
-  min-height: 100dvh;
-  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
-  background:
-    radial-gradient(circle at 16% 14%, rgba(117, 69, 255, 0.14), transparent 30%),
-    radial-gradient(circle at 78% 9%, rgba(50, 128, 255, 0.12), transparent 30%),
-    radial-gradient(circle at 83% 86%, rgba(214, 92, 255, 0.08), transparent 32%),
-    linear-gradient(135deg, #030407 0%, #060812 42%, #090d18 100%);
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(circle at center, black 0%, transparent 82%);
-  pointer-events: none;
-}
-
-button,
-input {
-  font-family: inherit;
-}
-
-.dashboard {
-  position: relative;
-  z-index: 1;
-  width: 100vw;
-  height: 100dvh;
-  padding: 18px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 27% 73%;
-  gap: 14px;
-}
-
-.card {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius);
-  background: linear-gradient(145deg, rgba(22, 25, 38, 0.86), rgba(7, 9, 15, 0.88));
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.055), transparent 34%);
-  pointer-events: none;
-}
-
-/* TIME CARD */
-
-.time-card {
-  grid-column: 1;
-  grid-row: 1;
-  display: grid;
-  grid-template-columns: 30% 70%;
-  align-items: center;
-  padding: 16px 24px;
-  background: linear-gradient(135deg, rgba(20, 18, 37, 0.88), rgba(8, 13, 26, 0.91));
-  border-color: rgba(157, 124, 255, 0.22);
-}
-
-.analog-wrap {
-  height: 100%;
-  display: grid;
-  place-items: center;
-}
-
-.analog {
-  position: relative;
-  width: min(15vw, 145px);
-  height: min(15vw, 145px);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(78, 65, 142, 0.14) 0%, rgba(20, 27, 47, 0.18) 62%, rgba(7, 9, 16, 0.46) 100%);
-  box-shadow:
-    0 0 0 2px rgba(98, 216, 255, 0.18),
-    0 0 35px rgba(157, 124, 255, 0.18),
-    inset 0 0 50px rgba(98, 216, 255, 0.06);
-}
-
-.num {
-  position: absolute;
-  font-size: 13px;
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.72);
-  transform: translate(-50%, -50%);
-}
-
-.n12 { left: 50%; top: 13%; }
-.n3 { left: 86%; top: 50%; }
-.n6 { left: 50%; top: 87%; }
-.n9 { left: 14%; top: 50%; }
-
-.hand {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  border-radius: 999px;
-  transform-origin: 0 50%;
-}
-
-.hand.hour {
-  width: 30%;
-  height: 7px;
-  background: linear-gradient(90deg, var(--pink), var(--purple));
-  transform: rotate(212deg);
-}
-
-.hand.min {
-  width: 40%;
-  height: 5px;
-  background: linear-gradient(90deg, var(--cyan), var(--blue));
-  transform: rotate(323deg);
-}
-
-.pin {
-  position: absolute;
-  width: 17px;
-  height: 17px;
-  left: 50%;
-  top: 50%;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: #102b5b;
-  border: 3px solid var(--cyan);
-  box-shadow: 0 0 20px rgba(98, 216, 255, 0.42);
-}
-
-.time-content {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 7px;
-}
-
-.clockline {
-  display: flex;
-  align-items: flex-end;
-  gap: 14px;
-  line-height: 0.86;
-}
-
-.clock {
-  font-size: clamp(48px, 6vw, 92px);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-}
-
-.ampm {
-  padding-bottom: 8px;
-  font-size: clamp(18px, 1.7vw, 30px);
-  font-weight: 900;
-  color: var(--pink);
-}
-
-.date {
-  font-size: clamp(15px, 1.15vw, 21px);
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.76);
-}
-
-.next-pill {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 2px;
-  min-width: min(360px, 100%);
-  padding: 9px 14px;
-  border-radius: 18px;
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 30px rgba(157, 124, 255, 0.06);
-}
-
-.next-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, rgba(157, 124, 255, 0.2), rgba(98, 216, 255, 0.08));
-  border: 1px solid rgba(157, 124, 255, 0.26);
-  font-size: 20px;
-}
-
-.next-title {
-  font-size: clamp(14px, 1vw, 18px);
-  font-weight: 900;
-}
-
-.next-sub {
-  font-size: clamp(12px, 0.95vw, 16px);
-  font-weight: 900;
-  color: var(--pink);
-}
-
-.chev {
-  margin-left: auto;
-  color: rgba(255, 255, 255, 0.54);
-  font-size: 24px;
-}
-
-/* WEATHER */
-
-.weather-card {
-  grid-column: 2;
-  grid-row: 1;
-  padding: 15px 20px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  background: linear-gradient(135deg, rgba(11, 16, 30, 0.92), rgba(6, 9, 16, 0.88));
-  border-color: rgba(98, 216, 255, 0.16);
-}
-
-.weather-card::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 34%;
-  background:
-    linear-gradient(180deg, transparent, rgba(38, 66, 126, 0.075)),
-    radial-gradient(ellipse at 70% 100%, rgba(98, 216, 255, 0.08), transparent 42%);
-  pointer-events: none;
-}
-
-.weather-top {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 14% 22% 1fr;
-  align-items: center;
-  gap: 8px;
-}
-
-.weather-moon {
-  font-size: 48px;
-  text-align: center;
-  filter: drop-shadow(0 0 18px rgba(157, 124, 255, 0.28));
-}
-
-.temperature {
-  font-size: clamp(50px, 5.6vw, 88px);
-  font-weight: 900;
-  letter-spacing: -0.055em;
-  line-height: 0.8;
-}
-
-.condition {
-  margin-bottom: 6px;
-  font-size: clamp(16px, 1.3vw, 24px);
-  font-weight: 900;
-}
-
-.weather-meta {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: clamp(12px, 0.95vw, 17px);
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.rain {
-  color: #bbecff;
-}
-
-.forecast {
-  position: relative;
-  z-index: 1;
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  overflow: hidden;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-.day {
-  padding: 8px 5px;
-  text-align: center;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.day:first-child {
-  border-left: none;
-}
-
-.day-name {
-  margin-bottom: 4px;
-  font-size: clamp(10px, 0.78vw, 13px);
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.weather-ico {
-  margin-bottom: 4px;
-  font-size: clamp(18px, 1.55vw, 28px);
-  line-height: 1;
-}
-
-.hi {
-  font-size: clamp(14px, 1.05vw, 20px);
-  font-weight: 900;
-}
-
-.lo {
-  margin-top: 3px;
-  font-size: clamp(12px, 0.85vw, 16px);
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.pop-small {
-  margin-top: 2px;
-  font-size: clamp(10px, 0.72vw, 13px);
-  font-weight: 900;
-  color: var(--cyan);
-}
-
-/* HOME CONTROL */
-
-.home-card {
-  grid-column: 1;
-  grid-row: 2;
-  padding: 16px 22px 18px;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: 12px;
-  background: linear-gradient(135deg, rgba(10, 14, 26, 0.9), rgba(5, 7, 12, 0.94));
-  border-color: rgba(255, 255, 255, 0.105);
-}
-
-.section-head {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: clamp(22px, 1.65vw, 34px);
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
-
-.section-title .icon {
-  color: var(--purple);
-}
-
-.section-sub {
-  margin-top: 2px;
-  font-size: clamp(12px, 0.9vw, 15px);
-  font-weight: 800;
-  color: var(--muted);
-}
-
-.scenes {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.scene {
-  min-height: 68px;
-  padding: 10px 10px;
-  border-radius: 17px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
-  color: var(--text);
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 9px;
-  transition: transform 0.12s, opacity 0.15s, background 0.15s;
-}
-
-.scene:active {
-  transform: scale(0.96);
-}
-
-.scene.sending {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.scene-ico {
-  font-size: 25px;
-  line-height: 1;
-}
-
-.scene-label {
-  font-size: clamp(12px, 0.92vw, 17px);
-  font-weight: 900;
-}
-
-.scene-status {
-  grid-column: 1 / -1;
-  min-height: 13px;
-  font-size: 10px;
-  font-weight: 900;
-  color: var(--dim);
-}
-
-.scene.morning { box-shadow: inset 0 0 30px rgba(157, 124, 255, 0.1); }
-.scene.breakfast { box-shadow: inset 0 0 30px rgba(244, 203, 91, 0.08); }
-.scene.dinner { box-shadow: inset 0 0 30px rgba(242, 154, 74, 0.1); }
-.scene.night { box-shadow: inset 0 0 30px rgba(92, 141, 255, 0.1); }
-
-/* ROOM CONTROLS */
-
-.room-controls {
-  position: relative;
-  z-index: 2;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 24px;
-  background: rgba(6, 8, 15, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.room-controls-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.room-controls-title {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: clamp(19px, 1.45vw, 28px);
-  font-weight: 900;
-}
-
-.govee-logo {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(98, 216, 255, 0.22), rgba(157, 124, 255, 0.16));
-  border: 1px solid rgba(98, 216, 255, 0.18);
-  color: var(--cyan);
-  font-weight: 900;
-}
-
-.govee-open {
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.055);
-  color: rgba(255, 255, 255, 0.78);
-  border-radius: 999px;
-  padding: 9px 15px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.room-toggle-grid {
-  height: 100%;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.room-toggle-tile {
-  position: relative;
-  overflow: hidden;
-  border-radius: 26px;
-  padding: 24px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.115);
-  background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.018));
-  color: #fff;
-  cursor: pointer;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  text-align: left;
-  transition: transform 0.12s, opacity 0.15s, border-color 0.15s, box-shadow 0.15s;
-}
-
-.room-toggle-tile::before {
-  content: "";
-  position: absolute;
-  inset: -30%;
-  opacity: 0.6;
-  pointer-events: none;
-  background: radial-gradient(circle at 18% 10%, rgba(255, 101, 119, 0.12), transparent 45%);
-}
-
-.room-toggle-tile.is-on {
-  border-color: rgba(88, 230, 138, 0.36);
-  box-shadow:
-    inset 0 0 38px rgba(88, 230, 138, 0.11),
-    0 0 22px rgba(88, 230, 138, 0.06);
-}
-
-.room-toggle-tile.is-on::before {
-  background: radial-gradient(circle at 18% 10%, rgba(88, 230, 138, 0.22), transparent 45%);
-}
-
-.room-toggle-tile:active {
-  transform: scale(0.96);
-}
-
-.room-toggle-tile.sending {
-  opacity: 0.58;
-  pointer-events: none;
-}
-
-.room-toggle-icon {
-  position: relative;
-  z-index: 2;
-  font-size: clamp(34px, 3vw, 58px);
-  line-height: 1;
-}
-
-.room-toggle-title {
-  position: relative;
-  z-index: 2;
-  align-self: end;
-  max-width: 88%;
-  font-size: clamp(22px, 2vw, 38px);
-  font-weight: 900;
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-}
-
-.room-toggle-state {
-  position: relative;
-  z-index: 2;
-  margin-top: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  font-size: clamp(15px, 1.15vw, 20px);
-  font-weight: 900;
-  color: var(--red);
-}
-
-.state-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--red);
-  box-shadow: 0 0 16px rgba(255, 101, 119, 0.45);
-}
-
-.room-toggle-tile.is-on .room-toggle-state {
-  color: var(--green);
-}
-
-.room-toggle-tile.is-on .state-dot {
-  background: var(--green);
-  box-shadow: 0 0 16px rgba(88, 230, 138, 0.52);
-}
-
-/* STATUS STRIP */
-
-.status-strip {
-  position: relative;
-  z-index: 2;
-  min-height: 70px;
-  padding: 12px 15px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 16px;
-  border-radius: 20px;
-  background: rgba(6, 8, 15, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.status-left {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-width: 0;
-}
-
-.shield {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 15px;
-  background: linear-gradient(135deg, rgba(88, 230, 138, 0.14), rgba(42, 217, 125, 0.035));
-  border: 1px solid rgba(88, 230, 138, 0.22);
-  color: var(--green);
-  font-size: 22px;
-}
-
-.status-title {
-  font-size: clamp(15px, 1.1vw, 20px);
-  font-weight: 900;
-}
-
-.status-sub {
-  margin-top: 1px;
-  font-size: clamp(12px, 0.85vw, 15px);
-  font-weight: 800;
-  color: var(--green);
-}
-
-.status-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 9px;
-  flex-wrap: wrap;
-}
-
-.status-actions button {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 13px;
-  color: #fff;
-  font-size: clamp(12px, 0.9vw, 15px);
-  font-weight: 900;
-  padding: 10px 13px;
-  cursor: pointer;
-}
-
-.status-actions button.primary {
-  background: linear-gradient(90deg, rgba(69, 183, 255, 0.22), rgba(182, 108, 255, 0.16));
-  border-color: rgba(121, 218, 255, 0.25);
-}
-
-/* AGENDA */
-
-.agenda-card {
-  grid-column: 2;
-  grid-row: 2;
-  padding: 18px 20px 20px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 14px;
-  background: linear-gradient(135deg, rgba(13, 16, 30, 0.92), rgba(5, 8, 14, 0.94));
-  border-color: rgba(255, 255, 255, 0.105);
-}
-
-.agenda-head {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.agenda-title {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: clamp(22px, 1.65vw, 34px);
-  font-weight: 900;
-}
-
-.agenda-sub {
-  margin-top: 2px;
-  font-size: clamp(12px, 0.9vw, 15px);
-  font-weight: 800;
-  color: var(--muted);
-}
-
-.refresh-btn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.agenda-body {
-  position: relative;
-  z-index: 2;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: 44% 56%;
-  gap: 13px;
-}
-
-.glance-col {
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  gap: 12px;
-}
-
-.next-event-card,
-.schedule-card,
-.notes-card,
-.event-list {
-  border-radius: 21px;
-  background: rgba(6, 8, 15, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.next-event-card {
-  padding: 16px;
-  min-height: 130px;
-  display: grid;
-  align-content: center;
-  gap: 6px;
-  background: linear-gradient(90deg, rgba(123, 87, 255, 0.24), rgba(51, 43, 115, 0.13));
-}
-
-.mini-title {
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-
-.next-event-name {
-  font-size: clamp(18px, 1.35vw, 26px);
-  font-weight: 900;
-  line-height: 1.05;
-}
-
-.next-event-meta {
-  font-size: clamp(13px, 1vw, 17px);
-  font-weight: 800;
-  color: var(--muted);
-}
-
-.schedule-card {
-  min-height: 150px;
-  padding: 14px;
-}
-
-.schedule-list,
-.upcoming-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 9px;
-}
-
-.schedule-item,
-.upcoming-item {
-  display: grid;
-  grid-template-columns: 76px 1fr;
-  gap: 10px;
-  align-items: start;
-}
-
-.item-time {
-  font-size: 13px;
-  font-weight: 900;
-  color: var(--cyan);
-}
-
-.item-title {
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1.15;
-}
-
-.item-location {
-  margin-top: 2px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--dim);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.empty-state {
-  padding: 10px 0;
-  color: var(--dim);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.notes-card {
-  padding: 14px;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: 10px;
-}
-
-.note-input-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px;
-}
-
-#houseNoteInput {
-  width: 100%;
-  outline: none;
-  border-radius: 14px;
-  padding: 12px 13px;
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 800;
-  background: rgba(0, 0, 0, 0.24);
-  border: 1px solid rgba(255, 255, 255, 0.105);
-}
-
-.note-input-row button,
-.clear-notes-btn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: linear-gradient(90deg, rgba(125, 84, 255, 0.35), rgba(47, 121, 255, 0.22));
-  color: #fff;
-  border-radius: 14px;
-  padding: 0 14px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.house-notes-list {
-  min-height: 0;
-  overflow: auto;
-  display: grid;
-  gap: 8px;
-  padding-right: 3px;
-}
-
-.house-note-item {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 9px;
-  align-items: center;
-  padding: 10px 11px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.075);
-}
-
-.house-note-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--purple);
-  box-shadow: 0 0 14px rgba(157, 124, 255, 0.55);
-}
-
-.house-note-text {
-  min-width: 0;
-  font-size: 14px;
-  font-weight: 800;
-  color: rgba(255,255,255,0.88);
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.delete-note-btn {
-  border: none;
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.6);
-  width: 26px;
-  height: 26px;
-  border-radius: 9px;
-  cursor: pointer;
-  font-weight: 900;
-}
-
-.clear-notes-btn {
-  justify-self: start;
-  height: 34px;
-  padding: 0 12px;
-  background: rgba(255, 255, 255, 0.055);
-}
-
-.event-list {
-  min-height: 0;
-  padding: 15px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
-
-.event-list-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.event-count {
-  font-size: 12px;
-  font-weight: 900;
-  color: var(--dim);
-}
-
-.upcoming-list {
-  min-height: 0;
-  overflow: auto;
-  padding-right: 4px;
-}
-
-.upcoming-list::-webkit-scrollbar,
-.house-notes-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.upcoming-list::-webkit-scrollbar-thumb,
-.house-notes-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.17);
-  border-radius: 20px;
-}
-
-.upcoming-item {
-  position: relative;
-  padding: 11px 0 11px 14px;
-  border-left: 2px solid rgba(255, 255, 255, 0.13);
-}
-
-.upcoming-item::before {
-  content: "";
-  position: absolute;
-  left: -6px;
-  top: 18px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--purple);
-  box-shadow: 0 0 18px rgba(157, 124, 255, 0.45);
-}
-
-.upcoming-date {
-  font-size: 12px;
-  font-weight: 900;
-  color: var(--purple);
-}
-
-.upcoming-time {
-  margin-top: 3px;
-  font-size: 13px;
-  font-weight: 900;
-  color: var(--cyan);
-}
-
-.full-cal {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #fff;
-  border-radius: 15px;
-  padding: 12px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-  background: linear-gradient(90deg, #7d54ff, #2f79ff);
-  box-shadow: 0 18px 48px rgba(74, 83, 255, 0.16);
-}
-
-.dashboard-version-badge {
-  position: fixed;
-  right: 14px;
-  bottom: 10px;
-  z-index: 40;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.46);
-  font-size: 10px;
-  font-weight: 900;
-  pointer-events: none;
-}
-
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 40px;
-  z-index: 100;
-  transform: translateX(-50%) translateY(18px);
-  padding: 12px 20px;
-  border-radius: 999px;
-  background: rgba(12, 15, 26, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 900;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-@media (max-width: 1100px) {
-  html,
-  body {
-    overflow: auto;
-  }
-
-  .dashboard {
-    height: auto;
-    min-height: 100dvh;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
-  }
-
-  .time-card,
-  .weather-card,
-  .home-card,
-  .agenda-card {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
-  .agenda-body {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 650px) {
-  .time-card {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    text-align: center;
-  }
-
-  .time-content {
-    align-items: center;
-  }
-
-  .weather-top {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .forecast {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .scenes,
-  .room-toggle-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-
-  .status-strip {
-    grid-template-columns: 1fr;
-  }
-
-  .status-actions {
-    justify-content: flex-start;
-  }
-}
+/* ===================== Home Hub V21 ===================== */
+:root{
+  --bg:#0C0E1E; --card:#15182E; --card2:#1C2040; --line:#252947; --line2:#2C3156;
+  --text:#F1F2FA; --muted:#A9AECB; --soft:#C9CEEA; --dim:#8C92BA;
+  --accent:#5B68E8; --accent2:#AEB8FF; --green:#4ADE80; --red:#FF5A76;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}
+button,input{font-family:inherit}
+button{cursor:pointer;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+a{color:var(--accent2)}
+h2{font-size:16px;font-weight:800}
+
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:800px;transform-origin:center center;
+  padding:20px 24px 16px;display:grid;grid-template-columns:300px minmax(0,1fr) 260px;
+  grid-template-rows:44px minmax(0,1fr) 64px;gap:16px 18px}
+
+.card{border-radius:22px;background:var(--card);border:1px solid var(--line)}
+.chips{grid-column:1/-1;display:flex;justify-content:center;gap:8px}
+.chip{display:flex;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:#1A1D35;color:var(--soft);font-size:13px;font-weight:700;white-space:nowrap;max-width:420px;overflow:hidden;text-overflow:ellipsis}
+.chip.amber{background:#3A2A12;color:#FFC266}
+.chip.warn{background:#3A1520;color:#FF8FA3}
+
+.col{display:flex;flex-direction:column;gap:14px;min-height:0}
+.clock{padding:18px 20px;text-align:center}
+.clock .t{font-size:56px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.clock .t span{font-size:20px;color:var(--accent2)}
+.clock .d{font-size:15px;font-weight:600;color:var(--muted);margin-top:6px}
+
+.weather{padding:16px 18px}
+.w-top{display:flex;justify-content:space-between;align-items:center}
+.w-left{display:flex;align-items:center;gap:10px}
+.w-cond{font-size:16px;font-weight:700}
+.w-meta{font-size:12px;font-weight:600;color:var(--muted)}
+.w-temp{font-size:32px;font-weight:800}
+.w-days{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:14px;text-align:center}
+.w-days .dn{font-size:12px;font-weight:700;color:var(--muted)}
+.w-days .hi{font-size:14px;font-weight:800;margin-top:4px}
+.w-days .lo{font-size:12px;color:var(--muted)}
+
+.cal{flex:1;min-height:0;padding:16px 18px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.cal-head{display:flex;justify-content:space-between;align-items:center}
+.small-btn{height:36px;padding:0 12px;border-radius:11px;border:1px solid var(--line2);background:var(--card2);color:var(--accent2);font-size:13px;font-weight:700}
+.ev{display:flex;gap:10px;padding:0 12px}
+.ev.hl{padding:10px 12px;border-radius:14px;background:#22264A}
+.ev .bar{width:4px;border-radius:4px;background:#3A3F66;flex-shrink:0}
+.ev.hl .bar{background:var(--accent2)}
+.ev .ti{font-size:14px;font-weight:700}
+.ev .tm{font-size:12px;color:var(--muted)}
+.empty{font-size:13px;font-weight:600;color:var(--muted);padding:0 12px}
+
+/* map */
+.map{position:relative;border-radius:26px;background:#111430;border:1px solid var(--line);overflow:hidden}
+.map .ttl{position:absolute;left:24px;top:18px;font-size:18px;font-weight:800}
+.map .hint{position:absolute;right:24px;top:22px;font-size:12px;font-weight:600;color:var(--muted)}
+.abs{position:absolute}
+.dev{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;border:none;background:none;color:var(--text);padding:0}
+.dev .orb{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line2);background:#1B1F3D;color:var(--dim);transition:background .25s,box-shadow .25s,border-color .25s}
+.dev .nm{font-size:14px;font-weight:800}
+.dev .st{font-size:12px;font-weight:700;color:var(--muted)}
+.dev.side{flex-direction:row-reverse;gap:10px;text-align:right}
+.dev.side .orb{width:52px;height:52px}
+.dev.pill{flex-direction:row;gap:12px;padding:8px 18px 8px 8px;border-radius:999px;border:1px solid var(--line2);background:#12152E;text-align:left}
+.dev.pill .orb{width:56px;height:56px;border:none}
+.dev.pill .nm{font-size:15px}
+.dev.offline .st{color:#FF8FA3}
+.dev.busy .orb{opacity:.6}
+.pool{position:absolute;border-radius:50%;pointer-events:none;opacity:0;transition:opacity .3s}
+.map-actions{position:absolute;right:24px;bottom:18px;display:flex;gap:8px}
+.map-btn{height:44px;padding:0 16px;border-radius:14px;border:1px solid var(--line2);background:var(--card2);color:var(--soft);font-size:13px;font-weight:800;display:flex;align-items:center;gap:8px}
+.map-btn.on{background:#3A2C12;border-color:#FFC266;color:#FFC266}
+
+/* notes */
+.notes{flex:1;min-height:0;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.note-row{display:flex;gap:8px}
+.note-row input{flex:1;min-width:0;height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--line2);background:#0F1226;color:var(--text);font-size:14px;font-weight:600;outline:none}
+.note-row input:focus{border-color:var(--accent2)}
+.note-row button{height:44px;padding:0 14px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:800}
+.note-list{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.note{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:9px 8px 9px 12px;border-radius:10px;background:var(--card2)}
+.note span{flex:1;min-width:0;overflow-wrap:anywhere}
+.note button{width:32px;height:32px;border:none;border-radius:9px;background:rgba(255,255,255,.06);color:var(--muted);font-weight:900;flex-shrink:0}
+
+/* nav */
+.nav{grid-column:1/-1;display:flex;justify-content:center}
+.nav-in{display:flex;gap:6px;padding:6px;border-radius:20px;background:var(--card);border:1px solid var(--line)}
+.nav-in button,.nav-in a{height:48px;padding:0 20px;border-radius:15px;border:none;background:none;color:var(--soft);font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-in .active{background:var(--accent);color:#fff;font-weight:800}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
+
+/* overlays */
+.scrim{position:absolute;inset:0;background:rgba(5,6,16,.72);display:none;place-items:center;z-index:20}
+.scrim.open{display:grid}
+.panel{width:540px;border-radius:28px;background:var(--card);border:1px solid var(--line2);box-shadow:0 30px 80px rgba(0,0,0,.6);padding:22px 24px 24px;display:flex;flex-direction:column;gap:20px}
+.panel.wide{width:640px}
+.p-head{display:flex;align-items:center;justify-content:space-between}
+.p-id{display:flex;align-items:center;gap:14px}
+.p-sw{width:56px;height:56px;border-radius:50%}
+.p-name{font-size:20px;font-weight:800}
+.p-st{font-size:13px;font-weight:700;color:var(--muted)}
+.p-tools{display:flex;align-items:center;gap:10px}
+.switch{width:64px;height:36px;border-radius:999px;border:none;background:#353B52;position:relative;padding:0}
+.switch i{position:absolute;top:4px;left:4px;width:28px;height:28px;border-radius:50%;background:#fff;transition:left .2s}
+.switch.on{background:var(--green)}
+.switch.on i{left:32px}
+.x-btn{width:44px;height:44px;border-radius:13px;border:1px solid var(--line2);background:var(--card2);color:var(--text);display:grid;place-items:center}
+.row-lbl{display:flex;justify-content:space-between;font-size:14px;font-weight:800}
+.row-lbl span{color:var(--soft)}
+input[type=range]{width:100%;height:36px}
+.swatches{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+.swatch{width:48px;height:48px;border-radius:50%;border:none;padding:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:5px;border-radius:16px;background:var(--card2)}
+.tabs.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tab{height:44px;border-radius:12px;border:none;background:transparent;color:var(--soft);font-size:14px;font-weight:800}
+.tab.on{background:var(--accent);color:#fff}
+.tab-body{min-height:196px;display:flex;flex-direction:column;gap:14px}
+.box{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:16px;background:var(--card2)}
+.box .b1{font-size:16px;font-weight:800}
+.box .b2{font-size:13px;font-weight:600;color:var(--muted);margin-top:2px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.opt{min-height:56px;border-radius:14px;border:1px solid var(--line2);background:var(--card2);color:var(--text);font-size:14px;font-weight:800;padding:6px}
+.opt.on{background:#22264A;border-color:var(--accent2)}
+.opt small{display:block;font-size:12px;font-weight:600;color:var(--muted)}
+.scene{border:none;background:none;color:var(--text);padding:0;display:flex;flex-direction:column;gap:6px}
+.scene i{display:block;height:52px;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.scene span{font-size:13px;font-weight:700;text-align:center}
+.msg{padding:14px 16px;border-radius:16px;background:var(--card2);font-size:14px;font-weight:600;line-height:1.5;color:var(--soft)}
+
+/* dual plug drawing */
+.plug-body{position:relative;width:440px;height:168px;border-radius:36px;background:var(--card2);border:1px solid #2E3360;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.06),0 14px 30px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:space-around;padding:0 30px;margin:0 auto}
+.outlet{position:relative;width:124px;height:124px;border-radius:30px;border:2px solid var(--line2);background:#13162C;padding:0;transition:box-shadow .25s,border-color .25s}
+.outlet i{position:absolute;border-radius:3px;background:#3A3F66;transition:background .25s}
+.outlet .s1{left:38px;top:26px;width:10px;height:36px}
+.outlet .s2{right:38px;top:26px;width:10px;height:30px}
+.outlet .g{left:50%;top:74px;width:22px;height:22px;margin-left:-11px;border-radius:11px 11px 4px 4px}
+.led{position:absolute;top:154px;width:6px;height:6px;border-radius:50%;background:#2A2F55}
+.plug-side{position:absolute;right:-8px;top:64px;width:14px;height:40px;border-radius:7px;background:#2E3360;border:1px solid #3A3F66}
+.plug-labels{width:440px;margin:0 auto;display:flex;justify-content:space-around;text-align:center}
+.plug-labels .k{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--muted)}
+.plug-labels .n{font-size:16px;font-weight:800;margin-top:2px}
+.plug-labels .v{font-size:13px;font-weight:700;color:var(--muted)}
+
+/* month calendar */
+.month{position:absolute;inset:0;z-index:30;background:var(--bg);padding:22px 24px;display:none;
+  grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:56px minmax(0,1fr);gap:16px 20px}
+.month.open{display:grid}
+.m-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
+.m-head .l{display:flex;align-items:center;gap:14px}
+.m-head h2{font-size:30px;letter-spacing:-.02em;min-width:250px}
+.sq{width:44px;height:44px;border-radius:13px;border:1px solid var(--line2);background:var(--card);color:var(--soft);display:grid;place-items:center}
+.btn-txt{height:44px;padding:0 16px;border-radius:13px;border:1px solid var(--line2);background:var(--card);color:var(--text);font-size:14px;font-weight:800}
+.btn-primary{height:48px;padding:0 18px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;text-align:center;font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--muted)}
+.m-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.day{min-height:0;border-radius:16px;border:1px solid var(--line);background:#13162C;color:var(--text);padding:8px;display:flex;flex-direction:column;gap:5px;text-align:left;overflow:hidden}
+.day.out{background:#0E1024;color:#4A4F78}
+.day.sel{border-color:var(--accent2);background:#22264A}
+.day.today .num{background:var(--accent);color:#fff}
+.day .num{width:30px;height:30px;border-radius:50%;font-size:15px;font-weight:800;display:grid;place-items:center;flex-shrink:0}
+.day .e{display:block;padding:4px 7px;border-radius:8px;background:rgba(174,184,255,.16);color:var(--accent2);font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day .more{font-size:11px;font-weight:700;color:var(--muted);padding-left:4px}
+.m-side{min-height:0;border-radius:24px;background:var(--card);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.m-side .k{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.m-side .big{font-size:26px;font-weight:800;margin-top:2px}
+.m-ev{display:flex;gap:12px;padding:12px 14px;border-radius:16px;background:var(--card2)}
+.m-ev .bar{width:4px;border-radius:4px;background:var(--accent2);flex-shrink:0}
+.m-ev .t{font-size:15px;font-weight:800}
+.m-ev .s{font-size:13px;font-weight:600;color:var(--muted);margin-top:2px}
+
+.toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:50;padding:12px 18px;border-radius:14px;
+  background:#3A1520;border:1px solid #6B2A3A;color:#FFD0DA;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s;max-width:640px;text-align:center}
+.toast.show{opacity:1}
+.setup{position:absolute;inset:0;z-index:60;background:var(--bg);display:none;place-items:center;text-align:center;padding:40px}
+.setup.open{display:grid}
+.setup div{max-width:620px;font-size:18px;font-weight:600;line-height:1.6;color:var(--soft)}
+.setup b{color:var(--text)}
 </style>
 </head>
-
 <body>
-<div class="dashboard">
+<div id="stage">
 
-  <section class="card time-card">
-    <div class="analog-wrap">
-      <div class="analog">
-        <div class="num n12">12</div>
-        <div class="num n3">3</div>
-        <div class="num n6">6</div>
-        <div class="num n9">9</div>
-        <div class="hand hour"></div>
-        <div class="hand min"></div>
-        <div class="pin"></div>
-      </div>
-    </div>
+  <!-- TOP CHIPS -->
+  <div class="chips">
+    <span class="chip amber" id="chipOn">-- of 6 on</span>
+    <span class="chip" id="chipNext">Loading calendar...</span>
+    <span class="chip" id="chipNotes">0 house notes</span>
+  </div>
 
-    <div class="time-content">
-      <div class="clockline">
-        <div class="clock" id="clock">--:--</div>
-        <div class="ampm" id="ampm">--</div>
-      </div>
-      <div class="date" id="date">---</div>
-      <div class="next-pill">
-        <div class="next-icon">📅</div>
-        <div>
-          <div class="next-title" id="topNextTitle">Next: Loading...</div>
-          <div class="next-sub" id="topNextSub">Checking family calendar</div>
+  <!-- LEFT COLUMN -->
+  <div class="col">
+    <section class="card clock">
+      <div class="t"><span id="hhmm" style="font-size:56px;color:var(--text)">--:--</span> <span id="ampm"></span></div>
+      <div class="d" id="dateText">&nbsp;</div>
+    </section>
+    <section class="card weather">
+      <div class="w-top">
+        <div class="w-left">
+          <span id="wIcon" style="font-size:30px;line-height:1">⛅</span>
+          <div><div class="w-cond" id="wCond">Loading weather</div><div class="w-meta" id="wMeta">&nbsp;</div></div>
         </div>
-        <div class="chev">›</div>
+        <span class="w-temp" id="wTemp">--°</span>
       </div>
+      <div class="w-days" id="wDays"></div>
+    </section>
+    <section class="card cal">
+      <div class="cal-head"><h2>Family Calendar</h2><button class="small-btn" data-open="month">Month</button></div>
+      <div id="calList" style="display:flex;flex-direction:column;gap:12px"><div class="empty">Loading...</div></div>
+    </section>
+  </div>
+
+  <!-- CENTER: LIVING ROOM MAP -->
+  <section class="map">
+    <div class="ttl">Living Room</div>
+    <div class="hint">Tap to toggle · Hold for color and brightness</div>
+
+    <!-- Deck area -->
+    <div class="abs" id="deckArea" style="left:30px;top:58px;width:576px;height:104px;border-radius:16px;border:2px dashed #3A3F66;background:#101329;transition:background .3s,box-shadow .3s"></div>
+    <div class="abs" style="left:50px;top:72px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)">Deck</div>
+
+    <!-- Room shell -->
+    <div class="abs" id="roomFloor" style="left:30px;top:176px;width:576px;height:384px;border-radius:18px;border:3px solid #3A3F66;background:#14172F;transition:background .3s"></div>
+
+    <!-- Light pools -->
+    <div class="pool" id="pool-lamp" style="left:4px;top:140px;width:180px;height:180px"></div>
+    <div class="pool" id="pool-backlight" style="left:150px;top:450px;width:340px;height:120px"></div>
+    <div class="pool" id="pool-couchL" style="left:504px;top:148px;width:120px;height:120px"></div>
+    <div class="pool" id="pool-couchR" style="left:504px;top:386px;width:120px;height:120px"></div>
+
+    <!-- Sofa -->
+    <div class="abs" style="left:290px;top:194px;width:262px;height:70px;border-radius:16px 0 0 16px;border:2px solid #4A5080;border-right:none;background:#1C2044"></div>
+    <div class="abs" style="left:482px;top:194px;width:70px;height:260px;border-radius:0 0 16px 16px;border:2px solid #4A5080;border-top:none;background:#1C2044"></div>
+    <div class="abs" style="left:290px;top:182px;width:276px;height:14px;border-radius:8px;background:#2A2F58"></div>
+    <div class="abs" style="left:552px;top:182px;width:14px;height:272px;border-radius:8px;background:#2A2F58"></div>
+    <div class="abs" style="left:290px;top:220px;width:192px;text-align:center;font-size:12px;font-weight:700;color:var(--dim)">Sofa</div>
+
+    <!-- TV -->
+    <div class="abs" id="tvBar" style="left:200px;top:520px;width:240px;height:14px;border-radius:4px;background:#2A2F58;transition:box-shadow .3s"></div>
+    <div class="abs" style="left:200px;top:498px;width:240px;text-align:center;font-size:12px;font-weight:700;color:var(--dim)">TV</div>
+
+    <!-- Devices -->
+    <button class="dev pill" data-key="deck" aria-haspopup="dialog" style="left:230px;top:74px">
+      <span class="orb"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 3H8l1-3z"/><rect x="7" y="6" width="10" height="11" rx="2"/><path d="M12 17v4M9 21h6"/></svg></span>
+      <span><span class="nm" style="display:block">Deck Light</span><span class="st" style="display:block">--</span></span>
+    </button>
+
+    <button class="dev" data-key="lamp" aria-haspopup="dialog" style="left:44px;top:196px;width:100px">
+      <span class="orb"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l3 8H5l3-8z"/><path d="M12 11v8M8 21h8"/></svg></span>
+      <span class="nm">Lamp</span><span class="st">--</span>
+    </button>
+
+    <button class="dev" data-key="plug" aria-haspopup="dialog" style="left:156px;top:196px;width:100px">
+      <span class="orb"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v5M15 2v5"/><path d="M6 7h12v4a6 6 0 0 1-12 0V7z"/><path d="M12 17v5"/></svg></span>
+      <span class="nm">Smart Plug</span><span class="st">--</span>
+    </button>
+
+    <button class="dev" data-key="backlight" aria-haspopup="dialog" style="left:60px;top:432px;width:120px">
+      <span class="orb"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="11" rx="2"/><path d="M8 20h8M1 9v3M23 9v3"/></svg></span>
+      <span class="nm">TV Backlight</span><span class="st">--</span>
+    </button>
+
+    <button class="dev side" data-key="couchL" aria-haspopup="dialog" style="right:46px;top:182px">
+      <span class="orb"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg></span>
+      <span><span class="nm" style="display:block">Couch L</span><span class="st" style="display:block">--</span></span>
+    </button>
+
+    <button class="dev side" data-key="couchR" aria-haspopup="dialog" style="right:46px;top:420px">
+      <span class="orb"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg></span>
+      <span><span class="nm" style="display:block">Couch R</span><span class="st" style="display:block">--</span></span>
+    </button>
+
+    <div class="map-actions">
+      <button class="map-btn" id="couchBtn"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg><span>Couch lights on</span></button>
+      <button class="map-btn" id="allOffBtn">Everything off</button>
     </div>
   </section>
 
-  <section class="card weather-card">
-    <div class="weather-top">
-      <div class="weather-moon" id="weatherIcon">🌙</div>
-      <div class="temperature" id="tempNow">--°</div>
-      <div>
-        <div class="condition" id="weatherCondition">Loading weather</div>
-        <div class="weather-meta">
-          <span id="weatherHighLow">H --° • L --°</span>
-          <span class="rain" id="weatherRain">💧 --%</span>
-        </div>
+  <!-- RIGHT COLUMN -->
+  <div class="col">
+    <section class="card notes">
+      <h2>House Notes</h2>
+      <div class="note-row">
+        <label for="noteInput" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Add a note</label>
+        <input id="noteInput" placeholder="Add a note..." autocomplete="off">
+        <button id="noteAdd">Add</button>
       </div>
+      <div class="note-list" id="noteList"></div>
+    </section>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="nav" aria-label="Sections">
+    <div class="nav-in">
+      <button class="active" id="navHome">Home</button>
+      <button data-open="month">Calendar</button>
+      <button id="navNotes">Notes</button>
+      <a href="https://ring.com/app" target="_blank" rel="noopener"><span class="live-dot"></span>Front Door</a>
     </div>
+  </nav>
 
-    <div class="forecast" id="forecast">
-      <div class="day"><div class="day-name">SUN</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">MON</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">TUE</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">WED</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">THU</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">FRI</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
-      <div class="day"><div class="day-name">SAT</div><div class="weather-ico">☀️</div><div class="hi">--°</div><div class="lo">--°</div></div>
+  <!-- LIGHT / PLUG PANEL -->
+  <div class="scrim" id="scrim"><div class="panel" id="panel" role="dialog" aria-modal="true"></div></div>
+
+  <!-- MONTH CALENDAR -->
+  <div class="month" id="month" role="dialog" aria-label="Family calendar">
+    <div class="m-head">
+      <div class="l">
+        <button class="sq" id="mPrev" aria-label="Previous month"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <h2 id="mTitle">Month</h2>
+        <button class="sq" id="mNext" aria-label="Next month"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="btn-txt" id="mToday">Today</button>
+      </div>
+      <button class="btn-primary" id="mClose"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>Back to home</button>
     </div>
-  </section>
-
-  <section class="card home-card">
-    <div class="section-head">
-      <div>
-        <div class="section-title"><span class="icon">⌂</span> Home Control</div>
-        <div class="section-sub">Alexa scenes and selected room controls</div>
-      </div>
+    <div style="min-height:0;display:flex;flex-direction:column;gap:8px">
+      <div class="wk"><span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span></div>
+      <div class="m-grid" id="mGrid"></div>
     </div>
+    <aside class="m-side" id="mSide"></aside>
+  </div>
 
-    <div class="scenes">
-      <button class="scene morning" onclick="sendScene('morning', this)">
-        <span class="scene-ico">🌤️</span>
-        <span class="scene-label">Good Morning</span>
-        <span class="scene-status"></span>
-      </button>
-
-      <button class="scene breakfast" onclick="sendScene('breakfast', this)">
-        <span class="scene-ico">🥞</span>
-        <span class="scene-label">Breakfast Time</span>
-        <span class="scene-status"></span>
-      </button>
-
-      <button class="scene dinner" onclick="sendScene('dinner', this)">
-        <span class="scene-ico">🍽️</span>
-        <span class="scene-label">Dinner Time</span>
-        <span class="scene-status"></span>
-      </button>
-
-      <button class="scene night" onclick="sendScene('bedtime', this)">
-        <span class="scene-ico">🌙</span>
-        <span class="scene-label">Good Night</span>
-        <span class="scene-status"></span>
-      </button>
-    </div>
-
-    <div class="room-controls">
-      <div class="room-controls-head">
-        <div class="room-controls-title">
-          <span class="govee-logo">G</span>
-          <span>Room Controls</span>
-        </div>
-        <button class="govee-open" onclick="openGovee()">Open Govee ↗</button>
-      </div>
-
-      <div class="room-toggle-grid">
-        <button class="room-toggle-tile" data-device="deck" onclick="toggleRoomDevice('deck', 'Deck Light', this)">
-          <div class="room-toggle-icon">🌳</div>
-          <div class="room-toggle-title">Deck Light</div>
-          <div class="room-toggle-state">
-            <span class="state-dot"></span>
-            <span class="state-text">Off</span>
-          </div>
-        </button>
-
-        <button class="room-toggle-tile" data-device="backlight" onclick="toggleRoomDevice('backlight', 'Living Room Backlight', this)">
-          <div class="room-toggle-icon">📺</div>
-          <div class="room-toggle-title">Living Room Backlight</div>
-          <div class="room-toggle-state">
-            <span class="state-dot"></span>
-            <span class="state-text">Off</span>
-          </div>
-        </button>
-
-        <button class="room-toggle-tile" data-device="plug1" onclick="toggleRoomDevice('plug1', 'Smart Plug 1', this)">
-          <div class="room-toggle-icon">🔌</div>
-          <div class="room-toggle-title">Smart Plug 1</div>
-          <div class="room-toggle-state">
-            <span class="state-dot"></span>
-            <span class="state-text">Off</span>
-          </div>
-        </button>
-
-        <button class="room-toggle-tile" data-device="plug2" onclick="toggleRoomDevice('plug2', 'Living Room Lamp', this)">
-          <div class="room-toggle-icon">💡</div>
-          <div class="room-toggle-title">Living Room Lamp</div>
-          <div class="room-toggle-state">
-            <span class="state-dot"></span>
-            <span class="state-text">Off</span>
-          </div>
-        </button>
-      </div>
-    </div>
-
-    <div class="status-strip">
-      <div class="status-left">
-        <div class="shield">✓</div>
-        <div>
-          <div class="status-title">Home: selected devices ready</div>
-          <div class="status-sub" id="homeStatusSub">Alexa scenes and room controls active</div>
-        </div>
-      </div>
-
-      <div class="status-actions">
-        <button class="primary" onclick="openRing()">Front Door / Ring</button>
-        <button onclick="openGoogleHome()">Google Home</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="card agenda-card">
-    <div class="agenda-head">
-      <div>
-        <div class="agenda-title">📋 Today at a Glance</div>
-        <div class="agenda-sub">Family calendar and house notes</div>
-      </div>
-      <button class="refresh-btn" onclick="loadCalendarFeed(true)">Refresh</button>
-    </div>
-
-    <div class="agenda-body">
-      <div class="glance-col">
-        <div class="next-event-card">
-          <div class="mini-title">Next Event</div>
-          <div class="next-event-name" id="nextEventName">Loading calendar...</div>
-          <div class="next-event-meta" id="nextEventMeta">Checking upcoming events</div>
-        </div>
-
-        <div class="schedule-card">
-          <div class="mini-title">Today's Schedule</div>
-          <div class="schedule-list" id="todaySchedule">
-            <div class="empty-state">Loading today's events...</div>
-          </div>
-        </div>
-
-        <div class="notes-card">
-          <div class="mini-title">House Notes</div>
-
-          <div class="note-input-row">
-            <input id="houseNoteInput" type="text" placeholder="Add a house note..." />
-            <button onclick="addHouseNote()">Add</button>
-          </div>
-
-          <div class="house-notes-list" id="houseNotesList">
-            <div class="empty-state">No house notes yet.</div>
-          </div>
-
-          <button class="clear-notes-btn" onclick="clearHouseNotes()">Clear Notes</button>
-        </div>
-      </div>
-
-      <div class="event-list">
-        <div class="event-list-head">
-          <div class="mini-title">Upcoming Events</div>
-          <div class="event-count" id="eventCount">Loading</div>
-        </div>
-
-        <div class="upcoming-list" id="upcomingList">
-          <div class="empty-state">Loading upcoming events...</div>
-        </div>
-
-        <button class="full-cal" onclick="openCalendar()">View Full Calendar ›</button>
-      </div>
-    </div>
-  </section>
+  <div class="toast" id="toast"></div>
+  <div class="setup" id="setup"><div><b>Almost there.</b><br>Paste your Apps Script Web app URL into the <b>APPS_URL</b> line near the top of the script in index.html, then commit.</div></div>
 </div>
 
-<div class="dashboard-version-badge">Home Hub V19 Toggle Room Controls</div>
-<div class="toast" id="toast"></div>
-
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-0Z7Sf93-DERMWL9MMoHEd76MlrnlJ3Xi6tH4wqfiAJ-_iYI9l8lkfIERsYHEFTYOxw/exec";
-const FAMILY_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=family11563085076736409084%40group.calendar.google.com&ctz=America%2FLos_Angeles";
+/* =========================================================
+   Home Hub V21
+   Paste your Apps Script Web app URL between the quotes below.
+   ========================================================= */
+const APPS_URL = 'https://script.google.com/macros/s/AKfycbyE_1Jrvgkt4kkJ5aNsFLjFBEmCyZ-FpSAD-Ww-YcLeeeAZMarMVfmBFzr-uMbrGpP8BQ/exec';
 
-const WEATHER_FALLBACK = {
-  latitude: 38.4405,
-  longitude: -122.7144
-};
+// Tiburon, CA
+const LAT = 37.8735, LON = -122.4566;
 
-let toastTimer;
+/* ---------------- helpers ---------------- */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const rgb = (hex) => { const n = parseInt(hex.slice(1), 16); return ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255); };
+const configured = () => APPS_URL && APPS_URL.indexOf('http') === 0;
 
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
+function api(params) {
+  const url = APPS_URL + '?' + new URLSearchParams(params).toString();
+  return fetch(url, { redirect: 'follow' })
+    .then((r) => r.json())
+    .then((j) => { if (!j.ok) throw new Error(j.error || 'Request failed'); return j; });
+}
+
+let toastTimer = null;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 4500);
 }
 
-function updateClock() {
+/* ---------------- fit 1280x800 design to any screen ---------------- */
+function fit() {
+  const s = Math.min(window.innerWidth / 1280, window.innerHeight / 800);
+  $('stage').style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+}
+window.addEventListener('resize', fit);
+fit();
+
+/* ---------------- clock ---------------- */
+function tick() {
   const now = new Date();
+  let h = now.getHours();
+  const ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  $('hhmm').textContent = h + ':' + String(now.getMinutes()).padStart(2, '0');
+  $('ampm').textContent = ap;
+  $('dateText').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+setInterval(tick, 1000);
+tick();
 
-  const timeParts = now.toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true
-  }).split(" ");
+/* ---------------- weather (Open-Meteo, no key) ---------------- */
+const WMO = { 0: ['Clear', '☀️'], 1: ['Mostly clear', '🌤️'], 2: ['Partly cloudy', '⛅'], 3: ['Overcast', '☁️'], 45: ['Fog', '🌫️'], 48: ['Fog', '🌫️'],
+  51: ['Light drizzle', '🌦️'], 53: ['Drizzle', '🌦️'], 55: ['Drizzle', '🌧️'], 61: ['Light rain', '🌧️'], 63: ['Rain', '🌧️'], 65: ['Heavy rain', '🌧️'],
+  71: ['Light snow', '🌨️'], 73: ['Snow', '❄️'], 75: ['Heavy snow', '❄️'], 80: ['Showers', '🌦️'], 81: ['Showers', '🌧️'], 82: ['Heavy showers', '⛈️'],
+  95: ['Thunderstorm', '⛈️'], 96: ['Thunderstorm', '⛈️'], 99: ['Thunderstorm', '⛈️'] };
+function loadWeather() {
+  const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + LAT + '&longitude=' + LON +
+    '&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max' +
+    '&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles&forecast_days=7';
+  fetch(url).then((r) => r.json()).then((d) => {
+    const w = WMO[d.current_weather.weathercode] || ['', '🌡️'];
+    $('wIcon').textContent = w[1];
+    $('wCond').textContent = w[0];
+    $('wTemp').textContent = Math.round(d.current_weather.temperature) + '°';
+    $('wMeta').textContent = 'H ' + Math.round(d.daily.temperature_2m_max[0]) + '° · L ' + Math.round(d.daily.temperature_2m_min[0]) + '° · Rain ' + (d.daily.precipitation_probability_max[0] || 0) + '%';
+    let html = '';
+    for (let i = 1; i < 7; i++) {
+      const day = new Date(d.daily.time[i] + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' });
+      html += '<div><div class="dn">' + day + '</div><div class="hi">' + Math.round(d.daily.temperature_2m_max[i]) + '°</div><div class="lo">' + Math.round(d.daily.temperature_2m_min[i]) + '°</div></div>';
+    }
+    $('wDays').innerHTML = html;
+  }).catch(() => { $('wCond').textContent = 'Weather unavailable'; });
+}
 
-  document.getElementById("clock").textContent = timeParts[0] || "--:--";
-  document.getElementById("ampm").textContent = timeParts[1] || "";
+/* ---------------- devices ---------------- */
+const KEYS = ['deck', 'backlight', 'couchL', 'couchR', 'plug', 'lamp'];
+const DEV = {
+  deck:      { name: 'Deck Light',          kind: 'light' },
+  backlight: { name: 'TV Backlight',        kind: 'backlight' },
+  couchL:    { name: 'Living Room Couch L', kind: 'light' },
+  couchR:    { name: 'Living Room Couch R', kind: 'light' },
+  plug:      { name: 'Smart Plug',          kind: 'outlet', fixed: '#B9A3FF' },
+  lamp:      { name: 'Lamp',                kind: 'outlet', fixed: '#FFD678' }
+};
+const S = {};
+KEYS.forEach((k) => { S[k] = { on: false, bright: 100, color: DEV[k].fixed || '#FFC266', online: true, mode: 'color', modeName: '' }; });
+S.backlight.color = '#62D8FF';
+const touched = {};   // key -> time of last command, so polling does not undo a fresh tap
+const features = {};  // key -> features from Apps Script
 
-  document.getElementById("date").textContent = now.toLocaleDateString([], {
-    weekday: "long",
-    month: "long",
-    day: "numeric"
+const SWATCHES = [['Warm white', '#FFC266'], ['Soft white', '#FFE2B0'], ['Cool white', '#E6F0FF'], ['Red', '#FF5A5A'], ['Pink', '#FF7AC8'], ['Purple', '#A98BFF'], ['Blue', '#5C8DFF'], ['Teal', '#4FE0C8']];
+
+function effColor(k) {
+  const s = S[k];
+  if (k === 'backlight') {
+    if (s.mode === 'music') return '#A98BFF';
+    if (s.mode === 'video') return '#5C8DFF';
+  }
+  return s.color;
+}
+function label(k) {
+  const s = S[k];
+  if (!s.online) return 'Offline';
+  if (!s.on) return 'Off';
+  if (DEV[k].kind === 'outlet') return 'On';
+  if (k === 'backlight' && s.mode === 'scene') return 'On · ' + s.modeName;
+  if (k === 'backlight' && s.mode === 'music') return 'On · Music';
+  if (k === 'backlight' && s.mode === 'video') return 'On · TV sync';
+  return 'On · ' + s.bright + '%';
+}
+
+function render(k) {
+  const s = S[k];
+  const el = document.querySelector('.dev[data-key="' + k + '"]');
+  if (el) {
+    const orb = el.querySelector('.orb');
+    const c = effColor(k);
+    const kk = (DEV[k].kind === 'outlet' ? 100 : s.bright) / 100;
+    orb.style.background = s.on ? c : '#1B1F3D';
+    orb.style.color = s.on ? '#1A1408' : '#8C92BA';
+    orb.style.borderColor = s.on ? c : '#2C3156';
+    orb.style.boxShadow = s.on ? '0 0 0 6px rgba(' + rgb(c) + ',' + (0.18 * kk).toFixed(2) + '), 0 0 ' + Math.round(10 + 26 * kk) + 'px rgba(' + rgb(c) + ',' + (0.2 + 0.45 * kk).toFixed(2) + ')' : 'none';
+    if (el.classList.contains('pill')) el.style.borderColor = s.on ? c : '#2C3156';
+    const st = el.querySelector('.st');
+    st.textContent = label(k);
+    st.style.color = !s.online ? '#FF8FA3' : (s.on ? c : '#A9AECB');
+    el.setAttribute('aria-pressed', s.on ? 'true' : 'false');
+    el.setAttribute('aria-label', DEV[k].name + ', ' + label(k) + '. Hold for more.');
+  }
+  // map effects
+  const pool = $('pool-' + k);
+  if (pool) {
+    const c = effColor(k);
+    pool.style.background = k === 'backlight'
+      ? 'radial-gradient(ellipse, rgba(' + rgb(c) + ',0.45) 0%, rgba(' + rgb(c) + ',0) 70%)'
+      : 'radial-gradient(circle, rgba(' + rgb(c) + ',0.42) 0%, rgba(' + rgb(c) + ',0) 70%)';
+    pool.style.opacity = s.on ? (k === 'lamp' ? 1 : (0.3 + 0.7 * s.bright / 100)).toFixed(2) : 0;
+  }
+  if (k === 'backlight') $('tvBar').style.boxShadow = s.on ? '0 0 24px 4px rgba(' + rgb(effColor(k)) + ',0.6)' : 'none';
+  if (k === 'deck') {
+    $('deckArea').style.background = s.on ? 'rgba(' + rgb(s.color) + ',0.14)' : '#101329';
+    $('deckArea').style.boxShadow = s.on ? 'inset 0 0 60px rgba(' + rgb(s.color) + ',' + (0.1 + 0.2 * s.bright / 100).toFixed(2) + ')' : 'none';
+  }
+  $('roomFloor').style.background = (S.lamp.on || S.backlight.on || S.couchL.on || S.couchR.on) ? '#1A1A33' : '#14172F';
+  const count = KEYS.filter((x) => S[x].on).length;
+  $('chipOn').textContent = count + ' of 6 on';
+  const both = S.couchL.on && S.couchR.on;
+  $('couchBtn').classList.toggle('on', both);
+  $('couchBtn').querySelector('span').textContent = both ? 'Couch lights off' : 'Couch lights on';
+  if (panelKey && (panelKey === k || (DEV[panelKey].kind === 'outlet' && DEV[k].kind === 'outlet'))) refreshPanelHeader();
+}
+function renderAll() { KEYS.forEach(render); }
+
+function setBusy(k, on) {
+  const el = document.querySelector('.dev[data-key="' + k + '"]');
+  if (el) el.classList.toggle('busy', on);
+}
+
+// Send a command, update the screen first, roll back if Govee says no
+function command(k, params, apply) {
+  if (!configured()) { toast('Add your Apps Script URL to index.html first'); return Promise.resolve(); }
+  const before = JSON.parse(JSON.stringify(S[k]));
+  apply(S[k]);
+  touched[k] = Date.now();
+  render(k);
+  setBusy(k, true);
+  return api(Object.assign({ key: k }, params))
+    .catch((e) => { S[k] = before; render(k); toast(DEV[k].name + ': ' + e.message); })
+    .finally(() => setBusy(k, false));
+}
+const power = (k, on) => command(k, { action: 'power', on: on ? 1 : 0 }, (s) => { s.on = on; if (!on && k === 'backlight') s.mode = 'color'; });
+
+function loadState() {
+  if (!configured()) return;
+  api({ action: 'state' }).then((j) => {
+    const now = Date.now();
+    Object.keys(j.lights || {}).forEach((k) => {
+      if (!S[k] || (touched[k] && now - touched[k] < 15000)) return;
+      const L = j.lights[k];
+      S[k].online = L.online !== false;
+      S[k].on = !!L.on;
+      if (typeof L.brightness === 'number') S[k].bright = L.brightness;
+      if (L.color && S[k].mode === 'color' && !DEV[k].fixed) S[k].color = L.color;
+    });
+    Object.keys(j.errors || {}).forEach((k) => { if (S[k]) S[k].online = false; if (k === 'plug') S.lamp.online = false; });
+    renderAll();
+  }).catch((e) => toast('Could not reach the lights: ' + e.message));
+}
+
+/* ---------------- tap vs hold ---------------- */
+let holdTimer = null, held = false;
+document.querySelectorAll('.dev').forEach((el) => {
+  const k = el.dataset.key;
+  el.addEventListener('pointerdown', () => {
+    held = false;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => { held = true; openPanel(k); }, 500);
   });
-}
-
-async function sendScene(scene, button) {
-  const status = button.querySelector(".scene-status");
-  const originalStatus = status.textContent;
-
-  button.classList.add("sending");
-  status.textContent = "Sending...";
-
-  try {
-    const response = await fetch(`${SCRIPT_URL}?action=scene&scene=${encodeURIComponent(scene)}&t=${Date.now()}`);
-    const data = await response.json();
-
-    if (data.ok) {
-      status.textContent = "Sent ✓";
-      showToast(`${data.label || "Scene"} sent`);
-    } else {
-      status.textContent = "Failed";
-      showToast(data.error || "Scene did not send");
-    }
-  } catch (err) {
-    status.textContent = "Failed";
-    showToast("Scene did not send");
-  }
-
-  setTimeout(() => {
-    button.classList.remove("sending");
-    status.textContent = originalStatus;
-  }, 1800);
-}
-
-/* Room Control Toggle State */
-
-function getRoomState(device) {
-  return localStorage.getItem(`roomDeviceState_${device}`) === "on";
-}
-
-function saveRoomState(device, isOn) {
-  localStorage.setItem(`roomDeviceState_${device}`, isOn ? "on" : "off");
-}
-
-function renderRoomStates() {
-  document.querySelectorAll(".room-toggle-tile").forEach(tile => {
-    const device = tile.dataset.device;
-    const isOn = getRoomState(device);
-    updateRoomTile(tile, isOn);
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => el.addEventListener(ev, () => clearTimeout(holdTimer)));
+  el.addEventListener('contextmenu', (e) => e.preventDefault());
+  el.addEventListener('click', () => {
+    clearTimeout(holdTimer);
+    if (held) { held = false; return; }
+    power(k, !S[k].on);
   });
+});
+
+$('allOffBtn').addEventListener('click', () => { KEYS.forEach((k) => { if (S[k].on) power(k, false); }); });
+$('couchBtn').addEventListener('click', () => {
+  const both = S.couchL.on && S.couchR.on;
+  power('couchL', !both);
+  power('couchR', !both);
+});
+
+/* ---------------- hold panels ---------------- */
+let panelKey = null;
+let blTab = 'color';
+let blSens = 70;
+
+const SCENE_COLORS = {
+  sunrise: ['#FF7A3D', '#FFC266'], sunset: ['#FF5A76', '#A98BFF'], aurora: ['#4FE0C8', '#5C8DFF', '#A98BFF'], ocean: ['#2E6BFF', '#4FE0C8'],
+  forest: ['#2FBF71', '#B8E06A'], candlelight: ['#FF9A3D', '#FFD678'], rainbow: ['#FF5A5A', '#FFD678', '#4FE0C8', '#5C8DFF', '#A98BFF'], party: ['#FF7AC8', '#5C8DFF', '#FFD678']
+};
+const FALLBACK_SCENE_COLORS = [['#FF7A3D', '#FFC266'], ['#4FE0C8', '#5C8DFF'], ['#FF5A76', '#A98BFF'], ['#2FBF71', '#B8E06A'], ['#FF7AC8', '#5C8DFF'], ['#FF9A3D', '#FFD678'], ['#5C8DFF', '#A98BFF'], ['#FF5A5A', '#FFD678']];
+const PREFERRED_SCENES = ['Sunrise', 'Sunset', 'Aurora', 'Ocean', 'Forest', 'Candlelight', 'Rainbow', 'Party', 'Movie', 'Romantic', 'Fire', 'Starry Sky'];
+
+function sceneColors(name, i) {
+  return SCENE_COLORS[String(name).toLowerCase()] || FALLBACK_SCENE_COLORS[i % FALLBACK_SCENE_COLORS.length];
 }
 
-function updateRoomTile(tile, isOn) {
-  const stateText = tile.querySelector(".state-text");
+function openPanel(k) {
+  panelKey = (k === 'lamp') ? 'plug' : k;
+  if (DEV[panelKey].kind === 'backlight' && !features.backlight) loadFeatures('backlight');
+  buildPanel();
+  $('scrim').classList.add('open');
+}
+function closePanel() { panelKey = null; $('scrim').classList.remove('open'); }
+$('scrim').addEventListener('click', (e) => { if (e.target === $('scrim')) closePanel(); });
 
-  tile.classList.toggle("is-on", isOn);
+function loadFeatures(k) {
+  if (!configured()) return;
+  api({ action: 'features', key: k }).then((j) => {
+    features[k] = j;
+    if (panelKey === k) buildPanel();
+  }).catch((e) => toast('Could not load options: ' + e.message));
+}
 
-  if (stateText) {
-    stateText.textContent = isOn ? "On" : "Off";
+function headerHtml(name, status, swatch, glow, withSwitch, on) {
+  return '<div class="p-head"><div class="p-id"><span class="p-sw" id="pSw" style="background:' + swatch + ';box-shadow:' + glow + '"></span>' +
+    '<div><div class="p-name">' + esc(name) + '</div><div class="p-st" id="pSt">' + esc(status) + '</div></div></div>' +
+    '<div class="p-tools">' + (withSwitch ? '<button class="switch' + (on ? ' on' : '') + '" id="pSwitch" data-act="power" aria-label="Turn on or off" aria-pressed="' + on + '"><i></i></button>' : '') +
+    '<button class="x-btn" data-act="close" aria-label="Close"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>';
+}
+
+function swatchGlow(k) {
+  const c = effColor(k);
+  return S[k].on ? '0 0 0 6px rgba(' + rgb(c) + ',0.18), 0 0 30px rgba(' + rgb(c) + ',0.5)' : 'none';
+}
+
+function refreshPanelHeader() {
+  if (!panelKey) return;
+  if (DEV[panelKey].kind === 'outlet') { buildPanel(); return; }
+  const k = panelKey;
+  if ($('pSw')) { $('pSw').style.background = S[k].on ? effColor(k) : '#2A2F55'; $('pSw').style.boxShadow = swatchGlow(k); }
+  if ($('pSt')) $('pSt').textContent = label(k);
+  if ($('pSwitch')) { $('pSwitch').classList.toggle('on', S[k].on); $('pSwitch').setAttribute('aria-pressed', S[k].on); }
+}
+
+function brightnessHtml(k) {
+  return '<div style="display:flex;flex-direction:column;gap:10px"><div class="row-lbl"><label for="pBright">Brightness</label><span id="pBrightVal">' + S[k].bright + '%</span></div>' +
+    '<input id="pBright" type="range" min="1" max="100" value="' + S[k].bright + '" style="accent-color:' + effColor(k) + '"></div>';
+}
+function swatchesHtml(k) {
+  return '<div class="swatches">' + SWATCHES.map((sw) => {
+    const sel = S[k].mode === 'color' && S[k].color.toUpperCase() === sw[1];
+    return '<button class="swatch" data-act="color" data-hex="' + sw[1] + '" aria-label="' + sw[0] + '" aria-pressed="' + sel + '" style="background:' + sw[1] + (sel ? ';box-shadow:0 0 0 3px #15182E, 0 0 0 6px ' + sw[1] : '') + '"></button>';
+  }).join('') + '</div>';
+}
+
+function buildPanel() {
+  const k = panelKey;
+  const p = $('panel');
+  if (!k) return;
+  const d = DEV[k];
+  p.classList.toggle('wide', d.kind === 'backlight');
+
+  if (d.kind === 'outlet') {
+    const on1 = S.plug.on, on2 = S.lamp.on;
+    const n = (on1 ? 1 : 0) + (on2 ? 1 : 0);
+    const o = (on, c) => 'border-color:' + (on ? c : '#2C3156') + ';box-shadow:' + (on ? '0 0 0 5px rgba(' + rgb(c) + ',0.16), 0 0 26px rgba(' + rgb(c) + ',0.45)' : 'none');
+    const slot = (on, c) => 'background:' + (on ? c : '#3A3F66');
+    p.setAttribute('aria-label', 'Dual Smart Plug');
+    p.innerHTML = headerHtml('Dual Smart Plug', n + ' of 2 outlets on', n ? '#B9A3FF' : '#2A2F55', n ? '0 0 0 6px rgba(185,163,255,0.18), 0 0 30px rgba(185,163,255,0.5)' : 'none', false) +
+      '<div style="display:flex;flex-direction:column;gap:14px">' +
+      '<div class="plug-body">' +
+      '<button class="outlet" data-act="outlet" data-k="plug" aria-label="Outlet 1, Smart Plug" aria-pressed="' + on1 + '" style="' + o(on1, '#B9A3FF') + '"><i class="s1" style="' + slot(on1, '#B9A3FF') + '"></i><i class="s2" style="' + slot(on1, '#B9A3FF') + '"></i><i class="g" style="' + slot(on1, '#B9A3FF') + '"></i></button>' +
+      '<button class="outlet" data-act="outlet" data-k="lamp" aria-label="Outlet 2, Lamp" aria-pressed="' + on2 + '" style="' + o(on2, '#FFD678') + '"><i class="s1" style="' + slot(on2, '#FFD678') + '"></i><i class="s2" style="' + slot(on2, '#FFD678') + '"></i><i class="g" style="' + slot(on2, '#FFD678') + '"></i></button>' +
+      '<span class="led" style="left:122px;background:' + (on1 ? '#B9A3FF' : '#2A2F55') + '"></span><span class="led" style="left:312px;background:' + (on2 ? '#FFD678' : '#2A2F55') + '"></span><span class="plug-side"></span>' +
+      '</div>' +
+      '<div class="plug-labels"><div style="width:150px"><div class="k">OUTLET 1</div><div class="n">Smart Plug</div><div class="v" style="color:' + (on1 ? '#B9A3FF' : '#A9AECB') + '">' + label('plug') + '</div></div>' +
+      '<div style="width:150px"><div class="k">OUTLET 2</div><div class="n">Lamp</div><div class="v" style="color:' + (on2 ? '#FFD678' : '#A9AECB') + '">' + label('lamp') + '</div></div></div>' +
+      '<div style="font-size:12px;font-weight:600;color:var(--muted);text-align:center">Tap an outlet to turn it on or off</div></div>';
+    return;
   }
-}
 
-async function toggleRoomDevice(device, label, tile) {
-  const currentlyOn = getRoomState(device);
-  const command = currentlyOn ? "off" : "on";
+  p.setAttribute('aria-label', d.name + ' settings');
+  let html = headerHtml(d.name, label(k), S[k].on ? effColor(k) : '#2A2F55', swatchGlow(k), true, S[k].on) + brightnessHtml(k);
 
-  tile.classList.add("sending");
-
-  try {
-    const response = await fetch(`${SCRIPT_URL}?action=govee&device=${encodeURIComponent(device)}&command=${encodeURIComponent(command)}&t=${Date.now()}`);
-    const data = await response.json();
-
-    if (data.ok) {
-      const newState = command === "on";
-      saveRoomState(device, newState);
-      updateRoomTile(tile, newState);
-
-      showToast(`${label} turned ${command}`);
-      document.getElementById("homeStatusSub").textContent = `${label} turned ${command}`;
-    } else {
-      showToast(data.error || `${label} did not respond`);
-      document.getElementById("homeStatusSub").textContent = `${label} did not respond`;
+  if (d.kind === 'light') {
+    html += '<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:14px;font-weight:800">Color</div>' + swatchesHtml(k) + '</div>';
+  } else {
+    const f = features.backlight;
+    const tabs = [['color', 'Color'], ['scene', 'Scenes'], ['music', 'Music']];
+    if (f && f.sync) tabs.unshift(['video', 'TV Sync']);
+    if (!tabs.some((t) => t[0] === blTab)) blTab = 'color';
+    html += '<div class="tabs' + (tabs.length === 3 ? ' three' : '') + '" role="tablist">' + tabs.map((t) =>
+      '<button class="tab' + (blTab === t[0] ? ' on' : '') + '" role="tab" aria-selected="' + (blTab === t[0]) + '" data-act="tab" data-tab="' + t[0] + '">' + t[1] + '</button>').join('') + '</div>';
+    html += '<div class="tab-body">';
+    if (blTab === 'color') html += swatchesHtml(k);
+    if (blTab === 'video') {
+      const on = S.backlight.on && S.backlight.mode === 'video';
+      html += '<div class="box"><div><div class="b1">Sync with TV</div><div class="b2">Lights follow what\'s on screen</div></div><button class="switch' + (on ? ' on' : '') + '" data-act="sync" aria-label="Sync with TV" aria-pressed="' + on + '"><i></i></button></div>';
     }
-  } catch (err) {
-    showToast(`${label} did not respond`);
-    document.getElementById("homeStatusSub").textContent = `${label} did not respond`;
-  }
-
-  setTimeout(() => {
-    tile.classList.remove("sending");
-  }, 800);
-}
-
-/* Calendar */
-
-async function loadCalendarFeed(manual) {
-  if (manual) showToast("Refreshing calendar...");
-
-  try {
-    const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
-    const data = await response.json();
-
-    if (!data.ok) {
-      throw new Error(data.error || "Calendar feed error");
-    }
-
-    renderNextEvent(data.nextEvent);
-    renderTodaySchedule(data.todayEvents || []);
-    renderUpcomingEvents(data.upcomingEvents || []);
-
-    if (manual) showToast("Calendar refreshed");
-  } catch (err) {
-    document.getElementById("nextEventName").textContent = "Calendar unavailable";
-    document.getElementById("nextEventMeta").textContent = "Open full calendar for details";
-    document.getElementById("todaySchedule").innerHTML = `<div class="empty-state">Could not load today's schedule.</div>`;
-    document.getElementById("upcomingList").innerHTML = `<div class="empty-state">Could not load upcoming events.</div>`;
-    document.getElementById("eventCount").textContent = "Unavailable";
-    if (manual) showToast("Calendar could not refresh");
-  }
-}
-
-function renderNextEvent(event) {
-  const name = document.getElementById("nextEventName");
-  const meta = document.getElementById("nextEventMeta");
-  const topTitle = document.getElementById("topNextTitle");
-  const topSub = document.getElementById("topNextSub");
-
-  if (!event) {
-    name.textContent = "No upcoming events";
-    meta.textContent = "Nothing scheduled in the next window";
-    topTitle.textContent = "Next: No upcoming events";
-    topSub.textContent = "Family calendar is clear";
-    return;
-  }
-
-  name.textContent = event.title || "Untitled Event";
-
-  const eventMeta = `${event.date || ""} • ${event.time || ""}${event.location ? " • " + event.location : ""}`;
-  meta.textContent = eventMeta;
-
-  topTitle.textContent = `Next: ${event.title || "Untitled Event"}`;
-  topSub.textContent = `${event.date || ""} at ${event.time || ""}`;
-}
-
-function renderTodaySchedule(events) {
-  const container = document.getElementById("todaySchedule");
-
-  if (!events.length) {
-    container.innerHTML = `<div class="empty-state">No more events today.</div>`;
-    return;
-  }
-
-  container.innerHTML = events.slice(0, 4).map(event => `
-    <div class="schedule-item">
-      <div class="item-time">${escapeHtml(event.time || "")}</div>
-      <div>
-        <div class="item-title">${escapeHtml(event.title || "Untitled Event")}</div>
-        <div class="item-location">${escapeHtml(event.location || "")}</div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function renderUpcomingEvents(events) {
-  const container = document.getElementById("upcomingList");
-  const count = document.getElementById("eventCount");
-
-  count.textContent = `${events.length} upcoming`;
-
-  if (!events.length) {
-    container.innerHTML = `<div class="empty-state">No upcoming events found.</div>`;
-    return;
-  }
-
-  container.innerHTML = events.slice(0, 10).map(event => `
-    <div class="upcoming-item">
-      <div>
-        <div class="upcoming-date">${escapeHtml(event.date || "")}</div>
-        <div class="upcoming-time">${escapeHtml(event.time || "")}</div>
-      </div>
-      <div>
-        <div class="item-title">${escapeHtml(event.title || "Untitled Event")}</div>
-        <div class="item-location">${escapeHtml(event.location || "")}</div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-/* House Notes */
-
-function getHouseNotes() {
-  try {
-    return JSON.parse(localStorage.getItem("homeHubHouseNotesList") || "[]");
-  } catch (err) {
-    return [];
-  }
-}
-
-function saveHouseNotes(notes) {
-  localStorage.setItem("homeHubHouseNotesList", JSON.stringify(notes));
-}
-
-function renderHouseNotes() {
-  const notes = getHouseNotes();
-  const list = document.getElementById("houseNotesList");
-
-  if (!notes.length) {
-    list.innerHTML = `<div class="empty-state">No house notes yet.</div>`;
-    return;
-  }
-
-  list.innerHTML = notes.map((note, index) => `
-    <div class="house-note-item">
-      <div class="house-note-dot"></div>
-      <div class="house-note-text">${escapeHtml(note)}</div>
-      <button class="delete-note-btn" onclick="deleteHouseNote(${index})">×</button>
-    </div>
-  `).join("");
-}
-
-function addHouseNote() {
-  const input = document.getElementById("houseNoteInput");
-  const value = input.value.trim();
-
-  if (!value) {
-    showToast("Add a note first");
-    return;
-  }
-
-  const notes = getHouseNotes();
-  notes.unshift(value);
-  saveHouseNotes(notes);
-  input.value = "";
-  renderHouseNotes();
-  showToast("House note saved");
-}
-
-function deleteHouseNote(index) {
-  const notes = getHouseNotes();
-  notes.splice(index, 1);
-  saveHouseNotes(notes);
-  renderHouseNotes();
-  showToast("House note removed");
-}
-
-function clearHouseNotes() {
-  saveHouseNotes([]);
-  renderHouseNotes();
-  showToast("House notes cleared");
-}
-
-function setupHouseNotesInput() {
-  const input = document.getElementById("houseNoteInput");
-  input.addEventListener("keydown", event => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      addHouseNote();
-    }
-  });
-}
-
-/* Weather */
-
-async function loadWeather() {
-  const location = await getWeatherLocation();
-  const url =
-    `https://api.open-meteo.com/v1/forecast` +
-    `?latitude=${location.latitude}` +
-    `&longitude=${location.longitude}` +
-    `&current=temperature_2m,weather_code` +
-    `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
-    `&temperature_unit=fahrenheit` +
-    `&timezone=auto`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const currentTemp = Math.round(data.current.temperature_2m);
-    const todayHigh = Math.round(data.daily.temperature_2m_max[0]);
-    const todayLow = Math.round(data.daily.temperature_2m_min[0]);
-    const rainChance = data.daily.precipitation_probability_max[0] ?? 0;
-    const condition = weatherCodeToText(data.current.weather_code);
-    const icon = weatherCodeToIcon(data.current.weather_code);
-
-    document.getElementById("tempNow").textContent = `${currentTemp}°`;
-    document.getElementById("weatherCondition").textContent = condition;
-    document.getElementById("weatherHighLow").textContent = `H ${todayHigh}° • L ${todayLow}°`;
-    document.getElementById("weatherRain").textContent = `💧 ${rainChance}%`;
-    document.getElementById("weatherIcon").textContent = icon;
-
-    renderForecast(data.daily);
-  } catch (err) {
-    document.getElementById("weatherCondition").textContent = "Weather unavailable";
-  }
-}
-
-function getWeatherLocation() {
-  return new Promise(resolve => {
-    if (!navigator.geolocation) {
-      resolve(WEATHER_FALLBACK);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-      },
-      () => resolve(WEATHER_FALLBACK),
-      {
-        timeout: 2500,
-        maximumAge: 1000 * 60 * 60
+    if (blTab === 'scene') {
+      if (!f) html += '<div class="msg">Loading scenes from Govee...</div>';
+      else if (!f.scenes.length) html += '<div class="msg">Govee did not return any scenes for this light.</div>';
+      else {
+        const list = PREFERRED_SCENES.filter((n) => f.scenes.some((x) => x.toLowerCase() === n.toLowerCase()));
+        f.scenes.forEach((n) => { if (list.length < 8 && list.indexOf(n) < 0) list.push(n); });
+        html += '<div class="grid4">' + list.slice(0, 8).map((n, i) => {
+          const sel = S.backlight.mode === 'scene' && S.backlight.modeName === n;
+          const cs = sceneColors(n, i);
+          return '<button class="scene" data-act="scene" data-name="' + esc(n) + '" aria-pressed="' + sel + '"><i style="background:linear-gradient(90deg,' + cs.join(',') + ')' + (sel ? ';box-shadow:0 0 0 3px #15182E, 0 0 0 6px ' + cs[0] : '') + '"></i><span>' + esc(n) + '</span></button>';
+        }).join('') + '</div>';
       }
-    );
-  });
+    }
+    if (blTab === 'music') {
+      if (!f) html += '<div class="msg">Loading music modes from Govee...</div>';
+      else if (!f.music.length) html += '<div class="msg">This light does not offer music mode through the Govee API.</div>';
+      else {
+        html += '<div class="grid4">' + f.music.slice(0, 8).map((n) => {
+          const sel = S.backlight.mode === 'music' && S.backlight.modeName === n;
+          return '<button class="opt' + (sel ? ' on' : '') + '" data-act="music" data-name="' + esc(n) + '" aria-pressed="' + sel + '">' + esc(n) + '</button>';
+        }).join('') + '</div>' +
+          '<div class="row-lbl"><label for="pSens">Sensitivity</label><span id="pSensVal">' + blSens + '%</span></div><input id="pSens" type="range" min="1" max="100" value="' + blSens + '" style="accent-color:#A98BFF">';
+      }
+    }
+    html += '</div>';
+  }
+  p.innerHTML = html;
+
+  const br = $('pBright');
+  if (br) {
+    br.addEventListener('input', () => { $('pBrightVal').textContent = br.value + '%'; });
+    br.addEventListener('change', () => {
+      const v = Number(br.value);
+      command(k, { action: 'brightness', value: v }, (s) => { s.bright = v; s.on = true; }).then(() => refreshPanelHeader());
+    });
+  }
+  const sens = $('pSens');
+  if (sens) {
+    sens.addEventListener('input', () => { $('pSensVal').textContent = sens.value + '%'; });
+    sens.addEventListener('change', () => {
+      blSens = Number(sens.value);
+      if (S.backlight.mode === 'music') command('backlight', { action: 'music', mode: S.backlight.modeName, sens: blSens }, () => {});
+    });
+  }
 }
 
-function renderForecast(daily) {
-  const days = daily.time.slice(0, 7).map((date, index) => {
-    const dayName = new Date(date + "T12:00:00").toLocaleDateString([], { weekday: "short" }).toUpperCase();
-    const hi = Math.round(daily.temperature_2m_max[index]);
-    const lo = Math.round(daily.temperature_2m_min[index]);
-    const rain = daily.precipitation_probability_max[index] || 0;
-    const code = daily.weather_code[index];
+$('panel').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-act]');
+  if (!b || !panelKey) return;
+  const k = panelKey;
+  const act = b.dataset.act;
+  if (act === 'close') return closePanel();
+  if (act === 'power') return power(k, !S[k].on).then(buildPanel);
+  if (act === 'outlet') { const ok = b.dataset.k; return power(ok, !S[ok].on).then(buildPanel); }
+  if (act === 'color') {
+    const hex = b.dataset.hex;
+    return command(k, { action: 'color', hex: hex }, (s) => { s.color = hex; s.on = true; s.mode = 'color'; }).then(buildPanel);
+  }
+  if (act === 'tab') { blTab = b.dataset.tab; return buildPanel(); }
+  if (act === 'scene') {
+    const n = b.dataset.name;
+    return command('backlight', { action: 'scene', name: n }, (s) => { s.on = true; s.mode = 'scene'; s.modeName = n; s.color = sceneColors(n, 0)[0]; }).then(buildPanel);
+  }
+  if (act === 'music') {
+    const n = b.dataset.name;
+    return command('backlight', { action: 'music', mode: n, sens: blSens }, (s) => { s.on = true; s.mode = 'music'; s.modeName = n; }).then(buildPanel);
+  }
+  if (act === 'sync') {
+    const on = !(S.backlight.on && S.backlight.mode === 'video');
+    return command('backlight', { action: 'sync', on: on ? 1 : 0 }, (s) => { s.on = true; s.mode = on ? 'video' : 'color'; }).then(buildPanel);
+  }
+});
 
-    return `
-      <div class="day">
-        <div class="day-name">${dayName}</div>
-        <div class="weather-ico">${weatherCodeToIcon(code)}</div>
-        <div class="hi">${hi}°</div>
-        <div class="lo">${lo}°</div>
-        ${rain > 20 ? `<div class="pop-small">${rain}%</div>` : ""}
-      </div>
-    `;
-  });
-
-  document.getElementById("forecast").innerHTML = days.join("");
+/* ---------------- calendar card + chips ---------------- */
+function loadCalendar() {
+  if (!configured()) return;
+  api({ action: 'calendar' }).then((j) => {
+    const ne = j.nextEvent;
+    $('chipNext').textContent = ne ? 'Next: ' + ne.title + ' · ' + (ne.dayKey === todayKey() ? ne.time : ne.day + ' ' + ne.time) : 'Nothing coming up';
+    let html = '';
+    (j.todayEvents || []).forEach((e) => { html += '<div class="ev hl"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">Today · ' + esc(e.time) + '</div></div></div>'; });
+    (j.upcomingEvents || []).slice(0, Math.max(1, 4 - (j.todayEvents || []).length)).forEach((e) => { html += '<div class="ev"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">' + esc(e.day) + ' · ' + esc(e.time) + '</div></div></div>'; });
+    $('calList').innerHTML = html || '<div class="empty">Nothing on the calendar soon.</div>';
+  }).catch((e) => { $('calList').innerHTML = '<div class="empty">Calendar unavailable</div>'; toast('Calendar: ' + e.message); });
+}
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
-function weatherCodeToText(code) {
-  if ([0].includes(code)) return "Clear";
-  if ([1, 2].includes(code)) return "Partly cloudy";
-  if ([3].includes(code)) return "Cloudy";
-  if ([45, 48].includes(code)) return "Fog";
-  if ([51, 53, 55, 56, 57].includes(code)) return "Drizzle";
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "Rain";
-  if ([71, 73, 75, 77, 85, 86].includes(code)) return "Snow";
-  if ([95, 96, 99].includes(code)) return "Thunderstorm";
-  return "Clear";
+/* ---------------- month overlay ---------------- */
+const monthCache = {};
+let mY, mM, mSel;
+function openMonth() {
+  const d = new Date();
+  mY = d.getFullYear(); mM = d.getMonth() + 1; mSel = d.getDate();
+  $('month').classList.add('open');
+  drawMonth();
 }
-
-function weatherCodeToIcon(code) {
-  if ([0].includes(code)) return "☀️";
-  if ([1, 2].includes(code)) return "🌤️";
-  if ([3].includes(code)) return "☁️";
-  if ([45, 48].includes(code)) return "🌫️";
-  if ([51, 53, 55, 56, 57].includes(code)) return "🌦️";
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "🌧️";
-  if ([71, 73, 75, 77, 85, 86].includes(code)) return "❄️";
-  if ([95, 96, 99].includes(code)) return "⛈️";
-  return "🌙";
+function drawMonth() {
+  const key = mY + '-' + mM;
+  $('mTitle').textContent = new Date(mY, mM - 1, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const data = monthCache[key];
+  if (!data && configured()) {
+    api({ action: 'month', y: mY, m: mM }).then((j) => { monthCache[key] = j.days || {}; if (mY + '-' + mM === key) drawMonth(); })
+      .catch((e) => toast('Calendar: ' + e.message));
+  }
+  const days = data || {};
+  const first = new Date(mY, mM - 1, 1).getDay();
+  const count = new Date(mY, mM, 0).getDate();
+  const prevCount = new Date(mY, mM - 1, 0).getDate();
+  const cells = Math.ceil((first + count) / 7) * 7;
+  const now = new Date();
+  const isThisMonth = now.getFullYear() === mY && now.getMonth() + 1 === mM;
+  $('mGrid').style.gridTemplateRows = 'repeat(' + (cells / 7) + ', minmax(0, 1fr))';
+  let html = '';
+  for (let i = 0; i < cells; i++) {
+    const n = i - first + 1;
+    if (n < 1 || n > count) {
+      const shown = n < 1 ? prevCount + n : n - count;
+      html += '<button class="day out" tabindex="-1" aria-hidden="true"><span class="num">' + shown + '</span></button>';
+      continue;
+    }
+    const evs = days[String(n)] || [];
+    const cls = 'day' + (isThisMonth && n === now.getDate() ? ' today' : '') + (n === mSel ? ' sel' : '');
+    html += '<button class="' + cls + '" data-day="' + n + '" aria-label="' + esc(new Date(mY, mM - 1, n).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })) + (evs.length ? ', ' + evs.length + ' events' : '') + '"><span class="num">' + n + '</span>' +
+      evs.slice(0, 2).map((e) => '<span class="e">' + esc(e.title) + '</span>').join('') + (evs.length > 2 ? '<span class="more">+' + (evs.length - 2) + ' more</span>' : '') + '</button>';
+  }
+  $('mGrid').innerHTML = html;
+  const selEvs = days[String(mSel)] || [];
+  const selDate = new Date(mY, mM - 1, mSel);
+  $('mSide').innerHTML = '<div><div class="k">' + (isThisMonth && mSel === now.getDate() ? 'Today' : selDate.toLocaleDateString('en-US', { weekday: 'long' })) + '</div><div class="big">' +
+    selDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) + '</div></div>' +
+    (data ? (selEvs.length ? selEvs.map((e) => '<div class="m-ev"><span class="bar"></span><div><div class="t">' + esc(e.title) + '</div><div class="s">' + esc(e.time) + (e.location ? ' · ' + esc(e.location) : '') + '</div></div></div>').join('')
+      : '<div class="msg" style="background:none;border:1px dashed #3A3F66">Nothing on the family calendar this day.</div>') : '<div class="msg">Loading...</div>');
 }
+$('mGrid').addEventListener('click', (e) => { const b = e.target.closest('[data-day]'); if (b) { mSel = Number(b.dataset.day); drawMonth(); } });
+$('mPrev').addEventListener('click', () => { mM--; if (mM < 1) { mM = 12; mY--; } mSel = 1; drawMonth(); });
+$('mNext').addEventListener('click', () => { mM++; if (mM > 12) { mM = 1; mY++; } mSel = 1; drawMonth(); });
+$('mToday').addEventListener('click', openMonth);
+$('mClose').addEventListener('click', () => $('month').classList.remove('open'));
+document.querySelectorAll('[data-open="month"]').forEach((b) => b.addEventListener('click', openMonth));
+$('navHome').addEventListener('click', () => { $('month').classList.remove('open'); closePanel(); });
 
-/* Links */
-
-function openCalendar() {
-  window.open(FAMILY_CALENDAR_URL, "_blank");
+/* ---------------- house notes (saved on this device) ---------------- */
+let notes = [];
+try { notes = JSON.parse(localStorage.getItem('homeHubNotes') || '[]'); } catch (e) { notes = []; }
+function saveNotes() { try { localStorage.setItem('homeHubNotes', JSON.stringify(notes)); } catch (e) { /* storage blocked */ } }
+function renderNotes() {
+  $('noteList').innerHTML = notes.length
+    ? notes.map((n, i) => '<div class="note"><span>' + esc(n) + '</span><button data-del="' + i + '" aria-label="Delete note">✕</button></div>').join('')
+    : '<div class="empty" style="padding:0">No house notes yet.</div>';
+  $('chipNotes').textContent = notes.length + (notes.length === 1 ? ' house note' : ' house notes');
 }
-
-function openGoogleHome() {
-  window.location.href = "https://home.google.com";
+function addNote() {
+  const v = $('noteInput').value.trim();
+  if (!v) return;
+  notes.push(v); $('noteInput').value = ''; saveNotes(); renderNotes();
 }
+$('noteAdd').addEventListener('click', addNote);
+$('noteInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addNote(); });
+$('noteList').addEventListener('click', (e) => { const b = e.target.closest('[data-del]'); if (b) { notes.splice(Number(b.dataset.del), 1); saveNotes(); renderNotes(); } });
+$('navNotes').addEventListener('click', () => { $('month').classList.remove('open'); closePanel(); $('noteInput').focus(); });
 
-function openGovee() {
-  window.location.href = "https://apps.apple.com/app/govee-home/id1395696823";
-}
-
-function openRing() {
-  window.location.href = "https://ring.com/app";
-}
-
-/* Init */
-
-updateClock();
-setInterval(updateClock, 10000);
-
-setupHouseNotesInput();
-renderHouseNotes();
-renderRoomStates();
-
-loadCalendarFeed(false);
+/* ---------------- start ---------------- */
+renderAll();
+renderNotes();
 loadWeather();
-
-setInterval(() => loadCalendarFeed(false), 1000 * 60 * 5);
-setInterval(loadWeather, 1000 * 60 * 20);
+setInterval(loadWeather, 15 * 60 * 1000);
+if (!configured()) {
+  $('setup').classList.add('open');
+} else {
+  loadState();
+  loadCalendar();
+  loadFeatures('backlight');
+  setInterval(loadState, 60 * 1000);
+  setInterval(loadCalendar, 5 * 60 * 1000);
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && configured()) { loadState(); loadCalendar(); } });
 </script>
 </body>
 </html>
