@@ -29,7 +29,7 @@ a{color:var(--accent2)}
 h2{font-size:16px;font-weight:800}
 
 #stage{position:absolute;left:50%;top:50%;width:1280px;height:800px;transform-origin:center center;
-  padding:20px 24px 16px;display:grid;grid-template-columns:300px minmax(0,1fr) 260px;
+  padding:20px 24px 16px;display:grid;grid-template-columns:360px minmax(0,1fr);
   grid-template-rows:44px minmax(0,1fr) 64px;gap:16px 18px}
 
 .card{border-radius:22px;background:var(--card);border:1px solid var(--line)}
@@ -68,6 +68,7 @@ h2{font-size:16px;font-weight:800}
 
 /* map */
 .map{position:relative;border-radius:26px;background:#111430;border:1px solid var(--line);overflow:hidden}
+.map-in{position:relative;width:636px;height:100%;margin:0 auto}
 .map .ttl{position:absolute;left:24px;top:18px;font-size:18px;font-weight:800}
 .map .hint{position:absolute;right:24px;top:22px;font-size:12px;font-weight:600;color:var(--muted)}
 .abs{position:absolute}
@@ -86,17 +87,6 @@ h2{font-size:16px;font-weight:800}
 .map-actions{position:absolute;right:24px;bottom:18px;display:flex;gap:8px}
 .map-btn{height:44px;padding:0 16px;border-radius:14px;border:1px solid var(--line2);background:var(--card2);color:var(--soft);font-size:13px;font-weight:800;display:flex;align-items:center;gap:8px}
 .map-btn.on{background:#3A2C12;border-color:#FFC266;color:#FFC266}
-
-/* notes */
-.notes{flex:1;min-height:0;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
-.note-row{display:flex;gap:8px}
-.note-row input{flex:1;min-width:0;height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--line2);background:#0F1226;color:var(--text);font-size:14px;font-weight:600;outline:none}
-.note-row input:focus{border-color:var(--accent2)}
-.note-row button{height:44px;padding:0 14px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:800}
-.note-list{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.note{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:9px 8px 9px 12px;border-radius:10px;background:var(--card2)}
-.note span{flex:1;min-width:0;overflow-wrap:anywhere}
-.note button{width:32px;height:32px;border:none;border-radius:9px;background:rgba(255,255,255,.06);color:var(--muted);font-weight:900;flex-shrink:0}
 
 /* nav */
 .nav{grid-column:1/-1;display:flex;justify-content:center}
@@ -202,7 +192,6 @@ input[type=range]{width:100%;height:36px}
   <div class="chips">
     <span class="chip amber" id="chipOn">-- of 6 on</span>
     <span class="chip" id="chipNext">Loading calendar...</span>
-    <span class="chip" id="chipNotes">0 house notes</span>
   </div>
 
   <!-- LEFT COLUMN -->
@@ -228,7 +217,7 @@ input[type=range]{width:100%;height:36px}
   </div>
 
   <!-- CENTER: LIVING ROOM MAP -->
-  <section class="map">
+  <section class="map"><div class="map-in">
     <div class="ttl">Living Room</div>
     <div class="hint">Tap to toggle · Hold for color and brightness</div>
 
@@ -291,27 +280,13 @@ input[type=range]{width:100%;height:36px}
       <button class="map-btn" id="couchBtn"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg><span>Couch lights on</span></button>
       <button class="map-btn" id="allOffBtn">Everything off</button>
     </div>
-  </section>
-
-  <!-- RIGHT COLUMN -->
-  <div class="col">
-    <section class="card notes">
-      <h2>House Notes</h2>
-      <div class="note-row">
-        <label for="noteInput" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Add a note</label>
-        <input id="noteInput" placeholder="Add a note..." autocomplete="off">
-        <button id="noteAdd">Add</button>
-      </div>
-      <div class="note-list" id="noteList"></div>
-    </section>
-  </div>
+  </div></section>
 
   <!-- BOTTOM NAV -->
   <nav class="nav" aria-label="Sections">
     <div class="nav-in">
       <button class="active" id="navHome">Home</button>
       <button data-open="month">Calendar</button>
-      <button id="navNotes">Notes</button>
       <a href="https://ring.com/app" target="_blank" rel="noopener"><span class="live-dot"></span>Front Door</a>
     </div>
   </nav>
@@ -764,7 +739,7 @@ function loadCalendar() {
     $('chipNext').textContent = ne ? 'Next: ' + ne.title + ' · ' + (ne.dayKey === todayKey() ? ne.time : ne.day + ' ' + ne.time) : 'Nothing coming up';
     let html = '';
     (j.todayEvents || []).forEach((e) => { html += '<div class="ev hl"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">Today · ' + esc(e.time) + '</div></div></div>'; });
-    (j.upcomingEvents || []).slice(0, Math.max(1, 4 - (j.todayEvents || []).length)).forEach((e) => { html += '<div class="ev"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">' + esc(e.day) + ' · ' + esc(e.time) + '</div></div></div>'; });
+    (j.upcomingEvents || []).slice(0, Math.max(2, 7 - (j.todayEvents || []).length)).forEach((e) => { html += '<div class="ev"><span class="bar"></span><div><div class="ti">' + esc(e.title) + '</div><div class="tm">' + esc(e.day) + ' · ' + esc(e.time) + '</div></div></div>'; });
     $('calList').innerHTML = html || '<div class="empty">Nothing on the calendar soon.</div>';
   }).catch((e) => { $('calList').innerHTML = '<div class="empty">Calendar unavailable</div>'; toast('Calendar: ' + e.message); });
 }
@@ -827,29 +802,8 @@ $('mClose').addEventListener('click', () => $('month').classList.remove('open'))
 document.querySelectorAll('[data-open="month"]').forEach((b) => b.addEventListener('click', openMonth));
 $('navHome').addEventListener('click', () => { $('month').classList.remove('open'); closePanel(); });
 
-/* ---------------- house notes (saved on this device) ---------------- */
-let notes = [];
-try { notes = JSON.parse(localStorage.getItem('homeHubNotes') || '[]'); } catch (e) { notes = []; }
-function saveNotes() { try { localStorage.setItem('homeHubNotes', JSON.stringify(notes)); } catch (e) { /* storage blocked */ } }
-function renderNotes() {
-  $('noteList').innerHTML = notes.length
-    ? notes.map((n, i) => '<div class="note"><span>' + esc(n) + '</span><button data-del="' + i + '" aria-label="Delete note">✕</button></div>').join('')
-    : '<div class="empty" style="padding:0">No house notes yet.</div>';
-  $('chipNotes').textContent = notes.length + (notes.length === 1 ? ' house note' : ' house notes');
-}
-function addNote() {
-  const v = $('noteInput').value.trim();
-  if (!v) return;
-  notes.push(v); $('noteInput').value = ''; saveNotes(); renderNotes();
-}
-$('noteAdd').addEventListener('click', addNote);
-$('noteInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addNote(); });
-$('noteList').addEventListener('click', (e) => { const b = e.target.closest('[data-del]'); if (b) { notes.splice(Number(b.dataset.del), 1); saveNotes(); renderNotes(); } });
-$('navNotes').addEventListener('click', () => { $('month').classList.remove('open'); closePanel(); $('noteInput').focus(); });
-
 /* ---------------- start ---------------- */
 renderAll();
-renderNotes();
 loadWeather();
 setInterval(loadWeather, 15 * 60 * 1000);
 if (!configured()) {
